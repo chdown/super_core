@@ -12,10 +12,6 @@ dependencies:
     sdk: flutter
   dio: ^5.4.1
   logger: ^2.1.0
-  super_load:
-    git:
-      url: https://github.com/chdown/super_load
-      ref: 55b127d
   connectivity_plus: ^5.0.2
   pull_to_refresh: ^2.0.0
 
@@ -23,5 +19,9 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
+  super_load:
+    git:
+      url: https://github.com/chdown/super_load
+      ref: 55b127d
 
 flutter:

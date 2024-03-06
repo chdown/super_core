@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:dio/dio.dart';
 
 /// @author : ch
@@ -32,5 +34,5 @@ class SuperNetConfig {
   /// 网络请求msg字段
   static String msg = 'msg';
 
-  static tokenRefresh() => {};
+  static VoidCallback tokenRefresh = (){};
 }

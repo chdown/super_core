@@ -6,10 +6,10 @@ import 'package:dio/dio.dart';
 ///
 class SuperNetConfig {
   /// 数据请求地址
-  static String baseUrl = '';
+  static String Function() baseUrl = () => '';
 
   /// 代理地址：192.160.0.1:8888
-  static String proxyUrl = '';
+  static String Function()  proxyUrl = () => '';
 
   /// 连接等待毫秒数
   static int connectTimeout = 30 * 1000;

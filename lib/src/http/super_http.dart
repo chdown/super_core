@@ -23,7 +23,7 @@ class SuperHttp {
   SuperHttp() {
     /// 网络配置
     final options = BaseOptions(
-      baseUrl: SuperNetConfig.baseUrl,
+      baseUrl: SuperNetConfig.baseUrl(),
       connectTimeout: Duration(seconds: SuperNetConfig.connectTimeout),
       sendTimeout: Duration(seconds: SuperNetConfig.sendTimeout),
       receiveTimeout: Duration(seconds: SuperNetConfig.receiveTimeout),
@@ -32,12 +32,12 @@ class SuperHttp {
     _dio = Dio(options);
 
     /// 请求代理地址，仅初始化生效
-    if (SuperNetConfig.proxyUrl.isNotEmpty) {
+    if (SuperNetConfig.proxyUrl().isNotEmpty) {
       _dio.httpClientAdapter = IOHttpClientAdapter(
         createHttpClient: () {
           final client = HttpClient();
           client.findProxy = (uri) {
-            return "PROXY ${SuperNetConfig.proxyUrl}";
+            return "PROXY ${SuperNetConfig.proxyUrl()}";
           };
           return client;
         },

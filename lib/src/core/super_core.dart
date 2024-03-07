@@ -17,6 +17,8 @@ abstract class SuperCore {
 
   void showRefreshState(LoadConfig loadConfig, LoadState loadState, String errorMsg);
 
+  void showToast(String message);
+
   /// 通用的数据请求方法
   /// [request] 请求包装类，返回最终list数据的情况下，会自动进行空页面显示处理
   /// [loadEnum] 请求数据的方式
@@ -49,6 +51,9 @@ abstract class SuperCore {
   }
 
   void _showState(LoadConfig loadConfig, LoadEnum loadEnum, LoadState loadState, {String errorMsg = ''}) {
+    /// 输出toast
+    if(errorMsg.isNotEmpty && loadConfig.isShowToast) showToast(errorMsg);
+
     /// 配置回调
     if (loadState == LoadState.start) loadConfig.start?.call();
     if (loadState == LoadState.success || loadState == LoadState.successEmpty) loadConfig.success?.call();

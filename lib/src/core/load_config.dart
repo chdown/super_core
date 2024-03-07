@@ -25,7 +25,7 @@ class LoadConfig {
     this.error,
     this.finish,
     this.isErrorPage = false,
-    this.isShowToast = false,
+    this.isShowToast = true,
     this.config,
     this.config1,
   });

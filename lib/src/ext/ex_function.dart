@@ -5,7 +5,7 @@ import 'dart:async';
 /// @description 防抖节流方法
 ///
 
-typedef StringCallback = bool Function(String value);
+typedef StringCallback = void Function(String value);
 
 ///
 // 扩展Function，添加防抖功能

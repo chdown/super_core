@@ -4,6 +4,10 @@ import 'dart:async';
 /// @date 2024-02-18 09:34:57
 /// @description 防抖节流方法
 ///
+
+typedef StringCallback = bool Function(String value);
+
+///
 // 扩展Function，添加防抖功能
 extension DebounceExtension on Function() {
   void Function() debounce([int milliseconds = 500]) {

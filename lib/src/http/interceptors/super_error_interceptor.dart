@@ -1,9 +1,15 @@
+import 'dart:ui';
+
 import 'package:dio/dio.dart';
 import 'package:super_core/src/config/super_net_config.dart';
 import 'package:super_core/src/http/app_net_error.dart';
 import 'package:super_core/src/http/super_http.dart';
 
 class SuperErrorInterceptor extends Interceptor {
+  final VoidCallback tokenRefresh;
+
+  SuperErrorInterceptor(this.tokenRefresh);
+
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
     /// 业务层返回401，表示用户过期
@@ -42,38 +48,38 @@ class SuperErrorInterceptor extends Interceptor {
   void onError(DioException err, ErrorInterceptorHandler handler) {
     switch (err.type) {
       case DioExceptionType.sendTimeout:
-        throw AppNetError(code: AppNetError.errorConnection, message: "请求服务器超时，请稍后再试！");
+        throw AppNetError(code: AppNetError.errorConnection, message: AppNetError.sendTimeoutMsg);
       case DioExceptionType.connectionTimeout:
-        throw AppNetError(code: AppNetError.errorConnection, message: "连接服务器超时，请稍后再试！");
+        throw AppNetError(code: AppNetError.errorConnection, message: AppNetError.connectionTimeoutMsg);
       case DioExceptionType.cancel:
-        throw AppNetError(code: AppNetError.errorConnection, message: "请求被异常取消，请稍后再试！");
+        throw AppNetError(code: AppNetError.errorConnection, message: AppNetError.cancelMsg);
       case DioExceptionType.receiveTimeout:
-        throw AppNetError(code: AppNetError.errorConnection, message: "响应超时，请稍后再试！");
+        throw AppNetError(code: AppNetError.errorConnection, message: AppNetError.receiveTimeoutMsg);
       case DioExceptionType.connectionError:
-        throw AppNetError(code: AppNetError.errorConnection, message: "连接服务器异常，请稍后再试！");
+        throw AppNetError(code: AppNetError.errorConnection, message: AppNetError.connectionErrorMsg);
       case DioExceptionType.badResponse:
         int code = err.response?.statusCode ?? AppNetError.errorUnKnow;
         String? message = err.response?.statusMessage;
         if (code == 400) {
-          throw AppNetError(code: code, message: message ?? "错误的请求");
+          throw AppNetError(code: code, message: message ?? AppNetError.error400Msg);
         } else if (code == 401) {
           SuperHttp.instance.cancelRequests(token: CancelToken());
-          SuperNetConfig.tokenRefresh();
+          tokenRefresh();
         } else if (code == 403) {
-          throw AppNetError(code: code, message: message ?? "服务器拒绝请求");
+          throw AppNetError(code: code, message: message ?? AppNetError.error403Msg);
         } else if (code == 404) {
-          throw AppNetError(code: code, message: message ?? "未知的请求地址");
+          throw AppNetError(code: code, message: message ?? AppNetError.error404Msg);
         } else if (code == 500) {
-          throw AppNetError(code: code, message: message ?? "服务出现错误(500)");
+          throw AppNetError(code: code, message: message ?? AppNetError.error500Msg);
         } else if (code == 502) {
-          throw AppNetError(code: code, message: message ?? "服务出现错误(502)");
+          throw AppNetError(code: code, message: message ?? AppNetError.error502Msg);
         } else if (code == 503) {
-          throw AppNetError(code: code, message: message ?? "服务出现错误(503)！");
+          throw AppNetError(code: code, message: message ?? AppNetError.error503Msg);
         } else {
-          throw AppNetError(code: code, message: message ?? "未知错误($code)，请稍后再试！");
+          throw AppNetError(code: code, message: message ?? AppNetError.errorKnowMsg);
         }
       default:
-        throw AppNetError(code: AppNetError.errorUnKnow, message: "未知错误，请稍后再试！");
+        throw AppNetError(code: AppNetError.errorUnKnow, message: AppNetError.errorKnowMsg);
     }
   }
 }

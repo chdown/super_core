@@ -20,7 +20,6 @@ class SuperHttp {
     return _instance ??= SuperHttp();
   }
 
-
   SuperHttp() {
     /// 网络配置
     final options = BaseOptions(

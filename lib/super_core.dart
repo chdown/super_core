@@ -1,7 +1,7 @@
 library super_core;
 
 export 'src/config/super_net_config.dart';
-export 'src/core/base_load.dart';
+export 'src/core/super_core.dart';
 export 'src/core/load_config.dart';
 export 'src/core/load_enum.dart';
 export 'src/core/load_state.dart';

@@ -10,7 +10,7 @@ import 'load_enum.dart';
 /// @author : ch
 /// @date 2024-01-13 14:25:30
 /// @description Load加载基类
-abstract class BaseLoad {
+abstract class SuperCore {
   void showLoadingState(LoadConfig loadConfig, LoadState loadState, String errorMsg);
 
   void showPageState(LoadConfig loadConfig, LoadState loadState, String errorMsg);

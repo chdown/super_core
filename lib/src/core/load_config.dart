@@ -21,6 +21,7 @@ class LoadConfig {
   LoadConfig({
     this.pageController,
     this.refreshController,
+    this.start,
     this.success,
     this.error,
     this.finish,

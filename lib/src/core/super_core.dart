@@ -17,7 +17,7 @@ mixin SuperCore {
 
   void showRefreshState(LoadConfig loadConfig, LoadState loadState, String errorMsg);
 
-  void showToast(String message);
+  void showToast(String? message);
 
   /// 通用的数据请求方法
   /// [request] 请求包装类，返回最终list数据的情况下，会自动进行空页面显示处理

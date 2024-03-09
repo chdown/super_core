@@ -6,9 +6,7 @@ class SuperLogUtils {
   static LogOutput? output;
   static bool isReleaseError = false;
 
-  static final _log = Logger(
-    output: output,
-  );
+  static final _log = Logger(output: output, printer: PrettyPrinter(printTime: true));
 
   static void d(dynamic message) {
     if (kDebugMode) _log.d(message);

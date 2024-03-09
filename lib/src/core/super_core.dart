@@ -39,7 +39,7 @@ mixin SuperCore {
       bool isEmpty = list != null && list.isEmpty;
       _showState(loadConfig, loadEnum, isEmpty ? LoadState.successEmpty : LoadState.success);
     } catch (e) {
-      SuperLogUtils.e(null, error: e);
+      SuperLogUtils.e(null, error: e, stackTrace: e is Error ? (e.stackTrace) : null);
       String msg = _getErrorMsg(e);
       loadConfig.error?.call(msg);
       bool iseNetUnConnection = e is AppNetError && e.code == AppNetError.errorNetUnConnection;

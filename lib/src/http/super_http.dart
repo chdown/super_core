@@ -24,9 +24,9 @@ class SuperHttp {
     /// 网络配置
     final options = BaseOptions(
       baseUrl: SuperNetConfig.baseUrl(),
-      connectTimeout: Duration(seconds: SuperNetConfig.connectTimeout),
-      sendTimeout: Duration(seconds: SuperNetConfig.sendTimeout),
-      receiveTimeout: Duration(seconds: SuperNetConfig.receiveTimeout),
+      connectTimeout: Duration(milliseconds: SuperNetConfig.connectTimeout),
+      sendTimeout: Duration(milliseconds: SuperNetConfig.sendTimeout),
+      receiveTimeout: Duration(milliseconds: SuperNetConfig.receiveTimeout),
     );
 
     _dio = Dio(options);

@@ -9,7 +9,7 @@ import 'package:super_core/src/utils/object_util.dart';
 
 ///
 extension ObjectExtension on Object? {
-  bool isEmpty() => ObjectUtil.isEmpty(this);
+  bool isNullOrEmpty() => ObjectUtil.isEmpty(this);
 
-  bool isNotEmpty() => ObjectUtil.isNotEmpty(this);
+  bool isNotNullOrEmpty() => ObjectUtil.isNotEmpty(this);
 }

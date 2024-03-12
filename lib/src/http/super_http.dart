@@ -71,7 +71,7 @@ class SuperHttp {
   /// [options] 配置
   /// [cancelToken] 取消
   ///
-  Future<Map<String, dynamic>> get(
+  Future<dynamic> get(
     String path, {
     Map<String, dynamic>? params,
     Options? options,
@@ -82,7 +82,7 @@ class SuperHttp {
       queryParameters: params,
       cancelToken: cancelToken ?? _cancelToken,
     );
-    return response.data;
+    return response;
   }
 
   /// post 请求
@@ -104,14 +104,13 @@ class SuperHttp {
   }) async {
     Options customOptions = options ?? Options();
     customOptions.contentType = jsonContentType;
-    var response = await _dio.post(
+    return await _dio.post(
       path,
       data: params,
       queryParameters: queryParameters,
       options: customOptions,
       cancelToken: cancelToken ?? _cancelToken,
     );
-    return response.data;
   }
 
   /// download 下载

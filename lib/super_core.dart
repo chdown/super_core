@@ -11,6 +11,8 @@ export 'src/ext/ex_bool.dart';
 export 'src/ext/ex_object.dart';
 export 'src/ext/ex_string.dart';
 export 'src/ext/ex_int.dart';
+export 'src/ext/ex_context.dart';
+export 'src/ext/ex_list.dart';
 export 'src/http/app_net_error.dart';
 export 'src/http/super_http.dart';
 export 'src/http/interceptors/super_error_interceptor.dart';

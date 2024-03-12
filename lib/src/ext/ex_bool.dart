@@ -9,14 +9,20 @@ import 'package:super_core/src/utils/obj_util.dart';
 extension BoolExtension on bool? {
 
   /// 取value
-  int value() {
+  int getIntValue() {
     if (this == null) return 0;
     return this! ? 1 : 0;
   }
 
+  /// 取value
+  String getStringValue() => getIntValue().toString();
+
   /// 取反value
-  int inversionValue() {
+  int getReverseIntValue() {
     if (this == null) return 1;
     return this! ? 0 : 1;
   }
+
+  /// 取value
+  String getReverseIntStringValue() => getReverseIntValue().toString();
 }

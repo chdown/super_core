@@ -3,9 +3,9 @@
 /// @description bool方法
 ///
 extension IntExtension on int? {
+  /// string形式的bool值
+  bool getBool() => this != null && this == 1;
+
   /// 取反value
-  int inversionValue() {
-    if (this == null) return 1;
-    return this == 0 ? 1 : 0;
-  }
+  int getReverseBoolInt() => getBool() ? 0 : 1;
 }

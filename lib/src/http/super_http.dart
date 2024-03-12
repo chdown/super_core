@@ -20,6 +20,8 @@ class SuperHttp {
     return _instance ??= SuperHttp();
   }
 
+  Dio getDio() => _dio;
+
   SuperHttp() {
     /// 网络配置
     final options = BaseOptions(
@@ -105,36 +107,6 @@ class SuperHttp {
     Options customOptions = options ?? Options();
     customOptions.contentType = jsonContentType;
     return await _dio.post(
-      path,
-      data: params,
-      queryParameters: queryParameters,
-      options: customOptions,
-      cancelToken: cancelToken ?? _cancelToken,
-    );
-  }
-
-  /// download 下载
-  ///
-  /// [path] 请求地址
-  /// [savePath] 保存地址
-  /// [params] 请求数据
-  /// [queryParameters] 请求参数
-  /// [jsonContentType] 请求参数格式
-  /// [options] 配置
-  /// [receive] 进度回调
-  /// [cancelToken] 取消
-  ///
-  Future<dynamic> head(
-    String path, {
-    params,
-    Map<String, dynamic>? queryParameters,
-    String? jsonContentType = Headers.jsonContentType,
-    Options? options,
-    CancelToken? cancelToken,
-  }) async {
-    Options customOptions = options ?? Options();
-    customOptions.contentType = jsonContentType;
-    return await _dio.head(
       path,
       data: params,
       queryParameters: queryParameters,

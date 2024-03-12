@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:super_core/src/utils/object_util.dart';
+import 'package:super_core/src/utils/obj_util.dart';
 
 /// @author : ch
 /// @date 2024-02-18 09:34:57

@@ -3,7 +3,7 @@
 /// @date 2024-03-12 11:57:28
 /// @description Object工具类
 ///
-class ObjectUtil{
+class ObjUtil{
   /// Returns true  String or List or Map is empty.
   static bool isEmpty(Object? object) {
     if (object == null) return true;

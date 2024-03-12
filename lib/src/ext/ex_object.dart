@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:super_core/src/utils/object_util.dart';
+import 'package:super_core/src/utils/obj_util.dart';
 
 /// @author : ch
 /// @date 2024-02-18 09:34:57
@@ -9,7 +9,7 @@ import 'package:super_core/src/utils/object_util.dart';
 
 ///
 extension ObjectExtension on Object? {
-  bool isNullOrEmpty() => ObjectUtil.isEmpty(this);
+  bool isNullOrEmpty() => ObjUtil.isEmpty(this);
 
-  bool isNotNullOrEmpty() => ObjectUtil.isNotEmpty(this);
+  bool isNotNullOrEmpty() => ObjUtil.isNotEmpty(this);
 }

@@ -7,6 +7,8 @@ import 'dart:async';
 
 typedef StringCallback = void Function(String value);
 
+typedef IntCallback = void Function(int value);
+
 ///
 // 扩展Function，添加防抖功能
 extension DebounceExtension on Function() {

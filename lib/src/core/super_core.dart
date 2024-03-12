@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:super_core/src/core/load_config.dart';
 import 'package:super_core/src/core/load_state.dart';
 import 'package:super_core/src/http/app_net_error.dart';
-import 'package:super_core/src/utils/super_log_utils.dart';
+import 'package:super_core/src/utils/log_util.dart';
 
 import 'load_enum.dart';
 
@@ -39,7 +39,7 @@ mixin SuperCore {
       bool isEmpty = list != null && list.isEmpty;
       _showState(loadConfig, loadEnum, isEmpty ? LoadState.successEmpty : LoadState.success);
     } catch (e) {
-      SuperLogUtils.e(null, error: e, stackTrace: e is Error ? (e.stackTrace) : null);
+      LogUtil.e(null, error: e, stackTrace: e is Error ? (e.stackTrace) : null);
       String msg = _getErrorMsg(e);
       loadConfig.error?.call(msg);
       bool iseNetUnConnection = e is AppNetError && e.code == AppNetError.errorNetUnConnection;

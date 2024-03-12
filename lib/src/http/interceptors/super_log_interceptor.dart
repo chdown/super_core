@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:super_core/src/utils/super_log_utils.dart';
+import 'package:super_core/src/utils/log_util.dart';
 
 class SuperLogInterceptor extends Interceptor {
   @override
@@ -20,7 +20,7 @@ class SuperLogInterceptor extends Interceptor {
       'Request Token': '${err.requestOptions.headers["Authorization"]}',
       'Response Data': err.response?.data,
     };
-    SuperLogUtils.e(log, stackTrace: err.stackTrace);
+    LogUtil.e(log, stackTrace: err.stackTrace);
     super.onError(err, handler);
   }
 
@@ -35,7 +35,7 @@ class SuperLogInterceptor extends Interceptor {
       'Request Token': '${response.requestOptions.headers["Authorization"]}',
       'Response Data': response.data,
     };
-    SuperLogUtils.i(log);
+    LogUtil.i(log);
     super.onResponse(response, handler);
   }
 }

@@ -12,4 +12,5 @@ export 'src/http/super_http.dart';
 export 'src/http/interceptors/super_error_interceptor.dart';
 export 'src/http/interceptors/super_header_interceptor.dart';
 export 'src/http/interceptors/super_log_interceptor.dart';
-export 'src/utils/super_log_utils.dart';
+export 'src/utils/log_util.dart';
+export 'src/utils/object_util.dart';

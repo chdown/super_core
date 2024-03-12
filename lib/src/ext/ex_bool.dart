@@ -17,6 +17,6 @@ extension BoolExtension on bool? {
   /// 取反value
   int inversionValue() {
     if (this == null) return 1;
-    return this! ? 1 : 1;
+    return this! ? 0 : 1;
   }
 }

@@ -4,6 +4,9 @@
 /// @description Object工具类
 ///
 class ObjUtil{
+
+  ObjUtil._();
+
   /// Returns true  String or List or Map is empty.
   static bool isEmpty(Object? object) {
     if (object == null) return true;

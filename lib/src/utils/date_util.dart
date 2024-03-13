@@ -7,6 +7,9 @@ import 'package:super_core/src/utils/obj_util.dart';
 /// @description 日期工具
 ///
 class DateUtil {
+
+  DateUtil._();
+
   /// 获取日期
   static String getNowDateStr({String format = DateEnum.normYmd}) => dateToStr(DateTime.now(), format: format);
 

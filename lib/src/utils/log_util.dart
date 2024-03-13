@@ -2,6 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
 
 class LogUtil {
+
+  LogUtil._();
+
   /// 配置输出 Log
   static LogOutput? output;
   static bool isReleaseError = false;

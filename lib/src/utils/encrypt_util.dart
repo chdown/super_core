@@ -8,6 +8,9 @@ import 'package:convert/convert.dart';
 /// @description 加密工具
 ///
 class EncryptUtil {
+
+  EncryptUtil._();
+
   /// md5 加密
   static String encodeMd5(String data) {
     var content = Utf8Encoder().convert(data);

@@ -7,6 +7,9 @@ import 'package:rational/rational.dart';
 /// @description 数字计算工具
 ///
 class NumUtil{
+
+  NumUtil._();
+
   /// The parameter [fractionDigits] must be an integer satisfying: `0 <= fractionDigits <= 20`.
   static num? getNumByValueStr(String valueStr, {int? fractionDigits}) {
     double? value = double.tryParse(valueStr);

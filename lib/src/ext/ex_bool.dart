@@ -7,22 +7,21 @@ import 'package:super_core/src/utils/obj_util.dart';
 /// @description bool方法
 ///
 extension BoolExtension on bool? {
-
   /// 取value
-  int getIntValue() {
+  int get intValue {
     if (this == null) return 0;
     return this! ? 1 : 0;
   }
 
-  /// 取value
-  String getStringValue() => getIntValue().toString();
-
   /// 取反value
-  int getReverseIntValue() {
+  int get reverseIntValue {
     if (this == null) return 1;
     return this! ? 0 : 1;
   }
 
   /// 取value
-  String getReverseIntStringValue() => getReverseIntValue().toString();
+  String get stringValue => intValue.toString();
+
+  /// 取value
+  String reverseStringValue() => reverseIntValue.toString();
 }

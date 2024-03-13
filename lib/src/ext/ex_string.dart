@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:super_core/src/ext/ex_bool.dart';
 import 'package:super_core/src/ext/ex_object.dart';
 import 'package:super_core/src/utils/obj_util.dart';
@@ -10,10 +8,13 @@ import 'package:super_core/src/utils/obj_util.dart';
 ///
 extension StringExtension on String? {
   /// string形式的bool值
-  bool getBool() => isEmptyOrNull && this == "1";
+  bool get boolValue => isEmptyOrNull && this == "1";
 
   /// string形式的int值
-  int getBoolInt() => getBool().getIntValue();
+  int get intValue => boolValue.intValue;
+
+  /// string形式的非bool的string
+  String get reverseBoolStr => boolValue ? "0" : "1";
 
   /// string形式的int值
   int toInt({int defaultValue = 0}) {
@@ -27,6 +28,13 @@ extension StringExtension on String? {
     return double.tryParse(this!) ?? defaultValue;
   }
 
-  /// string形式的非bool的string
-  String getReverseBoolStr() => getBool() ? "0" : "1";
+  /// 不为空是后面增加指定文本
+  String notEmptySuffix(String suffix) {
+    return isEmptyOrNull ? (this ?? '') : '$this$suffix';
+  }
+
+  /// 不为空是前面增加指定文本
+  String notEmptyPrefix(String prefix) {
+    return isEmptyOrNull ? (this ?? '') : '$prefix$this';
+  }
 }

@@ -13,6 +13,7 @@ dependencies:
   dio: ^5.4.1
   logger: ^2.1.0
   connectivity_plus: ^5.0.2
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:

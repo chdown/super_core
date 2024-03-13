@@ -4,8 +4,8 @@
 ///
 extension IntExtension on int? {
   /// string形式的bool值
-  bool getBool() => this != null && this == 1;
+  bool get boolValue => this != null && this == 1;
 
   /// 取反value
-  int getReverseBoolInt() => getBool() ? 0 : 1;
+  int get reverseBoolInt => boolValue ? 0 : 1;
 }

@@ -12,10 +12,4 @@ extension ObjectExtension on Object? {
 
   /// 是否不为null或空
   bool get isNotEmptyOrNull => ObjUtil.isNotEmpty(this);
-
-  /// 为空时返回Obj
-  Object emptyToObj(Object obj) => isEmptyOrNull ? obj : this!;
-
-  /// 不为空时返回Obj
-  Object notEmptyToObj(Object obj) => isNotEmptyOrNull ? obj : this!;
 }

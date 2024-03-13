@@ -7,6 +7,13 @@ import 'package:super_core/src/utils/obj_util.dart';
 /// @description String方法
 ///
 extension StringExtension on String? {
+
+  /// 为空时返回Obj
+  String emptyToNew(String obj) => isEmptyOrNull ? obj : this!;
+
+  /// 不为空时返回Obj
+  String notEmptyToNew(String obj) => isNotEmptyOrNull ? obj : this!;
+
   /// string形式的bool值
   bool get boolValue => isEmptyOrNull && this == "1";
 

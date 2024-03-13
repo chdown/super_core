@@ -21,5 +21,6 @@ export 'src/http/interceptors/super_header_interceptor.dart';
 export 'src/http/interceptors/super_log_interceptor.dart';
 export 'src/utils/date_util.dart';
 export 'src/utils/log_util.dart';
+export 'src/utils/num_util.dart';
 export 'src/utils/obj_util.dart';
 export 'src/utils/enum/date_enum.dart';

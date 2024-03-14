@@ -21,6 +21,8 @@ extension ContextExtension on BuildContext {
 
   double get navigationBarHeight => _padding().bottom;
 
+  double get viewInsetsBottom =>  MediaQuery.viewInsetsOf(this).bottom;
+
   ThemeData get theme => Theme.of(this);
 
   ColorScheme get colorScheme =>theme.colorScheme;

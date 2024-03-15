@@ -15,7 +15,7 @@ extension StringExtension on String? {
   String notEmptyToNew(String obj) => isNotEmptyOrNull ? obj : this!;
 
   /// string形式的bool值
-  bool get boolValue => isEmptyOrNull && this == "1";
+  bool get boolValue => isNotEmptyOrNull && this == "1";
 
   /// string形式的int值
   int get intValue => boolValue.intValue;

@@ -23,5 +23,5 @@ extension BoolExtension on bool? {
   String get stringValue => intValue.toString();
 
   /// 取value
-  String reverseStringValue() => reverseIntValue.toString();
+  String get reverseStringValue => reverseIntValue.toString();
 }

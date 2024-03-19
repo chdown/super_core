@@ -41,11 +41,9 @@ mixin SuperCore {
     } catch (e) {
       LogUtil.e(null, error: e, stackTrace: e is Error ? (e.stackTrace) : null);
       String msg = _getErrorMsg(e);
-      loadConfig.error?.call(msg);
       bool iseNetUnConnection = e is AppNetError && e.code == AppNetError.errorNetUnConnection;
       _showState(loadConfig, loadEnum, iseNetUnConnection ? LoadState.netError : LoadState.error, errorMsg: msg);
     } finally {
-      loadConfig.finish?.call();
       _showState(loadConfig, loadEnum, LoadState.finish);
     }
   }

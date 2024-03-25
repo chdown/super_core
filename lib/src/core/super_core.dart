@@ -63,19 +63,24 @@ mixin SuperCore {
     if (loadEnum == LoadEnum.page) showPageState(loadConfig, loadState, errorMsg);
     if (loadEnum == LoadEnum.refresh) showRefreshState(loadConfig, loadState, errorMsg);
   }
-}
 
-/// 获取错误日志
-_getErrorMsg(Object e) {
-  String msg = "未知业务错误！";
-  if (e is DioException) {
-    if (e.error is AppNetError) {
-      msg = (e.error as AppNetError).message;
-    } else {
-      msg = e.message ?? "未知网络错误！";
+  /// 获取错误日志
+  _getErrorMsg(Object e) {
+    String msg = "未知业务错误！";
+    if (e is DioException) {
+      if (e.error is AppNetError) {
+        msg = (e.error as AppNetError).message;
+      } else {
+        msg = e.message ?? "未知网络错误！";
+      }
+    } else if (e is AppNetError) {
+      msg = e.message;
     }
-  } else if (e is AppNetError) {
-    msg = e.message;
+    msg = extError(e);
+    return msg;
   }
-  return msg;
+
+  String extError(Object e) {
+    return "未知业务错误";
+  }
 }

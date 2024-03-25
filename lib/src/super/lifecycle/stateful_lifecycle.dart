@@ -8,6 +8,12 @@ import 'state_lifecycle.dart';
 /// @date 2024-03-14 16:40:19
 /// @description StatefulWidget 的生命周期实现基于原生实现
 ///
+/// 需要添加下面的代码
+/// MaterialApp(
+//   navigatorObservers: [routeObserver],
+//   // ... other properties
+// )
+///
 final RouteObserver routeObserver = RouteObserver();
 
 mixin StatefulLifecycle<T extends StatefulWidget> on State<T> implements RouteAware, WidgetsBindingObserver, StateLifecycle {

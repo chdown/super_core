@@ -1,4 +1,3 @@
-
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -12,7 +11,6 @@ import 'state_lifecycle.dart';
 final RouteObserver routeObserver = RouteObserver();
 
 mixin StatefulLifecycle<T extends StatefulWidget> on State<T> implements RouteAware, WidgetsBindingObserver, StateLifecycle {
-
   @override
   void initState() {
     super.initState();
@@ -64,58 +62,55 @@ mixin StatefulLifecycle<T extends StatefulWidget> on State<T> implements RouteAw
     }
   }
 
-  @override
-  void didChangeAccessibilityFeatures() {
-    // TODO: implement didChangeAccessibilityFeatures
-  }
+  //  =========================== 默认空实现 ===========================
 
   @override
-  void didChangeLocales(List<Locale>? locales) {
-    // TODO: implement didChangeLocales
-  }
+  void didChangeAccessibilityFeatures() {}
 
   @override
-  void didChangeMetrics() {
-    // TODO: implement didChangeMetrics
-  }
+  void didChangeLocales(List<Locale>? locales) {}
 
   @override
-  void didChangePlatformBrightness() {
-    // TODO: implement didChangePlatformBrightness
-  }
+  void didChangeMetrics() {}
 
   @override
-  void didChangeTextScaleFactor() {
-    // TODO: implement didChangeTextScaleFactor
-  }
+  void didChangePlatformBrightness() {}
 
   @override
-  void didHaveMemoryPressure() {
-    // TODO: implement didHaveMemoryPressure
-  }
+  void didChangeTextScaleFactor() {}
+
+  @override
+  void didHaveMemoryPressure() {}
 
   @override
   Future<bool> didPopRoute() {
-    // TODO: implement didPopRoute
-    throw UnimplementedError();
+    return Future<bool>.value(false);
   }
 
   @override
   Future<bool> didPushRoute(String route) {
-    // TODO: implement didPushRoute
-    throw UnimplementedError();
+    return Future<bool>.value(false);
   }
 
   @override
   Future<bool> didPushRouteInformation(RouteInformation routeInformation) {
-    // TODO: implement didPushRouteInformation
-    throw UnimplementedError();
+    return didPushRoute(routeInformation.location!);
   }
 
   @override
-  Future<AppExitResponse> didRequestAppExit() {
-    // TODO: implement didRequestAppExit
-    throw UnimplementedError();
+  Future<AppExitResponse> didRequestAppExit() async {
+    return AppExitResponse.exit;
   }
-}
 
+  @override
+  void onStart() {}
+
+  @override
+  void onStop() {}
+
+  @override
+  void onResume() {}
+
+  @override
+  void onPause() {}
+}

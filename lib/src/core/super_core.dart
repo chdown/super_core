@@ -76,11 +76,11 @@ mixin SuperCore {
     } else if (e is AppNetError) {
       msg = e.message;
     }
-    msg = extError(e);
+    msg = extError(e, msg);
     return msg;
   }
 
-  String extError(Object e) {
-    return "未知业务错误";
+  String extError(Object e, String msg) {
+    return msg;
   }
 }

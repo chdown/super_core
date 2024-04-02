@@ -3,6 +3,9 @@
 /// @description 日期枚举
 ///
 class DateEnum {
+
+  DateEnum._();
+
   static const String normY = "yyyy";
 
   static const String normYm = "yyyy-MM";

@@ -7,7 +7,6 @@ import 'package:super_core/src/utils/obj_util.dart';
 /// @description 日期工具
 ///
 class DateUtil {
-
   DateUtil._();
 
   /// 获取日期
@@ -23,13 +22,22 @@ class DateUtil {
   static String dateStrToStr(
     String? srcTime, {
     String srcFormat = DateEnum.normYmdHms,
-    String destFormat =  DateEnum.normYmd,
+    String destFormat = DateEnum.normYmd,
   }) {
-    return dateToStr(getTime(srcTime, srcFormat), format: destFormat);
+    return dateToStr(getTime(srcTime, format: srcFormat), format: destFormat);
+  }
+
+  /// 日期转换为新日期
+  static DateTime? dateToDate(
+    DateTime srcTime, {
+    String srcFormat = DateEnum.normYmdHms,
+    String destFormat = DateEnum.normYmd,
+  }) {
+    return getTime(dateToStr(srcTime, format: srcFormat), format: destFormat);
   }
 
   /// 获取时间
-  static DateTime? getTime(String? time, String format) {
+  static DateTime? getTime(String? time, {String format = DateEnum.normYmdHms}) {
     if (ObjUtil.isEmpty(time)) return null;
     try {
       return DateFormat(format).parse(time!);

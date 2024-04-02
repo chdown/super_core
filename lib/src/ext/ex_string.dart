@@ -1,13 +1,15 @@
 import 'package:super_core/src/ext/ex_bool.dart';
 import 'package:super_core/src/ext/ex_object.dart';
-import 'package:super_core/src/utils/obj_util.dart';
+import "package:path/path.dart" as path;
+import 'package:super_core/src/utils/date_util.dart';
+
+import '../../super_core.dart';
 
 /// @author : ch
 /// @date 2024-02-18 09:34:57
 /// @description String方法
 ///
 extension StringExtension on String? {
-
   /// 为空时返回Obj
   String emptyToNew(String obj) => isEmptyOrNull ? obj : this!;
 
@@ -44,4 +46,20 @@ extension StringExtension on String? {
   String notEmptyPrefix(String prefix) {
     return isEmptyOrNull ? (this ?? '') : '$prefix$this';
   }
+
+  /// 获取文件名称含后缀
+  String fileNameAndExtension() => isNotEmptyOrNull ? path.basename(this!) : '';
+
+  /// 获取文件名称
+  String fileName() => isNotEmptyOrNull ? path.basenameWithoutExtension(this!) : '';
+
+  /// string转日期
+  DateTime? toDateTime({String format = DateEnum.normYmdHms}) => DateUtil.getTime(this, format: format);
+
+  /// string转日期
+  String? toStrTime({
+    String srcFormat = DateEnum.normYmdHms,
+    String destFormat = DateEnum.normYmd,
+  }) =>
+      DateUtil.dateStrToStr(this, srcFormat: srcFormat, destFormat: destFormat);
 }

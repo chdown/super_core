@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:super_core/src/core/load_config.dart';
@@ -18,6 +20,13 @@ mixin SuperCore {
   void showRefreshState(LoadConfig loadConfig, LoadState loadState, String errorMsg);
 
   void showToast(String? message);
+
+  /// 扩展异常
+  String extError(Object e, String msg) => msg;
+
+  /// 消费错误
+  /// [return] 返回true时错误将不再往下进行
+  Future<bool> consumptionError(Object e) async => false;
 
   /// 通用的数据请求方法
   /// [request] 请求包装类，返回最终list数据的情况下，会自动进行空页面显示处理
@@ -40,6 +49,7 @@ mixin SuperCore {
       _showState(loadConfig, loadEnum, isEmpty ? LoadState.successEmpty : LoadState.success);
     } catch (e) {
       LogUtil.e(null, error: e, stackTrace: e is Error ? (e.stackTrace) : null);
+      if (await consumptionError(e)) return;
       String msg = _getErrorMsg(e);
       bool iseNetUnConnection = e is AppNetError && e.code == AppNetError.errorNetUnConnection;
       _showState(loadConfig, loadEnum, iseNetUnConnection ? LoadState.netError : LoadState.error, errorMsg: msg);
@@ -77,10 +87,6 @@ mixin SuperCore {
       msg = e.message;
     }
     msg = extError(e, msg);
-    return msg;
-  }
-
-  String extError(Object e, String msg) {
     return msg;
   }
 }

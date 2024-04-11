@@ -25,7 +25,7 @@ class SuperErrorInterceptor extends Interceptor {
           ),
           true,
         );
-      } else if (response.data[SuperNetConfig.code] != 200) {
+      } else if (!SuperNetConfig.code.contains(response.data[SuperNetConfig.code])) {
         response.statusCode = response.data[SuperNetConfig.code];
         response.statusMessage = response.data[SuperNetConfig.msg];
         handler.reject(

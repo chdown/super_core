@@ -9,7 +9,7 @@ class SuperNetConfig {
   static String Function() baseUrl = () => '';
 
   /// 代理地址：192.160.0.1:8888
-  static String Function()  proxyUrl = () => '';
+  static String Function() proxyUrl = () => '';
 
   /// 连接等待毫秒数
   static int connectTimeout = 30 * 1000;
@@ -31,4 +31,7 @@ class SuperNetConfig {
 
   /// 网络请求msg字段
   static String msg = 'msg';
+
+  /// 请求成功code
+  static List<int> codeSuccess = [200];
 }

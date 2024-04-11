@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ffi';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -29,12 +30,12 @@ mixin SuperCore {
   Future<bool> consumptionError(Object e) async => false;
 
   /// 通用的数据请求方法
-  /// [request] 请求包装类，返回最终list数据的情况下，会自动进行空页面显示处理
+  /// [request] 请求包装类，返回最终[List]数据的情况下，会自动进行空页面显示处理
   /// [loadEnum] 请求数据的方式
   /// [loadConfig] Load配置
   ///
   Future request<T>({
-    required Future<List?> Function() request,
+    required Future<dynamic> Function() request,
     LoadEnum loadEnum = LoadEnum.loading,
     LoadConfig? loadConfig,
   }) async {
@@ -44,8 +45,8 @@ mixin SuperCore {
         throw AppNetError(code: AppNetError.errorNetUnConnection, message: AppNetError.errorNetUnConnectionMsg);
       }
       _showState(loadConfig, loadEnum, LoadState.start);
-      List? list = await request(); // 请求数据
-      bool isEmpty = list != null && list.isEmpty;
+      dynamic result = await request(); // 请求数据
+      bool isEmpty = result != null && result is List && result.isEmpty;
       _showState(loadConfig, loadEnum, isEmpty ? LoadState.successEmpty : LoadState.success);
     } catch (e) {
       LogUtil.e(null, error: e, stackTrace: e is Error ? (e.stackTrace) : null);

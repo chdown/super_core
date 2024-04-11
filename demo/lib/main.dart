@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:super_core/super_core.dart';
 
@@ -33,7 +31,7 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with StatefulLifecycle {
+class _MyHomePageState extends State<MyHomePage> with StatefulLifecycle, SuperCore {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +49,11 @@ class _MyHomePageState extends State<MyHomePage> with StatefulLifecycle {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          List<Kk> list = <Kk>[];
+          request(
+            request: () async {
+              return {};
+            },
+          );
         },
         tooltip: 'Increment',
         child: const Icon(Icons.add),
@@ -61,7 +63,7 @@ class _MyHomePageState extends State<MyHomePage> with StatefulLifecycle {
 
   @override
   void onPause() {
-    // TODO: implement onPause
+
   }
 
   @override
@@ -78,8 +80,26 @@ class _MyHomePageState extends State<MyHomePage> with StatefulLifecycle {
   void onStop() {
     // TODO: implement onStop
   }
+
+  @override
+  void showLoadingState(LoadConfig loadConfig, LoadState loadState, String errorMsg) {
+    LogUtil.d(loadState);
+  }
+
+  @override
+  void showPageState(LoadConfig loadConfig, LoadState loadState, String errorMsg) {
+    LogUtil.d(loadState);
+  }
+
+  @override
+  void showRefreshState(LoadConfig loadConfig, LoadState loadState, String errorMsg) {
+    LogUtil.d(loadState);
+  }
+
+  @override
+  void showToast(String? message) {
+    // TODO: implement showToast
+  }
 }
 
-class Kk{
-
-}
+class Kk {}

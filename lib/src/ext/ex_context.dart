@@ -11,9 +11,9 @@ extension ContextExtension on BuildContext {
 
   Size size() => MediaQuery.sizeOf(this);
 
-  double get width => size().width;
+  double get sizeWidth => size().width;
 
-  double get height => size().height;
+  double get sizeHeight => size().height;
 
   EdgeInsets _padding() => MediaQuery.paddingOf(this);
 

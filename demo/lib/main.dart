@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:super_core/super_core.dart';
 
-import 'Pager.dart';
-
 void main() {
   SuperNetConfig.baseUrl = () => 'http://192.168.31.200:1883/';
   runApp(const MyApp());
@@ -35,18 +33,32 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> with StatefulLifecycle, SuperCore {
   @override
+  void initState() {
+    Map<String, dynamic> values = {
+      "1": "1",
+      "2": "1",
+      "3": "1",
+      "4": "",
+      "5": "1",
+      "6": "1",
+    };
+    LogUtil.d((values.where((k, v) => ObjUtil.isNotEmpty(v))));
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: Center(
+      body: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            CustomPaint(painter: Pager()),
+            Text('You have pushed the button this many times:'),
+            // CustomPaint(painter: Pager()),
           ],
         ),
       ),

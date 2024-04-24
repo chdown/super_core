@@ -14,6 +14,7 @@ export 'src/ext/ex_list.dart';
 export 'src/ext/ex_object.dart';
 export 'src/ext/ex_string.dart';
 export 'src/ext/ex_widget.dart';
+export 'src/ext/ex_map.dart';
 export 'src/http/app_net_error.dart';
 export 'src/super/lifecycle/state_lifecycle.dart';
 export 'src/super/lifecycle/stateful_lifecycle.dart';

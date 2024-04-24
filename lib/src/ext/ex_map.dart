@@ -15,4 +15,12 @@ extension MapExtension<K, V> on Map<K, V> {
     addAll(newMap);
     return this;
   }
+
+  Map<K, V> copy() {
+    Map<K, V> newMap = {};
+    forEach((key, value) {
+      newMap[key] = value;
+    });
+    return newMap;
+  }
 }

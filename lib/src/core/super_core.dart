@@ -27,7 +27,7 @@ mixin SuperCore {
 
   /// 消费错误
   /// [return] 返回true时错误将不再往下进行
-  Future<bool> consumptionError(Object e) async => false;
+  Future<bool> consumptionError(Object e, StackTrace? trace) async => false;
 
   /// 通用的数据请求方法
   /// [request] 请求包装类，返回最终[List]数据的情况下，会自动进行空页面显示处理
@@ -50,10 +50,11 @@ mixin SuperCore {
       _showState(loadConfig, loadEnum, isEmpty ? LoadState.successEmpty : LoadState.success);
     } catch (e) {
       LogUtil.e(null, error: e, stackTrace: e is Error ? (e.stackTrace) : null);
-      if (await consumptionError(e)) return;
       String msg = _getErrorMsg(e);
+      if (await consumptionError(e, e is Error ? (e.stackTrace) : null)) return;
       bool iseNetUnConnection = e is AppNetError && e.code == AppNetError.errorNetUnConnection;
       _showState(loadConfig, loadEnum, iseNetUnConnection ? LoadState.netError : LoadState.error, errorMsg: msg);
+      rethrow;
     } finally {
       _showState(loadConfig, loadEnum, LoadState.finish);
     }

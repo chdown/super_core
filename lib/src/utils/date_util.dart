@@ -12,6 +12,9 @@ class DateUtil {
   /// 获取日期
   static String getNowDateStr({String format = DateEnum.normYmd}) => dateToStr(DateTime.now(), format: format);
 
+  /// 获取当前日期的dateTime
+  static DateTime getNowTime({String format = DateEnum.normYmdHms}) => DateFormat(format).parse(getNowDateStr(format: format));
+
   /// DateTime日期转换为字符串日期
   static String dateToStr(DateTime? dateTime, {String format = DateEnum.normYmd}) {
     if (dateTime == null) return "";

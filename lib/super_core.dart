@@ -11,7 +11,6 @@ export 'src/ext/ex_context.dart';
 export 'src/ext/ex_function.dart';
 export 'src/ext/ex_int.dart';
 export 'src/ext/ex_list.dart';
-export 'src/ext/ex_object.dart';
 export 'src/ext/ex_string.dart';
 export 'src/ext/ex_widget.dart';
 export 'src/ext/ex_map.dart';

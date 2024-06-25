@@ -1,15 +1,17 @@
-import 'package:super_core/src/ext/ex_bool.dart';
-import 'package:super_core/src/ext/ex_object.dart';
-import "package:path/path.dart" as path;
-import 'package:super_core/src/utils/date_util.dart';
-
 import '../../super_core.dart';
+import "package:path/path.dart" as path;
 
 /// @author : ch
 /// @date 2024-02-18 09:34:57
 /// @description String方法
 ///
 extension StringExtension on String? {
+  /// 是否为null或空
+  bool get isEmptyOrNull => ObjUtil.isEmpty(this);
+
+  /// 是否不为null或空
+  bool get isNotEmptyOrNull => ObjUtil.isNotEmpty(this);
+
   /// 为空时返回Obj
   String emptyToNew(String obj) => isEmptyOrNull ? obj : this!;
 
@@ -35,6 +37,11 @@ extension StringExtension on String? {
   double toDouble({double defaultValue = 0.0}) {
     if (isEmptyOrNull) return defaultValue;
     return double.tryParse(this!) ?? defaultValue;
+  }
+
+  /// string转换为double-> 处理小数点
+  String toAsFixed({double defaultValue = 0.0, int fractionDigits = 2}) {
+    return toDouble(defaultValue: defaultValue).toStringAsFixed(fractionDigits);
   }
 
   /// 不为空是后面增加指定文本

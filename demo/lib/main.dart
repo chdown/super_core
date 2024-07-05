@@ -64,11 +64,7 @@ class _MyHomePageState extends State<MyHomePage> with StatefulLifecycle, SuperCo
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          request(
-            request: () async {
-              return {};
-            },
-          );
+          debugPrint("11111111");
         },
         tooltip: 'Increment',
         child: const Icon(Icons.add),

@@ -13,6 +13,7 @@ export 'src/ext/ex_int.dart';
 export 'src/ext/ex_list.dart';
 export 'src/ext/ex_string.dart';
 export 'src/ext/ex_widget.dart';
+export 'src/ext/ex_t.dart';
 export 'src/ext/ex_map.dart';
 export 'src/http/app_net_error.dart';
 export 'src/super/lifecycle/state_lifecycle.dart';

@@ -24,4 +24,10 @@ extension BoolExtension on bool? {
 
   /// 取value
   String get reverseStringValue => reverseIntValue.toString();
+
+  /// true文本显示
+  String trueText(String trueTxt, {String falseTxt = ''}) => this != null && this! ? trueTxt : falseTxt;
+
+  /// false文本显示
+  String falseText(String falseTxt, {String trueTxt = ''}) => this == null || !this! ? falseTxt : trueTxt;
 }

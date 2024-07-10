@@ -49,11 +49,10 @@ mixin SuperCore {
       _showState(loadConfig, loadEnum, isEmpty ? LoadState.successEmpty : LoadState.success);
     } catch (e) {
       LogUtil.e(null, error: e, stackTrace: e is Error ? (e.stackTrace) : null);
-      String msg = _getErrorMsg(e);
       if (await consumptionError(e, e is Error ? (e.stackTrace) : null)) return;
+      String msg = _getErrorMsg(e);
       bool iseNetUnConnection = e is AppNetError && e.code == AppNetError.errorNetUnConnection;
       _showState(loadConfig, loadEnum, iseNetUnConnection ? LoadState.netError : LoadState.error, errorMsg: msg);
-      rethrow;
     } finally {
       _showState(loadConfig, loadEnum, LoadState.finish);
     }
@@ -86,6 +85,8 @@ mixin SuperCore {
       }
     } else if (e is AppNetError) {
       msg = e.message;
+    }else{
+      throw e;
     }
     msg = extError(e, msg);
     return msg;

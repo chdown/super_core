@@ -85,8 +85,6 @@ mixin SuperCore {
       }
     } else if (e is AppNetError) {
       msg = e.message;
-    }else{
-      throw e;
     }
     msg = extError(e, msg);
     return msg;

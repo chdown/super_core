@@ -47,9 +47,9 @@ mixin SuperCore {
       dynamic result = await request(); // 请求数据
       bool isEmpty = result != null && result is List && result.isEmpty;
       _showState(loadConfig, loadEnum, isEmpty ? LoadState.successEmpty : LoadState.success);
-    } catch (e) {
-      LogUtil.e(null, error: e, stackTrace: e is Error ? (e.stackTrace) : null);
-      if (await consumptionError(e, e is Error ? (e.stackTrace) : null)) return;
+    } catch (e, stackTrace) {
+      LogUtil.e(null, error: e, stackTrace: stackTrace);
+      if (await consumptionError(e, stackTrace)) return;
       String msg = _getErrorMsg(e);
       bool iseNetUnConnection = e is AppNetError && e.code == AppNetError.errorNetUnConnection;
       _showState(loadConfig, loadEnum, iseNetUnConnection ? LoadState.netError : LoadState.error, errorMsg: msg);

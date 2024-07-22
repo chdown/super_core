@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
+import 'package:super_core/src/config/super_net_config.dart';
 import 'package:super_core/src/utils/log_util.dart';
 
 class SuperLogInterceptor extends Interceptor {
@@ -20,7 +22,7 @@ class SuperLogInterceptor extends Interceptor {
       'Request Token': '${err.requestOptions.headers["Authorization"]}',
       'Response Data': err.response?.data,
     };
-    LogUtil.e(log, stackTrace: err.stackTrace);
+    if (!kReleaseMode && SuperNetConfig.showDebugLog) LogUtil.e(log, stackTrace: err.stackTrace);
     super.onError(err, handler);
   }
 
@@ -35,7 +37,7 @@ class SuperLogInterceptor extends Interceptor {
       'Request Token': '${response.requestOptions.headers["Authorization"]}',
       'Response Data': response.data,
     };
-    LogUtil.i(log);
+    if (!kReleaseMode && SuperNetConfig.showDebugLog && SuperNetConfig.showDebugLogData) LogUtil.i(log);
     super.onResponse(response, handler);
   }
 }

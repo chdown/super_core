@@ -34,4 +34,10 @@ class SuperNetConfig {
 
   /// 请求成功code
   static List<int> codeSuccess = [200];
+
+  /// debug输出日志
+  static bool showDebugLog = true;
+
+  /// debug输出data日志
+  static bool showDebugLogData = true;
 }

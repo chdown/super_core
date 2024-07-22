@@ -35,9 +35,9 @@ class SuperLogInterceptor extends Interceptor {
       'Request Query': '${response.requestOptions.queryParameters}',
       'Request Data': '${response.requestOptions.data}',
       'Request Token': '${response.requestOptions.headers["Authorization"]}',
-      'Response Data': response.data,
+      if (SuperNetConfig.showDebugLogData) 'Response Data': response.data,
     };
-    if (!kReleaseMode && SuperNetConfig.showDebugLog && SuperNetConfig.showDebugLogData) LogUtil.i(log);
+    if (!kReleaseMode && SuperNetConfig.showDebugLog) LogUtil.i(log);
     super.onResponse(response, handler);
   }
 }

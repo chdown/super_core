@@ -37,7 +37,4 @@ class SuperNetConfig {
 
   /// debug输出日志
   static bool showDebugLog = true;
-
-  /// debug输出data日志
-  static bool showDebugLogData = true;
 }

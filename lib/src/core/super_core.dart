@@ -40,7 +40,8 @@ mixin SuperCore {
   }) async {
     loadConfig ??= LoadConfig();
     try {
-      if (await (Connectivity().checkConnectivity()) == ConnectivityResult.none) {
+      List<ConnectivityResult> connectivityList = await Connectivity().checkConnectivity();
+      if (connectivityList.isNotEmpty && connectivityList[0] == ConnectivityResult.none) {
         throw AppNetError(code: AppNetError.errorNetUnConnection, message: AppNetError.errorNetUnConnectionMsg);
       }
       _showState(loadConfig, loadEnum, LoadState.start);
@@ -48,6 +49,8 @@ mixin SuperCore {
       bool isEmpty = result != null && result is List && result.isEmpty;
       _showState(loadConfig, loadEnum, isEmpty ? LoadState.successEmpty : LoadState.success);
     } catch (e, stackTrace) {
+      /// 处理是否忽略取消错误
+      if (isIgnoreCancelError() && e is DioException && e.type == DioExceptionType.cancel) return;
       LogUtil.e(null, error: e, stackTrace: stackTrace);
       if (await consumptionError(e, stackTrace)) return;
       String msg = _getErrorMsg(e);
@@ -57,6 +60,9 @@ mixin SuperCore {
       _showState(loadConfig, loadEnum, LoadState.finish);
     }
   }
+
+  // 是否忽略取消错误
+  bool isIgnoreCancelError() => true;
 
   void _showState(LoadConfig loadConfig, LoadEnum loadEnum, LoadState loadState, {String errorMsg = ''}) {
     /// 输出toast

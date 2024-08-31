@@ -10,7 +10,8 @@ import 'package:super_core/super_core.dart';
 class MainController extends BaseController {
   List<ShopTablesEntity> mList = [];
   CancelToken cancelToken = CancelToken();
-  int mReqTime = 0;
+
+  // int mReqTime = 0;
 
   String tableType = "billiard";
 
@@ -28,44 +29,32 @@ class MainController extends BaseController {
   getTableData(String type) async {
     request(
       request: () async {
-        if (type == 'billiard') {
-          int reqTime = DateTime.now().millisecondsSinceEpoch;
-          mReqTime = reqTime;
-          await Future.delayed(
-            const Duration(seconds: 3),
-            () async {
-              List<ShopTablesEntity> list = (await AppHttp.get<List<ShopTablesEntity>>(
-                    'customer/shop/tables',
-                    params: {
-                      "shopId": '1770649609751498754',
-                      'tableType': type, //chess
-                    },
-                    cancelToken: cancelToken,
-                  )) ??
-                  [];
-              if (reqTime != mReqTime) return mList;
-              mList = list;
-              update();
-              return mList;
-            },
-          );
-        } else {
-          int reqTime = DateTime.now().millisecondsSinceEpoch;
-          mReqTime = reqTime;
-          List<ShopTablesEntity> list = (await AppHttp.get<List<ShopTablesEntity>>(
-                'customer/shop/tables',
-                params: {
-                  "shopId": '1770649609751498754',
-                  'tableType': type, //chess
-                },
-                cancelToken: cancelToken,
-              )) ??
-              List.empty();
-          if (reqTime != mReqTime) return mList;
-          mList = list;
-          update();
-          return mList;
-        }
+        bool isTrue = true;
+        List<ShopTablesEntity> list = await requestLimit<List<ShopTablesEntity>>(
+          'table',
+          request: () async {
+            List<ShopTablesEntity> result = (await AppHttp.get<List<ShopTablesEntity>>(
+                  'customer/shop/tables',
+                  params: {
+                    "shopId": '1770649609751498754',
+                    'tableType': type, //chess
+                  },
+                  cancelToken: cancelToken,
+                )) ??
+                [];
+            if (type == 'billiard') await Future.delayed(const Duration(seconds: 3));
+            return result;
+          },
+          error: () {
+            showToast('error');
+            return isTrue = false;
+          },
+          success: (t) {
+            mList = t;
+            update();
+            return mList;
+          },
+        );
       },
       loadEnum: LoadEnum.page,
     );

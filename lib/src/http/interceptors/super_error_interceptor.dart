@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:dio/dio.dart';
 import 'package:super_core/src/config/super_net_config.dart';
 import 'package:super_core/src/http/app_net_error.dart';
-import 'package:super_core/src/http/super_http.dart';
 
 class SuperErrorInterceptor extends Interceptor {
   final VoidCallback tokenRefresh;
@@ -63,7 +62,7 @@ class SuperErrorInterceptor extends Interceptor {
         if (code == 400) {
           throw AppNetError(code: code, message: message ?? AppNetError.error400Msg);
         } else if (code == 401) {
-          SuperHttp.instance.cancelRequests();
+          // SuperHttp.instance.cancelRequests();
           tokenRefresh();
         } else if (code == 403) {
           throw AppNetError(code: code, message: message ?? AppNetError.error403Msg);

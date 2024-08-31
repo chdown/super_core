@@ -8,7 +8,7 @@ class AppNetError extends Error {
   static const int errorUnKnow = -1;
   static String errorKnowMsg = "未知错误，请稍后再试！";
 
-  static const int errorConnection = -2;
+  static const int errorDio = -2;
 
   static const int errorData = -3;
   static String errorDataMsg = "数据错误，请稍后再试！";

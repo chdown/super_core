@@ -12,6 +12,7 @@ export 'src/ext/ex_int.dart';
 export 'src/ext/ex_list.dart';
 export 'src/ext/ex_map.dart';
 export 'src/ext/ex_map_null.dart';
+export 'src/ext/ex_object.dart';
 export 'src/ext/ex_string.dart';
 export 'src/ext/ex_t.dart';
 export 'src/ext/ex_widget.dart';

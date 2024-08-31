@@ -15,6 +15,7 @@ dependencies:
   connectivity_plus: ^6.0.3
   dio: ^5.5.0+1
   intl: ^0.18.1
+  lottie: ^3.1.0 #lottie动画
 
 dev_dependencies:
   flutter_test:

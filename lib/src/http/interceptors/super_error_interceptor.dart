@@ -48,15 +48,15 @@ class SuperErrorInterceptor extends Interceptor {
   void onError(DioException err, ErrorInterceptorHandler handler) {
     switch (err.type) {
       case DioExceptionType.sendTimeout:
-        throw AppNetError(code: AppNetError.errorConnection, message: AppNetError.sendTimeoutMsg);
+        throw AppNetError(code: AppNetError.errorDio, message: AppNetError.sendTimeoutMsg);
       case DioExceptionType.connectionTimeout:
-        throw AppNetError(code: AppNetError.errorConnection, message: AppNetError.connectionTimeoutMsg);
+        throw AppNetError(code: AppNetError.errorDio, message: AppNetError.connectionTimeoutMsg);
       case DioExceptionType.cancel:
-        throw AppNetError(code: AppNetError.errorConnection, message: AppNetError.cancelMsg);
+        throw AppNetError(code: AppNetError.errorDio, message: AppNetError.cancelMsg);
       case DioExceptionType.receiveTimeout:
-        throw AppNetError(code: AppNetError.errorConnection, message: AppNetError.receiveTimeoutMsg);
+        throw AppNetError(code: AppNetError.errorDio, message: AppNetError.receiveTimeoutMsg);
       case DioExceptionType.connectionError:
-        throw AppNetError(code: AppNetError.errorConnection, message: AppNetError.connectionErrorMsg);
+        throw AppNetError(code: AppNetError.errorDio, message: AppNetError.connectionErrorMsg);
       case DioExceptionType.badResponse:
         int code = err.response?.statusCode ?? AppNetError.errorUnKnow;
         String? message = err.response?.statusMessage;

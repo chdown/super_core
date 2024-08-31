@@ -6,11 +6,8 @@ import 'package:super_core/src/config/super_net_config.dart';
 
 /// @author : ch
 /// @date 2024-03-06 14:19:08
-/// @description 往后请求引擎
+/// @description  网络请求引擎封装，目前使用的是 Dio 框架
 ///
-/*
- * 网络请求引擎封装，目前使用的是 Dio 框架
- */
 class SuperHttp {
   CancelToken _cancelToken = CancelToken();
   static SuperHttp? _instance;

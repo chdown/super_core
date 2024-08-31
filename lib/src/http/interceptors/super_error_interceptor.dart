@@ -63,7 +63,7 @@ class SuperErrorInterceptor extends Interceptor {
         if (code == 400) {
           throw AppNetError(code: code, message: message ?? AppNetError.error400Msg);
         } else if (code == 401) {
-          SuperHttp.instance.cancelRequests(token: CancelToken());
+          SuperHttp.instance.cancelRequests();
           tokenRefresh();
         } else if (code == 403) {
           throw AppNetError(code: code, message: message ?? AppNetError.error403Msg);

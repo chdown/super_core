@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:dio/dio.dart';
 import 'package:super_core/super_core.dart';
 import 'package:super_ui/super_ui.dart';
 
@@ -21,7 +20,6 @@ class Config {
           // if (ObjUtil.isNotEmpty(CacheSpUtil.getAuthorization())) 'Authorization': CacheSpUtil.getAuthorization().toString(),
         };
       }),
-      QueuedInterceptor(),
       SuperLogInterceptor(),
       // SuperErrorInterceptor(() {
       //   EventBus.instance.emit(EventKeys.token);

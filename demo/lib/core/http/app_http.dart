@@ -9,10 +9,10 @@ import 'package:super_core/super_core.dart';
 class AppHttp {
   /// get请求
   /// [path] 请求地址
-  /// [queryParameters] 请求参数
+  /// [params] 请求参数
   /// [options] 请求配置
   /// [cancelToken] 取消CancelToken
-  /// [isAutoError] 是否自动处理错误
+  /// [ignoreNull] 是否忽略参数为空
   ///
   static Future<T?> get<T>(
     String path, {
@@ -29,10 +29,9 @@ class AppHttp {
 
   /// get请求
   /// [path] 请求地址
-  /// [queryParameters] 请求参数
+  /// [params] 请求参数
   /// [options] 请求配置
   /// [cancelToken] 取消CancelToken
-  /// [isAutoError] 是否自动处理错误
   ///
   static Future<List<T>> getList<T>(
     String path, {
@@ -46,10 +45,9 @@ class AppHttp {
 
   /// get请求
   /// [path] 请求地址
-  /// [queryParameters] 请求参数
+  /// [params] 请求参数
   /// [options] 请求配置
   /// [cancelToken] 取消CancelToken
-  /// [isAutoError] 是否自动处理错误
   ///
   static Future<PageRes<T>> getListBase<T>(
     String path, {
@@ -64,12 +62,12 @@ class AppHttp {
 
   /// post请求
   /// [path] 请求地址
+  /// [params] 请求参数
   /// [queryParameters] 请求参数
-  /// [data] 请求数据
   /// [jsonContentType] 请求方式
   /// [options] 请求配置
   /// [cancelToken] 取消CancelToken
-  /// [isAutoError] 是否自动处理错误
+  /// [ignoreNull] 是否忽略参数为空
   ///
   static Future<T?> post<T>(
     String path, {
@@ -96,9 +94,9 @@ class AppHttp {
   /// post请求
   /// [path] 请求地址
   /// [queryParameters] 请求参数
+  /// [jsonContentType] 请求方式
   /// [options] 请求配置
   /// [cancelToken] 取消CancelToken
-  /// [isAutoError] 是否自动处理错误
   ///
   static Future<List<T>> postList<T>(
     String path, {
@@ -108,17 +106,24 @@ class AppHttp {
     Options? options,
     CancelToken? cancelToken,
   }) async {
-    var result = await postBaseList<T>(path,
-        params: params, queryParameters: queryParameters, jsonContentType: jsonContentType, options: options, cancelToken: cancelToken);
+    var result = await postBaseList<T>(
+      path,
+      params: params,
+      queryParameters: queryParameters,
+      jsonContentType: jsonContentType,
+      options: options,
+      cancelToken: cancelToken,
+    );
     return result.records;
   }
 
   /// post请求
   /// [path] 请求地址
+  /// [params] 请求参数
   /// [queryParameters] 请求参数
+  /// [jsonContentType] 请求方式
   /// [options] 请求配置
   /// [cancelToken] 取消CancelToken
-  /// [isAutoError] 是否自动处理错误
   ///
   static Future<PageRes<T>> postBaseList<T>(
     String path, {
@@ -142,6 +147,7 @@ class AppHttp {
 
   /// upload请求
   /// [path] 请求地址
+  /// [params] 请求参数
   /// [queryParameters] 请求参数
   /// [file] 请求文件
   /// [jsonContentType] 请求方式
@@ -150,6 +156,7 @@ class AppHttp {
   ///
   static Future<T?> upload<T>(
     String path, {
+    Map<String, dynamic>? params,
     Map<String, dynamic>? queryParameters,
     required File file,
     String? jsonContentType = Headers.multipartFormDataContentType,
@@ -157,7 +164,10 @@ class AppHttp {
     CancelToken? cancelToken,
   }) async {
     var name = file.path.fileName();
-    dynamic data = FormData.fromMap({'file': await MultipartFile.fromFile(file.path, filename: name)});
+    dynamic data = FormData.fromMap({
+      'file': await MultipartFile.fromFile(file.path, filename: name),
+      if (params.isNotEmptyOrNull) ...params!,
+    });
     return await post<T>(
       path,
       params: data,
@@ -170,12 +180,13 @@ class AppHttp {
 
   /// post请求
   /// [path] 请求地址
+  /// [savePath] 文件保存路径
+  /// [params] 请求数据
   /// [queryParameters] 请求参数
-  /// [data] 请求数据
   /// [jsonContentType] 请求方式
   /// [options] 请求配置
   /// [cancelToken] 取消CancelToken
-  /// [isAutoError] 是否自动处理错误
+  /// [ignoreNull] 是否湖绿空
   ///
   static Future<T?> download<T>(
     String path,

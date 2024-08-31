@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
-import 'Config.dart';
+import 'config.dart';
 
 void main() {
   /// 初始化生命周期 监听

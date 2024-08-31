@@ -9,7 +9,7 @@ import 'package:super_core/src/config/super_net_config.dart';
 /// @description  网络请求引擎封装，目前使用的是 Dio 框架
 ///
 class SuperHttp {
-  CancelToken _cancelToken = CancelToken();
+  final CancelToken _cancelToken = CancelToken();
   static SuperHttp? _instance;
   late Dio _dio;
 
@@ -53,9 +53,8 @@ class SuperHttp {
   }
 
   /// 取消请求
-  void cancelRequests({required CancelToken token}) {
+  void cancelRequests() {
     _cancelToken.cancel("cancelled");
-    _cancelToken = token;
   }
 
   /// 重制Dio实例方法

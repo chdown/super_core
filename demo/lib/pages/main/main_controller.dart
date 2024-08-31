@@ -10,6 +10,7 @@ import 'package:super_core/super_core.dart';
 class MainController extends BaseController {
   List<ShopTablesEntity> mList = [];
   CancelToken cancelToken = CancelToken();
+  int mReqTime = 0;
 
   String tableType = "billiard";
 
@@ -28,10 +29,12 @@ class MainController extends BaseController {
     request(
       request: () async {
         if (type == 'billiard') {
+          int reqTime = DateTime.now().millisecondsSinceEpoch;
+          mReqTime = reqTime;
           await Future.delayed(
             const Duration(seconds: 3),
             () async {
-              mList = (await AppHttp.get<List<ShopTablesEntity>>(
+              List<ShopTablesEntity> list = (await AppHttp.get<List<ShopTablesEntity>>(
                     'customer/shop/tables',
                     params: {
                       "shopId": '1770649609751498754',
@@ -40,12 +43,16 @@ class MainController extends BaseController {
                     cancelToken: cancelToken,
                   )) ??
                   [];
+              if (reqTime != mReqTime) return mList;
+              mList = list;
               update();
               return mList;
             },
           );
         } else {
-          mList = (await AppHttp.get<List<ShopTablesEntity>>(
+          int reqTime = DateTime.now().millisecondsSinceEpoch;
+          mReqTime = reqTime;
+          List<ShopTablesEntity> list = (await AppHttp.get<List<ShopTablesEntity>>(
                 'customer/shop/tables',
                 params: {
                   "shopId": '1770649609751498754',
@@ -54,6 +61,8 @@ class MainController extends BaseController {
                 cancelToken: cancelToken,
               )) ??
               List.empty();
+          if (reqTime != mReqTime) return mList;
+          mList = list;
           update();
           return mList;
         }

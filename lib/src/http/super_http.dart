@@ -75,11 +75,7 @@ class SuperHttp {
     Options? options,
     CancelToken? cancelToken,
   }) async {
-    var response = await _dio.get(
-      path,
-      queryParameters: params,
-      cancelToken: cancelToken ?? _cancelToken,
-    );
+    var response = await _dio.get(path, queryParameters: params, cancelToken: cancelToken ?? _cancelToken, options: options);
     return response;
   }
 

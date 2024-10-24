@@ -24,7 +24,7 @@ class SuperNetConfig {
   static List<Interceptor> interceptors = [];
 
   /// dio其他扩展
-  static Dio extDio(Dio dio) => dio;
+  static Dio Function(Dio dio) extDio = (dio) => dio;
 
   /// 网络code字段
   static String code = 'code';

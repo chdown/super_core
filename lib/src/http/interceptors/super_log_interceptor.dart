@@ -15,35 +15,37 @@ class SuperLogInterceptor extends Interceptor {
   }
 
   @override
-  void onError(DioException err, ErrorInterceptorHandler handler) {
-    var time = DateTime.now().millisecondsSinceEpoch - err.requestOptions.extra["ts"];
-    var logEnable = err.requestOptions.extra["logEnable"] ?? true;
+  void onError(DioException rep, ErrorInterceptorHandler handler) {
+    var time = DateTime.now().millisecondsSinceEpoch - rep.requestOptions.extra["ts"];
+    var logEnable = rep.requestOptions.extra["logEnable"] ?? true;
     Map log = {
-      '【HTTP ${err.requestOptions.method}请求错误-${err.type}】 耗时:': '${time}ms',
-      'Request Message：': err.message,
-      'Request URL': '${err.requestOptions.uri}',
-      'Request Query': '${err.requestOptions.queryParameters}',
-      'Request Data': '${err.requestOptions.data}',
-      'Request Token': '${err.requestOptions.headers["Authorization"]}',
-      'Response Data': err.response?.data,
+      'Http：': rep.requestOptions.method,
+      'Time：': time,
+      'URL': '${rep.requestOptions.uri}',
+      'Headers': rep.requestOptions.headers,
+      'RequestQuery': rep.requestOptions.queryParameters,
+      'RequestData': rep.requestOptions.data,
+      'ResponseMessage': rep.message,
+      'ResponseData': rep.response?.data,
     };
-    if (!kReleaseMode && SuperNetConfig.showDebugLog && logEnable) LogUtil.e(log, stackTrace: err.stackTrace);
-    super.onError(err, handler);
+    if (!kReleaseMode && SuperNetConfig.showDebugLog && logEnable) LogUtil.e(log, stackTrace: rep.stackTrace);
+    super.onError(rep, handler);
   }
 
   @override
-  void onResponse(Response response, ResponseInterceptorHandler handler) {
-    var time = DateTime.now().millisecondsSinceEpoch - response.requestOptions.extra["ts"];
-    var logEnable = response.requestOptions.extra["logEnable"] ?? true;
+  void onResponse(Response rep, ResponseInterceptorHandler handler) {
+    var time = DateTime.now().millisecondsSinceEpoch - rep.requestOptions.extra["ts"];
+    var logEnable = rep.requestOptions.extra["logEnable"] ?? true;
     Map log = {
-      '【HTTP ${response.requestOptions.method}请求响应】 耗时': '${time}ms',
-      'Request URL': '${response.requestOptions.uri}',
-      'Request Query': '${response.requestOptions.queryParameters}',
-      'Request Data': '${response.requestOptions.data}',
-      'Request Token': '${response.requestOptions.headers["Authorization"]}',
-      'Response Data': response.data,
+      'Http：': rep.requestOptions.method,
+      'Time：': time,
+      'URL': '${rep.requestOptions.uri}',
+      'Headers': rep.requestOptions.headers,
+      'RequestQuery': rep.requestOptions.queryParameters,
+      'RequestData': rep.requestOptions.data,
+      'ResponseData': rep.data,
     };
     if (!kReleaseMode && SuperNetConfig.showDebugLog && logEnable) LogUtil.i(log);
-    super.onResponse(response, handler);
+    super.onResponse(rep, handler);
   }
 }

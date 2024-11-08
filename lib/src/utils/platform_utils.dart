@@ -34,4 +34,8 @@ class PlatformUtils {
   /// Whether the operating system is a version of
   /// [Fuchsia](https://en.wikipedia.org/wiki/Google_Fuchsia).
   static bool get isFuchsia => Platform.isFuchsia;
+
+  static bool get isMobile => isAndroid || isIOS || isOhos;
+
+  static bool get isDesktop => isWindows || isMacOS;
 }

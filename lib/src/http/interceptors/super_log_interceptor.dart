@@ -21,7 +21,6 @@ class SuperLogInterceptor extends Interceptor {
     Map log = {
       'Http：': rep.requestOptions.method,
       'Time：': time,
-      'StatusCode：': rep.response?.statusCode,
       'URL': '${rep.requestOptions.uri}',
       'Headers': rep.requestOptions.headers,
       'RequestQuery': rep.requestOptions.queryParameters,
@@ -40,7 +39,6 @@ class SuperLogInterceptor extends Interceptor {
     Map log = {
       'Http：': rep.requestOptions.method,
       'Time：': time,
-      'StatusCode：': rep.statusCode,
       'URL': '${rep.requestOptions.uri}',
       'Headers': rep.requestOptions.headers,
       'RequestQuery': rep.requestOptions.queryParameters,

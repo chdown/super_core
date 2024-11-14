@@ -1,7 +1,7 @@
 import 'dart:io';
 
-class PlatformUtils {
-  PlatformUtils._();
+class PlatUtils {
+  PlatUtils._();
 
   /// Whether the operating system is a version of
   /// [ohos](https://en.wikipedia.org/wiki/OpenHarmony).

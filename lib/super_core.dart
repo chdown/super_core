@@ -30,4 +30,4 @@ export 'src/utils/log_util.dart';
 export 'src/utils/net_util.dart';
 export 'src/utils/num_util.dart';
 export 'src/utils/obj_util.dart';
-export 'src/utils/platform_utils.dart';
+export 'src/utils/plat_utils.dart';

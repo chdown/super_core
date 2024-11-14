@@ -6,7 +6,12 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 ///
 class NetUtils {
   static Future<bool> isConnect() async {
-    ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
-    return connectivityResult != ConnectivityResult.none;
+    List<ConnectivityResult> list = await Connectivity().checkConnectivity();
+    return list.isNotEmpty && (list.length == 1 && list.first == ConnectivityResult.none);
+  }
+
+  static Future<bool> isConnectWifi() async {
+    List<ConnectivityResult> list = await Connectivity().checkConnectivity();
+    return list.isNotEmpty && (list.length == 1 && list.first == ConnectivityResult.none) && list.contains(ConnectivityResult.wifi);
   }
 }

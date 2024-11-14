@@ -1,13 +1,7 @@
 import 'dart:async';
 
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
-import 'package:super_core/src/core/load_config.dart';
-import 'package:super_core/src/core/load_state.dart';
-import 'package:super_core/src/http/app_net_error.dart';
-import 'package:super_core/src/utils/log_util.dart';
-
-import 'load_enum.dart';
+import 'package:super_core/super_core.dart';
 
 /// @author : ch
 /// @date 2024-01-13 14:25:30
@@ -40,8 +34,7 @@ mixin SuperCore {
   }) async {
     loadConfig ??= LoadConfig();
     try {
-      List<ConnectivityResult> connectivityList = await Connectivity().checkConnectivity();
-      if (connectivityList.isNotEmpty && connectivityList[0] == ConnectivityResult.none) {
+      if (!(await NetUtils.isConnect())) {
         throw AppNetError(code: AppNetError.errorNetUnConnection, message: AppNetError.errorNetUnConnectionMsg);
       }
       _showState(loadConfig, loadEnum, LoadState.start);

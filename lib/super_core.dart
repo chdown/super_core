@@ -27,6 +27,7 @@ export 'src/super/lifecycle/stateful_lifecycle.dart';
 export 'src/utils/date_util.dart';
 export 'src/utils/enum/date_enum.dart';
 export 'src/utils/log_util.dart';
+export 'src/utils/net_util.dart';
 export 'src/utils/num_util.dart';
 export 'src/utils/obj_util.dart';
 export 'src/utils/platform_utils.dart';

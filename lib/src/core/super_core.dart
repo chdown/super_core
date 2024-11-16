@@ -34,9 +34,7 @@ mixin SuperCore {
   }) async {
     loadConfig ??= LoadConfig();
     try {
-      if (!(await NetUtils.isConnect())) {
-        throw AppNetError(code: AppNetError.errorNetUnConnection, message: AppNetError.errorNetUnConnectionMsg);
-      }
+      await checkConnect();
       _showState(loadConfig, loadEnum, LoadState.start);
       dynamic result = await request(); // 请求数据
       bool isEmpty = result != null && result is List && result.isEmpty;
@@ -49,6 +47,12 @@ mixin SuperCore {
       _showState(loadConfig, loadEnum, iseNetUnConnection ? LoadState.netError : LoadState.error, errorMsg: msg);
     } finally {
       _showState(loadConfig, loadEnum, LoadState.finish);
+    }
+  }
+
+  Future<void> checkConnect() async {
+    if (!(await NetUtils.isConnect())) {
+      throw AppNetError(code: AppNetError.errorNetUnConnection, message: AppNetError.errorNetUnConnectionMsg);
     }
   }
 

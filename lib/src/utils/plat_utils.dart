@@ -37,7 +37,9 @@ class PlatUtils {
   /// [Fuchsia](https://en.wikipedia.org/wiki/Google_Fuchsia).
   static bool get isFuchsia => defaultTargetPlatform == TargetPlatform.fuchsia;
 
+  // isMobile
   static bool get isMobile => isAndroid || isIOS || isOhos;
 
+  // isDesktop
   static bool get isDesktop => isWindows || isMacOS || isLinux;
 }

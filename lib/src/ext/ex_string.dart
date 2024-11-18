@@ -16,7 +16,7 @@ extension StringExtension on String? {
   bool get isNotEmptyOrNull => ObjUtil.isNotEmpty(this);
 
   /// 为空时返回Obj
-  String emptyToNew(String obj) => isEmptyOrNull ? obj : this!;
+  String emptyToNew(String obj, {String prefix = "", String suffix = ""}) => isEmptyOrNull ? obj : "$prefix$this!$suffix";
 
   /// 不为空时返回Obj
   String notEmptyToNew(String obj) => isNotEmptyOrNull ? obj : this!;

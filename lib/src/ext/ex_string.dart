@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import "package:path/path.dart" as path;
 
 import '../../super_core.dart';
@@ -58,7 +60,7 @@ extension StringExtension on String? {
   /// 获取后面的文本
   String lastStr({int number = 1}) {
     if (isEmptyOrNull) return "";
-    return this!.substring(this!.length >= number ? number : 0);
+    return this!.substring(max(this!.length - number, 0));
   }
 
   /// 获取文件名称含后缀

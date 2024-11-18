@@ -15,7 +15,7 @@ class MainPage extends StatelessWidget {
       init: MainController(),
       builder: (controller) {
         return Scaffold(
-          appBar: AppBar(title: Text('首页首页首页首页'.lastStr(number: 12))),
+          appBar: AppBar(title: Text('首页首页首页首页'.lastStr())),
           body: SuperBody(
             topBody: Row(
               children: [

@@ -55,6 +55,12 @@ extension StringExtension on String? {
     return isEmptyOrNull ? (this ?? '') : '$prefix$this';
   }
 
+  /// 获取后面的文本
+  String lastStr({int number = 1}) {
+    if (isEmptyOrNull) return "";
+    return this!.substring(this!.length >= number ? number : 0);
+  }
+
   /// 获取文件名称含后缀
   String fileNameAndExtension() => isNotEmptyOrNull ? path.basename(this!) : '';
 

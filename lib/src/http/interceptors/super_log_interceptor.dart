@@ -19,14 +19,14 @@ class SuperLogInterceptor extends Interceptor {
     var time = DateTime.now().millisecondsSinceEpoch - rep.requestOptions.extra["ts"];
     var logEnable = rep.requestOptions.extra["logEnable"] ?? true;
     Map log = {
-      'Http：': rep.requestOptions.method,
-      'Time：': time,
-      'URL': '${rep.requestOptions.uri}',
-      'Headers': rep.requestOptions.headers,
-      'RequestQuery': rep.requestOptions.queryParameters,
-      'RequestData': rep.requestOptions.data,
-      'ResponseMessage': rep.message,
-      'ResponseData': rep.response?.data,
+      'http': rep.requestOptions.method,
+      'time': time,
+      'url': '${rep.requestOptions.uri}',
+      'headers': rep.requestOptions.headers,
+      'requestQuery': rep.requestOptions.queryParameters,
+      'requestData': rep.requestOptions.data,
+      'responseMessage': rep.message,
+      'responseData': rep.response?.data,
     };
     if (!kReleaseMode && SuperNetConfig.showDebugLog && logEnable) LogUtil.e(log, stackTrace: rep.stackTrace);
     super.onError(rep, handler);
@@ -37,13 +37,13 @@ class SuperLogInterceptor extends Interceptor {
     var time = DateTime.now().millisecondsSinceEpoch - rep.requestOptions.extra["ts"];
     var logEnable = rep.requestOptions.extra["logEnable"] ?? true;
     Map log = {
-      'Http：': rep.requestOptions.method,
-      'Time：': time,
-      'URL': '${rep.requestOptions.uri}',
-      'Headers': rep.requestOptions.headers,
-      'RequestQuery': rep.requestOptions.queryParameters,
-      'RequestData': rep.requestOptions.data,
-      'ResponseData': rep.data,
+      'http': rep.requestOptions.method,
+      'time': time,
+      'url': '${rep.requestOptions.uri}',
+      'headers': rep.requestOptions.headers,
+      'requestQuery': rep.requestOptions.queryParameters,
+      'requestData': rep.requestOptions.data,
+      'responseData': rep.data,
     };
     if (!kReleaseMode && SuperNetConfig.showDebugLog && logEnable) LogUtil.i(log);
     super.onResponse(rep, handler);

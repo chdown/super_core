@@ -1,3 +1,4 @@
+import 'package:demo/core/export.dart';
 import 'package:demo/pages/main/main_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -20,7 +21,17 @@ class MainPage extends StatelessWidget {
             topBody: Row(
               children: [
                 SuperButton(
-                  width: 120,
+                  width: 80,
+                  margin: const EdgeInsets.all(10),
+                  type: ButtonType.filled,
+                  text: 'Test',
+                  onTap: () async {
+                    LogUtil.i("1111");
+                    AppHttp.get("http://ip-api.com/json?lang=zh-CN");
+                  },
+                ),
+                SuperButton(
+                  width: 80,
                   margin: const EdgeInsets.all(10),
                   type: controller.tableType == 'billiard' ? ButtonType.filled : ButtonType.outlined,
                   text: 'billiard',
@@ -30,7 +41,7 @@ class MainPage extends StatelessWidget {
                   },
                 ),
                 SuperButton(
-                  width: 120,
+                  width: 80,
                   margin: const EdgeInsets.all(10),
                   type: controller.tableType == 'chess' ? ButtonType.filled : ButtonType.outlined,
                   text: 'chess',

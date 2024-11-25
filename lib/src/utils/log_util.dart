@@ -10,26 +10,52 @@ class LogUtil {
 
   static final _log = Logger(
     output: output,
-    printer: PrettyPrinter(colors: false, printTime: true),
+    printer: PrettyPrinter(colors: false, dateTimeFormat: DateTimeFormat.none, methodCount: 0),
   );
 
-  static void d(dynamic message) {
-    if (kDebugMode) _log.d(message);
+  static void d(
+    dynamic message, {
+    DateTime? time,
+    Object? error,
+    StackTrace? stackTrace,
+  }) {
+    if (kDebugMode) _log.d(message, time: time, error: error, stackTrace: stackTrace);
   }
 
-  static void i(dynamic message) {
-    if (kDebugMode) _log.i(message);
+  static void i(
+    dynamic message, {
+    DateTime? time,
+    Object? error,
+    StackTrace? stackTrace,
+  }) {
+    if (kDebugMode) _log.i(message, time: time, error: error, stackTrace: stackTrace);
   }
 
-  static void e(dynamic message, {Object? error, StackTrace? stackTrace}) {
-    if (kDebugMode || isReleaseError) _log.e(message, error: error, stackTrace: stackTrace);
+  static void e(
+    dynamic message, {
+    DateTime? time,
+    Object? error,
+    StackTrace? stackTrace,
+  }) {
+    if (kDebugMode || isReleaseError) _log.e(message, time: time, error: error, stackTrace: stackTrace);
   }
 
-  static void w(dynamic message) {
-    if (kDebugMode) _log.w(message);
+  static void w(
+    dynamic message, {
+    DateTime? time,
+    Object? error,
+    StackTrace? stackTrace,
+  }) {
+    if (kDebugMode) _log.w(message, time: time, error: error, stackTrace: stackTrace);
   }
 
-  static void c(Level level, dynamic message) {
-    if (kDebugMode) _log.log(level, message);
+  static void c(
+    Level level,
+    dynamic message, {
+    DateTime? time,
+    Object? error,
+    StackTrace? stackTrace,
+  }) {
+    if (kDebugMode) _log.log(level, message, time: time, error: error, stackTrace: stackTrace);
   }
 }

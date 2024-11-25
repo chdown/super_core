@@ -26,6 +26,9 @@ class SuperNetConfig {
   /// dio其他扩展
   static Dio Function(Dio dio) extDio = (dio) => dio;
 
+  /// 判断结果是否包含对应的字段，用来判断是否进行自动化异常处理
+  static String match = 'code';
+
   /// 网络code字段
   static String code = 'code';
 

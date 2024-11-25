@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:dio/dio.dart';
 import 'package:super_core/src/config/super_net_config.dart';
+import 'package:super_core/src/ext/ex_list.dart';
 import 'package:super_core/src/http/app_net_error.dart';
 
 class SuperErrorInterceptor extends Interceptor {
@@ -13,30 +14,35 @@ class SuperErrorInterceptor extends Interceptor {
   void onResponse(Response response, ResponseInterceptorHandler handler) {
     /// 业务层返回401，表示用户过期
     if (response.data is Map<String, dynamic>) {
-      if (response.data[SuperNetConfig.code] == AppNetError.errorToken) {
-        response.statusCode = AppNetError.errorToken;
-        response.statusMessage = response.data[SuperNetConfig.msg];
-        handler.reject(
-          DioException(
-            requestOptions: response.requestOptions,
-            response: response,
-            type: DioExceptionType.badResponse,
-          ),
-          true,
-        );
-      } else if (!SuperNetConfig.codeSuccess.contains(response.data[SuperNetConfig.code])) {
-        response.statusCode = response.data[SuperNetConfig.code];
-        response.statusMessage = response.data[SuperNetConfig.msg];
-        handler.reject(
-          DioException(
-            requestOptions: response.requestOptions,
-            response: response,
-            type: DioExceptionType.badResponse,
-          ),
-          true,
-        );
-      } else {
+      var isNotMath = SuperNetConfig.match.split(",").toList().findWhere((test) => !(response.data as Map).containsKey(test));
+      if (isNotMath) {
         super.onResponse(response, handler);
+      } else {
+        if (response.data[SuperNetConfig.code] == AppNetError.errorToken) {
+          response.statusCode = AppNetError.errorToken;
+          response.statusMessage = response.data[SuperNetConfig.msg];
+          handler.reject(
+            DioException(
+              requestOptions: response.requestOptions,
+              response: response,
+              type: DioExceptionType.badResponse,
+            ),
+            true,
+          );
+        } else if (!SuperNetConfig.codeSuccess.contains(response.data[SuperNetConfig.code])) {
+          response.statusCode = response.data[SuperNetConfig.code];
+          response.statusMessage = response.data[SuperNetConfig.msg];
+          handler.reject(
+            DioException(
+              requestOptions: response.requestOptions,
+              response: response,
+              type: DioExceptionType.badResponse,
+            ),
+            true,
+          );
+        } else {
+          super.onResponse(response, handler);
+        }
       }
     } else {
       super.onResponse(response, handler);

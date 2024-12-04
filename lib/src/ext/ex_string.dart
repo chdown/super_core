@@ -63,6 +63,12 @@ extension StringExtension on String? {
     return this!.substring(max(this!.length - number, 0));
   }
 
+  /// 获取后面的文本
+  String firstStr({int number = 1}) {
+    if (isEmptyOrNull) return "";
+    return this!.substring(0, min(this!.length, number));
+  }
+
   /// 获取文件名称含后缀
   String fileNameAndExtension() => isNotEmptyOrNull ? path.basename(this!) : '';
 

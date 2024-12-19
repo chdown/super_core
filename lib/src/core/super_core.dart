@@ -50,41 +50,6 @@ mixin SuperCore {
     }
   }
 
-  /// 子类实现，参考代码
-  /// if (!(await NetUtils.isConnect())) {
-  ///   throw AppNetError(code: AppNetError.errorNetUnConnection, message: AppNetError.errorNetUnConnectionMsg);
-  /// }
-  ///
-  /// 6.0以上版本
-  /// class NetUtils {
-  //   static Future<bool> isConnect() async {
-  //     List<ConnectivityResult> list = await Connectivity().checkConnectivity();
-  //     return list.isNotEmpty && (list.length == 1 && list.first != ConnectivityResult.none);
-  //   }
-  //
-  //   static Future<bool> isConnectWifi() async {
-  //     List<ConnectivityResult> list = await Connectivity().checkConnectivity();
-  //     return list.isNotEmpty && (list.length == 1 && list.first != ConnectivityResult.none) && list.contains(ConnectivityResult.wifi);
-  //   }
-  // }
-  //
-  ///   6.0以下版本
-  ///   static Future<bool> isConnect() async {
-  //     ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
-  //     return connectivityResult != ConnectivityResult.none;
-  //     List<ConnectivityResult> list = await Connectivity().checkConnectivity();
-  //     return list.isNotEmpty && (list.length == 1 && list.first != ConnectivityResult.none);
-  //   }
-  //
-  //   static Future<bool> isConnectWifi() async {
-  //     ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
-  //     return connectivityResult == ConnectivityResult.wifi;
-  //     List<ConnectivityResult> list = await Connectivity().checkConnectivity();
-  //     return list.isNotEmpty && (list.length == 1 && list.first != ConnectivityResult.none) && list.contains(ConnectivityResult.wifi);
-  //   }
-  ///
-  Future<void> checkConnect() async {}
-
   void _showState(LoadConfig loadConfig, LoadEnum loadEnum, LoadState loadState, {String errorMsg = ''}) {
     /// 输出toast
     if (errorMsg.isNotEmpty && loadConfig.isShowToast) showToast(errorMsg);
@@ -116,4 +81,39 @@ mixin SuperCore {
     msg = extError(e, msg);
     return msg;
   }
+
+  /// 子类实现，参考代码
+  // if (!(await NetUtils.isConnect())) {
+  //   throw AppNetError(code: AppNetError.errorNetUnConnection, message: AppNetError.errorNetUnConnectionMsg);
+  // }
+  //
+  //  /// 6.0以上版本
+  //  class NetUtils {
+  //   static Future<bool> isConnect() async {
+  //     List<ConnectivityResult> list = await Connectivity().checkConnectivity();
+  //     return list.isNotEmpty && (list.length == 1 && list.first != ConnectivityResult.none);
+  //   }
+  //
+  //   static Future<bool> isConnectWifi() async {
+  //     List<ConnectivityResult> list = await Connectivity().checkConnectivity();
+  //     return list.isNotEmpty && (list.length == 1 && list.first != ConnectivityResult.none) && list.contains(ConnectivityResult.wifi);
+  //   }
+  //
+  //   /// 6.0以下版本
+  //   static Future<bool> isConnect() async {
+  //     ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
+  //     return connectivityResult != ConnectivityResult.none;
+  //     List<ConnectivityResult> list = await Connectivity().checkConnectivity();
+  //     return list.isNotEmpty && (list.length == 1 && list.first != ConnectivityResult.none);
+  //   }
+  //
+  //   static Future<bool> isConnectWifi() async {
+  //     ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
+  //     return connectivityResult == ConnectivityResult.wifi;
+  //     List<ConnectivityResult> list = await Connectivity().checkConnectivity();
+  //     return list.isNotEmpty && (list.length == 1 && list.first != ConnectivityResult.none) && list.contains(ConnectivityResult.wifi);
+  //   }
+  // }
+  //
+  Future<void> checkConnect();
 }

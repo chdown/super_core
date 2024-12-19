@@ -90,6 +90,9 @@ class BaseController extends GetxController with SuperCore {
   }
 
   @override
+  Future<void> checkConnect() async {}
+
+  @override
   void onClose() {
     refreshController.dispose();
     loadPageController.dispose();

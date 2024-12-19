@@ -87,8 +87,9 @@ mixin SuperCore {
   //   throw AppNetError(code: AppNetError.errorNetUnConnection, message: AppNetError.errorNetUnConnectionMsg);
   // }
   //
-  //  /// 6.0以上版本
   //  class NetUtils {
+  //
+  //   /// 6.0以上版本
   //   static Future<bool> isConnect() async {
   //     List<ConnectivityResult> list = await Connectivity().checkConnectivity();
   //     return list.isNotEmpty && (list.length == 1 && list.first != ConnectivityResult.none);
@@ -103,15 +104,11 @@ mixin SuperCore {
   //   static Future<bool> isConnect() async {
   //     ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
   //     return connectivityResult != ConnectivityResult.none;
-  //     List<ConnectivityResult> list = await Connectivity().checkConnectivity();
-  //     return list.isNotEmpty && (list.length == 1 && list.first != ConnectivityResult.none);
   //   }
   //
   //   static Future<bool> isConnectWifi() async {
   //     ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
   //     return connectivityResult == ConnectivityResult.wifi;
-  //     List<ConnectivityResult> list = await Connectivity().checkConnectivity();
-  //     return list.isNotEmpty && (list.length == 1 && list.first != ConnectivityResult.none) && list.contains(ConnectivityResult.wifi);
   //   }
   // }
   //

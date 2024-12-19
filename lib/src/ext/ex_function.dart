@@ -9,9 +9,9 @@ typedef StringCallback = void Function(String value);
 
 typedef IntCallback = void Function(int value);
 
-///
-// 扩展Function，添加防抖功能
-extension DebounceExtension on Function() {
+extension ExExtension on Function() {
+  /// 扩展Function，添加防抖功能
+  /// 当事件在设定的时间内没有再次触发时，才会执行相应的函数
   void Function() debounce([int milliseconds = 500]) {
     Timer? debounceTimer;
     return () {
@@ -19,21 +19,16 @@ extension DebounceExtension on Function() {
       debounceTimer = Timer(Duration(milliseconds: milliseconds), this);
     };
   }
-}
 
-// 扩展Function，添加节流功能
-extension ThrottleExtension on Function {
+  /// 扩展Function，添加节流功能
+  /// 确保在每个时间间隔内至少执行一次函数
   void Function() throttle([int milliseconds = 500]) {
-    bool isAllowed = true;
     Timer? throttleTimer;
     return () {
-      if (!isAllowed) return;
-      isAllowed = false;
-      this();
-      throttleTimer?.cancel();
-      throttleTimer = Timer(Duration(milliseconds: milliseconds), () {
-        isAllowed = true;
-      });
+      if (throttleTimer == null || !throttleTimer!.isActive) {
+        this();
+        throttleTimer = Timer(Duration(milliseconds: milliseconds), () => throttleTimer?.cancel());
+      }
     };
   }
 }

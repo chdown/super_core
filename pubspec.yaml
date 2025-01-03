@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   logger: ">=2.0.0"
-  decimal: ">=3.0.0"
+  decimal: ">=2.3.3"
   dio: ">=5.0.0"
   intl: ">=0.18.0"
   lottie: ">=3.0.0"

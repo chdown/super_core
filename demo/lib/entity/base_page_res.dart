@@ -3,7 +3,7 @@ import 'package:demo/generated/json/base/json_convert_content.dart';
 import 'page_res.dart';
 
 class BasePageRes<T> {
-  int? code;
+  int? errorCode;
   String? msg;
   late PageRes<T> data = PageRes<T>();
 
@@ -11,13 +11,13 @@ class BasePageRes<T> {
 
   factory BasePageRes.fromJson(Map<String, dynamic> json) {
     final BasePageRes<T> res = BasePageRes<T>();
-    final int? code = jsonConvert.convert<int>(json['code']);
-    if (code != null) {
-      res.code = code;
+    final int? errorCode = jsonConvert.convert<int>(json['errorCode']);
+    if (errorCode != null) {
+      res.errorCode = errorCode;
     }
-    final String? msg = jsonConvert.convert<String>(json['msg']);
-    if (msg != null) {
-      res.msg = msg;
+    final String? errorMsg = jsonConvert.convert<String>(json['errorMsg']);
+    if (errorMsg != null) {
+      res.msg = errorMsg;
     }
     if (json["data"] != null) {
       res.data = PageRes<T>.fromJson(json["data"]);

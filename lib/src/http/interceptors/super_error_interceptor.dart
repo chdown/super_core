@@ -1,42 +1,32 @@
-import 'dart:ui';
-
 import 'package:dio/dio.dart';
 import 'package:super_core/src/config/super_net_config.dart';
-import 'package:super_core/src/ext/ex_list.dart';
-import 'package:super_core/src/http/app_net_error.dart';
 
+/// 错误处理拦截器
 class SuperErrorInterceptor extends Interceptor {
-  final VoidCallback tokenRefresh;
-
-  SuperErrorInterceptor(this.tokenRefresh);
+  static String sendTimeoutMsg = "请求服务器超时，请稍后再试！";
+  static String connectionTimeoutMsg = "连接服务器超时，请稍后再试！";
+  static String connectionErrorMsg = "连接服务器异常，请稍后再试！";
+  static String badCertificateMsg = "请求证书异常，请稍后再试！";
+  static String cancelMsg = "请求被异常取消，请稍后再试！";
+  static String receiveTimeoutMsg = "响应超时，请稍后再试！";
+  static String unknownMsg = "未知异常，请稍后再试！";
+  static String badResponseMsg = "服务器异常，请稍后重试！";
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    /// 业务层返回401，表示用户过期
     if (response.data is Map<String, dynamic>) {
-      var isNotMath = SuperNetConfig.match.split(",").toList().findWhere((test) => !(response.data as Map).containsKey(test));
+      var isNotMath = !(response.data as Map).containsKey(SuperNetConfig.successParam);
       if (isNotMath) {
         super.onResponse(response, handler);
       } else {
-        if (response.data[SuperNetConfig.code] == AppNetError.errorToken) {
-          response.statusCode = AppNetError.errorToken;
-          response.statusMessage = response.data[SuperNetConfig.msg];
+        if (!SuperNetConfig.successData.contains(response.data[SuperNetConfig.successParam])) {
+          response.statusCode = response.data[SuperNetConfig.successParam];
           handler.reject(
             DioException(
               requestOptions: response.requestOptions,
               response: response,
               type: DioExceptionType.badResponse,
-            ),
-            true,
-          );
-        } else if (!SuperNetConfig.codeSuccess.contains(response.data[SuperNetConfig.code])) {
-          response.statusCode = response.data[SuperNetConfig.code];
-          response.statusMessage = response.data[SuperNetConfig.msg];
-          handler.reject(
-            DioException(
-              requestOptions: response.requestOptions,
-              response: response,
-              type: DioExceptionType.badResponse,
+              message: response.data[SuperNetConfig.errorMsgParam],
             ),
             true,
           );
@@ -51,40 +41,27 @@ class SuperErrorInterceptor extends Interceptor {
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
-    switch (err.type) {
+    handler.next(err.copyWith(message: errorMsg(err)));
+  }
+
+  String errorMsg(DioException error) {
+    switch (error.type) {
       case DioExceptionType.sendTimeout:
-        throw AppNetError(code: AppNetError.errorDio, message: AppNetError.sendTimeoutMsg);
+        return sendTimeoutMsg;
       case DioExceptionType.connectionTimeout:
-        throw AppNetError(code: AppNetError.errorDio, message: AppNetError.connectionTimeoutMsg);
-      case DioExceptionType.cancel:
-        throw AppNetError(code: AppNetError.errorDio, message: AppNetError.cancelMsg);
-      case DioExceptionType.receiveTimeout:
-        throw AppNetError(code: AppNetError.errorDio, message: AppNetError.receiveTimeoutMsg);
+        return connectionTimeoutMsg;
       case DioExceptionType.connectionError:
-        throw AppNetError(code: AppNetError.errorDio, message: AppNetError.connectionErrorMsg);
+        return connectionErrorMsg;
+      case DioExceptionType.receiveTimeout:
+        return receiveTimeoutMsg;
+      case DioExceptionType.badCertificate:
+        return badCertificateMsg;
+      case DioExceptionType.cancel:
+        return cancelMsg;
+      case DioExceptionType.unknown:
+        return unknownMsg;
       case DioExceptionType.badResponse:
-        int code = err.response?.statusCode ?? AppNetError.errorUnKnow;
-        String? message = err.response?.statusMessage;
-        if (code == 400) {
-          throw AppNetError(code: code, message: message ?? AppNetError.error400Msg);
-        } else if (code == 401) {
-          // SuperHttp.instance.cancelRequests();
-          tokenRefresh();
-        } else if (code == 403) {
-          throw AppNetError(code: code, message: message ?? AppNetError.error403Msg);
-        } else if (code == 404) {
-          throw AppNetError(code: code, message: message ?? AppNetError.error404Msg);
-        } else if (code == 500) {
-          throw AppNetError(code: code, message: message ?? AppNetError.error500Msg);
-        } else if (code == 502) {
-          throw AppNetError(code: code, message: message ?? AppNetError.error502Msg);
-        } else if (code == 503) {
-          throw AppNetError(code: code, message: message ?? AppNetError.error503Msg);
-        } else {
-          throw AppNetError(code: code, message: message ?? AppNetError.errorKnowMsg);
-        }
-      default:
-        throw AppNetError(code: AppNetError.errorUnKnow, message: AppNetError.errorKnowMsg);
+        return error.message ?? badResponseMsg;
     }
   }
 }

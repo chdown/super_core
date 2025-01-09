@@ -1,5 +1,5 @@
 import 'package:demo/core/export.dart';
-import 'package:demo/entity/shop_tables_entity.dart';
+import 'package:demo/entity/article_entity.dart';
 import 'package:dio/dio.dart';
 import 'package:super_core/super_core.dart';
 
@@ -8,7 +8,7 @@ import 'package:super_core/super_core.dart';
 /// @description 首页
 ///
 class MainController extends BaseController {
-  List<ShopTablesEntity> mList = [];
+  List<ArticleEntity> mList = [];
   CancelToken cancelToken = CancelToken();
 
   // int mReqTime = 0;
@@ -23,40 +23,22 @@ class MainController extends BaseController {
 
   @override
   getData() async {
-    getTableData("billiard");
+    cancelToken = CancelToken();
+    await Future.delayed(Duration(seconds: 3));
+    mList = (await AppHttp.getList<ArticleEntity>(
+      ApiUrl.articleList,
+      cancelToken: cancelToken,
+    ));
+    update();
+    return mList;
   }
 
-  getTableData(String type) async {
-    request(
-      request: () async {
-        bool isTrue = true;
-        List<ShopTablesEntity> list = await requestLimit<List<ShopTablesEntity>>(
-          'table',
-          request: () async {
-            List<ShopTablesEntity> result = (await AppHttp.get<List<ShopTablesEntity>>(
-                  'customer/shop/tables',
-                  params: {
-                    "shopId": '1770649609751498754',
-                    'tableType': type, //chess
-                  },
-                  cancelToken: cancelToken,
-                )) ??
-                [];
-            if (type == 'billiard') await Future.delayed(const Duration(seconds: 3));
-            return result;
-          },
-          error: () {
-            showToast('error');
-            return isTrue = false;
-          },
-          success: (t) {
-            mList = t;
-            update();
-            return mList;
-          },
-        );
-      },
-      loadEnum: LoadEnum.page,
-    );
+  requestData() {
+    onRefresh(loadEnum: LoadEnum.page);
+  }
+
+  cancel() {
+    cancelToken.cancel();
+    onRefresh(loadEnum: LoadEnum.page);
   }
 }

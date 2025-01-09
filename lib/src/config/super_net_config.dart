@@ -26,18 +26,12 @@ class SuperNetConfig {
   /// dio其他扩展
   static Dio Function(Dio dio) extDio = (dio) => dio;
 
-  /// 判断结果是否包含对应的字段，用来判断是否进行自动化异常处理
-  static String match = 'code';
-
   /// 网络code字段
-  static String code = 'code';
+  static String successParam = 'code';
 
   /// 网络请求msg字段
-  static String msg = 'msg';
+  static String errorMsgParam = 'msg';
 
   /// 请求成功code
-  static List<int> codeSuccess = [200];
-
-  /// debug输出日志
-  static bool showDebugLog = true;
+  static List<int> successData = [200];
 }

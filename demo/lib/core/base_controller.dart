@@ -55,42 +55,35 @@ class BaseController extends GetxController with SuperCore {
   void showToast(String? message) => DialogUtils.toast(message ?? "");
 
   @override
-  void showLoadingState(LoadConfig loadConfig, LoadState loadState, String errorMsg) {
-    if (loadState == LoadState.start) {
-      DialogUtils.loading();
-    } else {
-      DialogUtils.dismiss();
-    }
-  }
-
-  @override
-  void showRefreshState(LoadConfig loadConfig, LoadState loadState, String errorMsg) {
-    loadConfig.refreshController ??= refreshController;
-    if (loadState != LoadState.start && loadConfig.refreshController is RefreshController) {
-      RefreshController controller = loadConfig.refreshController as RefreshController;
-      if (controller.isRefresh) controller.refreshCompleted();
-      if (controller.isLoading) controller.loadComplete();
-      if (loadState == LoadState.successEmpty) {
-        loadConfig.pageController ??= loadPageController;
-        SuperLoadController controller = loadConfig.pageController as SuperLoadController;
-        if (loadState == LoadState.successEmpty) controller.showEmpty();
+  void showState(LoadConfig loadConfig, LoadEnum loadEnum, LoadState loadState, String errorMsg) {
+    if (loadEnum == LoadEnum.loading) {
+      if (loadState == LoadState.start) {
+        DialogUtils.loading();
+      } else {
+        DialogUtils.dismiss();
       }
+    } else if (loadEnum == LoadEnum.refresh) {
+      loadConfig.refreshController ??= refreshController;
+      if (loadState != LoadState.start && loadConfig.refreshController is RefreshController) {
+        RefreshController controller = loadConfig.refreshController as RefreshController;
+        if (controller.isRefresh) controller.refreshCompleted();
+        if (controller.isLoading) controller.loadComplete();
+        if (loadState == LoadState.successEmpty) {
+          loadConfig.pageController ??= loadPageController;
+          SuperLoadController controller = loadConfig.pageController as SuperLoadController;
+          if (loadState == LoadState.successEmpty) controller.showEmpty();
+        }
+      }
+    } else if (loadEnum == LoadEnum.page) {
+      loadConfig.pageController ??= loadPageController;
+      SuperLoadController controller = loadConfig.pageController as SuperLoadController;
+      if (loadState == LoadState.start) controller.showLoading();
+      if (loadState == LoadState.success) controller.showContent();
+      if (loadState == LoadState.successEmpty) controller.showEmpty();
+      if (loadState == LoadState.netError) controller.showNetError();
+      if (loadState == LoadState.error) controller.showError();
     }
   }
-
-  @override
-  void showPageState(LoadConfig loadConfig, LoadState loadState, String errorMsg) {
-    loadConfig.pageController ??= loadPageController;
-    SuperLoadController controller = loadConfig.pageController as SuperLoadController;
-    if (loadState == LoadState.start) controller.showLoading();
-    if (loadState == LoadState.success) controller.showContent();
-    if (loadState == LoadState.successEmpty) controller.showEmpty();
-    if (loadState == LoadState.netError) controller.showNetError();
-    if (loadState == LoadState.error) controller.showError();
-  }
-
-  @override
-  Future<void> checkConnect() async {}
 
   @override
   void onClose() {

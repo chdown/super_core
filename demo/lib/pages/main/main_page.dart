@@ -17,56 +17,55 @@ class MainPage extends StatelessWidget {
       builder: (controller) {
         return Scaffold(
           appBar: AppBar(title: Text('首页首页首页首页'.lastStr())),
-          body: SuperBody(
-            topBody: Row(
-              children: [
-                SuperButton(
-                  width: 80,
-                  margin: const EdgeInsets.all(10),
-                  type: ButtonType.filled,
-                  text: 'Test',
-                  onTap: () async {
-                    LogUtil.i("1111");
-                    AppHttp.get("http://ip-api.com/json?lang=zh-CN");
-                  },
-                ),
-                SuperButton(
-                  width: 80,
-                  margin: const EdgeInsets.all(10),
-                  type: controller.tableType == 'billiard' ? ButtonType.filled : ButtonType.outlined,
-                  text: 'billiard',
-                  onTap: () {
-                    controller.tableType = "billiard";
-                    controller.getTableData("billiard");
-                  },
-                ),
-                SuperButton(
-                  width: 80,
-                  margin: const EdgeInsets.all(10),
-                  type: controller.tableType == 'chess' ? ButtonType.filled : ButtonType.outlined,
-                  text: 'chess',
-                  onTap: () {
-                    controller.tableType = "chess";
-                    controller.getTableData("chess");
-                  },
-                )
-              ],
-            ),
-            body: SuperLoad(
+          body: SuperLoad(
               controller: controller.loadPageController,
               onTap: (params) => controller.onRefresh(loadEnum: LoadEnum.page),
-              child: ListView.builder(
-                itemCount: controller.mList.length,
-                itemBuilder: (context, index) {
-                  return SuperCard(
-                    child: SuperText(
-                      text: controller.mList[index].tablecsName,
+              child: SuperBody(
+                topBody: Row(
+                  children: [
+                    SuperButton(
+                      width: 80,
+                      margin: const EdgeInsets.all(10),
+                      type: ButtonType.filled,
+                      text: 'Test',
+                      onTap: () async {
+                        LogUtil.i("1111");
+                        AppHttp.get("http://ip-api.com/json?lang=zh-CN");
+                      },
                     ),
-                  );
-                },
-              ),
-            ),
-          ),
+                    SuperButton(
+                      width: 80,
+                      margin: const EdgeInsets.all(10),
+                      type: ButtonType.filled,
+                      text: 'request',
+                      onTap: () {
+                        controller.requestData();
+                      },
+                    ),
+                    SuperButton(
+                      width: 80,
+                      margin: const EdgeInsets.all(10),
+                      type: ButtonType.filled,
+                      text: 'cancel',
+                      onTap: () {
+                        controller.cancel();
+                      },
+                    )
+                  ],
+                ),
+                body: SuperLoad(
+                  controller: controller.loadPageController,
+                  onTap: (params) => controller.onRefresh(loadEnum: LoadEnum.page),
+                  child: ListView.builder(
+                    itemCount: controller.mList.length,
+                    itemBuilder: (context, index) {
+                      return SuperCard(
+                        child: SuperText(text: controller.mList[index].title),
+                      );
+                    },
+                  ),
+                ),
+              )),
         );
       },
     );

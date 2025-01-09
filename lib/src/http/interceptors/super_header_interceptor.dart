@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 
+/// 通用请求头拦截器
 class SuperHeaderInterceptor extends Interceptor {
   Future<Map<String, String>> Function() headerParams;
 

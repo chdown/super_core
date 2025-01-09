@@ -23,7 +23,7 @@ class AppHttp {
   }) async {
     var result = await SuperHttp.instance.get(path, params: params, options: options, cancelToken: cancelToken);
     final model = BaseRes<T>.fromJson(result.data);
-    if (ignoreNull && model.data == null) throw AppNetError(code: AppNetError.errorData, message: AppNetError.errorDataMsg);
+    if (ignoreNull && model.data == null) throw AppDataError();
     return model.data;
   }
 
@@ -40,7 +40,7 @@ class AppHttp {
     CancelToken? cancelToken,
   }) async {
     var result = await getListBase<T>(path, params: params, options: options, cancelToken: cancelToken);
-    return result.records;
+    return result.datas;
   }
 
   /// get请求
@@ -87,7 +87,7 @@ class AppHttp {
       cancelToken: cancelToken,
     );
     final model = BaseRes<T>.fromJson(result.data);
-    if (ignoreNull && model.data == null) throw AppNetError(code: AppNetError.errorData, message: AppNetError.errorDataMsg);
+    if (ignoreNull && model.data == null) throw AppDataError();
     return model.data;
   }
 
@@ -114,7 +114,7 @@ class AppHttp {
       options: options,
       cancelToken: cancelToken,
     );
-    return result.records;
+    return result.datas;
   }
 
   /// post请求
@@ -209,7 +209,7 @@ class AppHttp {
     );
     if (result is Map<String, dynamic>) {
       final model = BaseRes<T>.fromJson(result);
-      if (ignoreNull && model.data == null) throw AppNetError(code: AppNetError.errorData, message: AppNetError.errorDataMsg);
+      if (ignoreNull && model.data == null) throw AppDataError();
       return model.data;
     }
   }

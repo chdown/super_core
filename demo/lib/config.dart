@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:super_core/super_core.dart';
 import 'package:super_ui/super_ui.dart';
 
@@ -10,20 +8,17 @@ import 'pages/load/load_loading.dart';
 
 class Config {
   static void initNet() {
+    SuperNetConfig.successParam = "errorCode";
+    SuperNetConfig.successData = [0];
+    SuperNetConfig.errorMsgParam = "errorMsg";
     SuperNetConfig.baseUrl = () => ApiBaseUrl.baseUrl;
     SuperNetConfig.interceptors = [
       SuperHeaderInterceptor(() async {
-        return {
-          'User-Agent': Platform.isAndroid ? 'Android' : 'iPhone',
-          // 'Version': await DeviceUtils.getAppVersion(),
-          // "Brand": await DeviceUtils.getBrand(),
-          // if (ObjUtil.isNotEmpty(CacheSpUtil.getAuthorization())) 'Authorization': CacheSpUtil.getAuthorization().toString(),
-        };
+        return Future.value({});
       }),
+      SuperErrorInterceptor(),
+      SuperTokenInterceptor(() {}),
       SuperLogInterceptor(),
-      // SuperErrorInterceptor(() {
-      //   EventBus.instance.emit(EventKeys.token);
-      // }),
     ];
   }
 

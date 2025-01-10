@@ -34,8 +34,8 @@ extension ContextExtension on BuildContext {
   Orientation get orientation => MediaQuery.of(this).orientation;
 
   /// 判断是否为横屏模式
-  bool get isLandscape => orientation == Orientation.landscape;
+  bool get isLand => orientation == Orientation.landscape;
 
   /// 判断是否为竖屏模式
-  bool get isPortrait => orientation == Orientation.portrait;
+  bool get isPort => orientation == Orientation.portrait;
 }

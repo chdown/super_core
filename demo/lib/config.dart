@@ -1,3 +1,4 @@
+import 'package:demo/utils/dialog_utils.dart';
 import 'package:super_core/super_core.dart';
 import 'package:super_ui/super_ui.dart';
 
@@ -17,7 +18,9 @@ class Config {
         return Future.value({});
       }),
       SuperErrorInterceptor(),
-      SuperTokenInterceptor(() {}),
+      SuperTokenInterceptor(() {
+        DialogUtils.toast("tokemn");
+      }, true),
       SuperLogInterceptor(),
     ];
   }

@@ -1,8 +1,7 @@
 import 'dart:math';
 
 import "package:path/path.dart" as path;
-
-import '../../super_core.dart';
+import 'package:super_core/super_core.dart';
 
 /// @author : ch
 /// @date 2024-02-18 09:34:57
@@ -79,9 +78,6 @@ extension StringExtension on String? {
   DateTime? toDateTime({String format = DateEnum.normYmdHms}) => DateUtil.getTime(this, format: format);
 
   /// string转日期
-  String? toStrTime({
-    String srcFormat = DateEnum.normYmdHms,
-    String destFormat = DateEnum.normYmd,
-  }) =>
+  String? toStrTime({String srcFormat = DateEnum.normYmdHms, String destFormat = DateEnum.normYmd}) =>
       DateUtil.dateStrToStr(this, srcFormat: srcFormat, destFormat: destFormat);
 }

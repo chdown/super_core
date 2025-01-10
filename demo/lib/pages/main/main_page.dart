@@ -1,5 +1,6 @@
 import 'package:demo/core/export.dart';
 import 'package:demo/pages/main/main_controller.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:super_core/super_core.dart';
@@ -30,7 +31,7 @@ class MainPage extends StatelessWidget {
                       text: 'Test',
                       onTap: () async {
                         LogUtil.i("1111");
-                        AppHttp.get("http://ip-api.com/json?lang=zh-CN");
+                        AppHttp.get("http://ip-api.com/json?lang=zh-CN", options: Options(extra: {"ignoreCheck": true}));
                       },
                     ),
                     SuperButton(

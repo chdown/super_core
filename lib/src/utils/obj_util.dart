@@ -1,10 +1,8 @@
-
 /// @author : ch
 /// @date 2024-03-12 11:57:28
 /// @description Object工具类
 ///
-class ObjUtil{
-
+class ObjUtil {
   ObjUtil._();
 
   /// Returns true  String or List or Map is empty.
@@ -16,7 +14,7 @@ class ObjUtil{
       return true;
     } else if (object is Map && object.isEmpty) {
       return true;
-    }else if (object is List && object.isEmpty) {
+    } else if (object is List && object.isEmpty) {
       return true;
     }
     return false;

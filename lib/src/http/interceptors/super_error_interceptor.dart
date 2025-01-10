@@ -1,7 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:super_core/src/config/super_net_config.dart';
+import 'package:super_core/super_core.dart';
 
 /// 错误处理拦截器
+/// 请求是传参[ignoreCheck]，错误处理器会忽略检查，可用于处理接口返回的特殊code值进行处理
 class SuperErrorInterceptor extends Interceptor {
   static String sendTimeoutMsg = "请求服务器超时，请稍后再试！";
   static String connectionTimeoutMsg = "连接服务器超时，请稍后再试！";
@@ -14,28 +15,22 @@ class SuperErrorInterceptor extends Interceptor {
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    if (response.data is Map<String, dynamic>) {
-      var isNotMath = !(response.data as Map).containsKey(SuperNetConfig.successParam);
-      if (isNotMath) {
-        super.onResponse(response, handler);
-      } else {
-        if (!SuperNetConfig.successData.contains(response.data[SuperNetConfig.successParam])) {
-          response.statusCode = response.data[SuperNetConfig.successParam];
-          handler.reject(
-            DioException(
-              requestOptions: response.requestOptions,
-              response: response,
-              type: DioExceptionType.badResponse,
-              message: response.data[SuperNetConfig.errorMsgParam],
-            ),
-            true,
-          );
-        } else {
-          super.onResponse(response, handler);
-        }
-      }
-    } else {
+    bool ignoreCheck = response.requestOptions.extra["ignoreCheck"] ?? false; // 是否忽略检查
+    var isMath = response.data is Map<String, dynamic> && (response.data as Map).containsKey(SuperNetConfig.successParam);
+    bool isSuccess = ignoreCheck || (isMath && SuperNetConfig.successData.contains(response.data[SuperNetConfig.successParam]));
+    if (isSuccess) {
       super.onResponse(response, handler);
+    } else {
+      response.statusCode = response.data[SuperNetConfig.successParam];
+      handler.reject(
+        DioException(
+          requestOptions: response.requestOptions,
+          response: response,
+          type: DioExceptionType.unknown,
+          message: response.data[SuperNetConfig.errorMsgParam],
+        ),
+        true,
+      );
     }
   }
 
@@ -59,9 +54,9 @@ class SuperErrorInterceptor extends Interceptor {
       case DioExceptionType.cancel:
         return cancelMsg;
       case DioExceptionType.unknown:
-        return unknownMsg;
+        return error.message ?? unknownMsg;
       case DioExceptionType.badResponse:
-        return error.message ?? badResponseMsg;
+        return badResponseMsg;
     }
   }
 }

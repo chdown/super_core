@@ -3,5 +3,6 @@
 /// @description 网络连接地址
 ///
 class ApiBaseUrl {
-  static String baseUrl = "https://www.wanandroid.com";
+  // static String baseUrl = "http://www.wanandroid.com";
+  static String baseUrl = "https://apifoxmock.com/m1/1728944-1941528-default/";
 }

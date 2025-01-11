@@ -15,7 +15,7 @@ class SuperErrorInterceptor extends Interceptor {
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    bool ignoreCheck = response.requestOptions.extra["ignoreCheck"] ?? false; // 是否忽略检查
+    bool ignoreCheck = (response.requestOptions.extra["ignoreCheck"] ?? false) || response.data is! Map<dynamic, dynamic>; // 是否忽略检查
     var isMath = response.data is Map<String, dynamic> && (response.data as Map).containsKey(SuperNetConfig.successParam);
     bool isSuccess = ignoreCheck || (isMath && SuperNetConfig.successData.contains(response.data[SuperNetConfig.successParam]));
     if (isSuccess) {

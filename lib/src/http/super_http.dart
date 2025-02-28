@@ -8,6 +8,16 @@ import 'package:super_core/src/config/super_net_config.dart';
 /// @date 2024-03-06 14:19:08
 /// @description  网络请求引擎封装，目前使用的是 Dio 框架
 ///
+///
+
+enum HttpMethod {
+  get,
+  post,
+  put,
+  delete,
+  head,
+}
+
 class SuperHttp {
   final CancelToken _cancelToken = CancelToken();
   static SuperHttp? _instance;
@@ -62,34 +72,18 @@ class SuperHttp {
     _instance = SuperHttp();
   }
 
-  /// get 请求
+  /// req 请求方法
   ///
   /// [path] 请求地址
-  /// [params] 请求数据
-  /// [options] 配置
-  /// [cancelToken] 取消
-  ///
-  Future<dynamic> get(
-    String path, {
-    Map<String, dynamic>? params,
-    Options? options,
-    CancelToken? cancelToken,
-  }) async {
-    var response = await _dio.get(path, queryParameters: params, cancelToken: cancelToken ?? _cancelToken, options: options);
-    return response;
-  }
-
-  /// post 请求
-  ///
-  /// [path] 请求地址
-  /// [params] 请求数据
+  /// [params] 请求数据，注意
   /// [queryParameters] 请求参数
   /// [jsonContentType] 请求参数格式
   /// [options] 配置
   /// [cancelToken] 取消
   ///
-  Future<dynamic> post(
+  Future<dynamic> http(
     String path, {
+    required HttpMethod httpMethod,
     params,
     Map<String, dynamic>? queryParameters,
     String? jsonContentType = Headers.jsonContentType,
@@ -97,70 +91,21 @@ class SuperHttp {
     CancelToken? cancelToken,
   }) async {
     Options customOptions = options ?? Options();
-    customOptions.contentType = jsonContentType;
-    return await _dio.post(
-      path,
-      data: params,
-      queryParameters: queryParameters,
-      options: customOptions,
-      cancelToken: cancelToken ?? _cancelToken,
-    );
-  }
-
-  /// put 请求
-  ///
-  /// [path] 请求地址
-  /// [params] 请求数据
-  /// [queryParameters] 请求参数
-  /// [jsonContentType] 请求参数格式
-  /// [options] 配置
-  /// [cancelToken] 取消
-  ///
-  Future<dynamic> put(
-    String path, {
-    params,
-    Map<String, dynamic>? queryParameters,
-    String? jsonContentType = Headers.jsonContentType,
-    Options? options,
-    CancelToken? cancelToken,
-  }) async {
-    Options customOptions = options ?? Options();
-    customOptions.contentType = jsonContentType;
-    return await _dio.put(
-      path,
-      data: params,
-      queryParameters: queryParameters,
-      options: customOptions,
-      cancelToken: cancelToken ?? _cancelToken,
-    );
-  }
-
-  /// delete 请求
-  ///
-  /// [path] 请求地址
-  /// [params] 请求数据
-  /// [queryParameters] 请求参数
-  /// [jsonContentType] 请求参数格式
-  /// [options] 配置
-  /// [cancelToken] 取消
-  ///
-  Future<dynamic> delete(
-    String path, {
-    params,
-    Map<String, dynamic>? queryParameters,
-    String? jsonContentType = Headers.jsonContentType,
-    Options? options,
-    CancelToken? cancelToken,
-  }) async {
-    Options customOptions = options ?? Options();
-    customOptions.contentType = jsonContentType;
-    return await _dio.delete(
-      path,
-      data: params,
-      queryParameters: queryParameters,
-      options: customOptions,
-      cancelToken: cancelToken ?? _cancelToken,
-    );
+    if (httpMethod != HttpMethod.get) {
+      customOptions.contentType = jsonContentType;
+    }
+    switch (httpMethod) {
+      case HttpMethod.get:
+        return await _dio.get(path, queryParameters: queryParameters ?? params, options: customOptions, cancelToken: cancelToken ?? _cancelToken);
+      case HttpMethod.post:
+        return await _dio.post(path, data: params, queryParameters: queryParameters, options: customOptions, cancelToken: cancelToken ?? _cancelToken);
+      case HttpMethod.put:
+        return await _dio.put(path, data: params, queryParameters: queryParameters, options: customOptions, cancelToken: cancelToken ?? _cancelToken);
+      case HttpMethod.delete:
+        return await _dio.delete(path, data: params, queryParameters: queryParameters, options: customOptions, cancelToken: cancelToken ?? _cancelToken);
+      case HttpMethod.head:
+        return await _dio.head(path, data: params, queryParameters: queryParameters, options: customOptions, cancelToken: cancelToken ?? _cancelToken);
+    }
   }
 
   /// download 下载

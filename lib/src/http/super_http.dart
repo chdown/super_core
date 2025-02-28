@@ -3,20 +3,13 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:super_core/src/config/super_net_config.dart';
+import 'package:super_core/src/http/http_method.dart';
 
 /// @author : ch
 /// @date 2024-03-06 14:19:08
 /// @description  网络请求引擎封装，目前使用的是 Dio 框架
 ///
 ///
-
-enum HttpMethod {
-  get,
-  post,
-  put,
-  delete,
-  head,
-}
 
 class SuperHttp {
   final CancelToken _cancelToken = CancelToken();

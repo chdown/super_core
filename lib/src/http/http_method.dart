@@ -7,4 +7,5 @@ enum HttpMethod {
   post,
   put,
   delete,
+  head,
 }

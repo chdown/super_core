@@ -107,6 +107,62 @@ class SuperHttp {
     );
   }
 
+  /// put 请求
+  ///
+  /// [path] 请求地址
+  /// [params] 请求数据
+  /// [queryParameters] 请求参数
+  /// [jsonContentType] 请求参数格式
+  /// [options] 配置
+  /// [cancelToken] 取消
+  ///
+  Future<dynamic> put(
+    String path, {
+    params,
+    Map<String, dynamic>? queryParameters,
+    String? jsonContentType = Headers.jsonContentType,
+    Options? options,
+    CancelToken? cancelToken,
+  }) async {
+    Options customOptions = options ?? Options();
+    customOptions.contentType = jsonContentType;
+    return await _dio.put(
+      path,
+      data: params,
+      queryParameters: queryParameters,
+      options: customOptions,
+      cancelToken: cancelToken ?? _cancelToken,
+    );
+  }
+
+  /// delete 请求
+  ///
+  /// [path] 请求地址
+  /// [params] 请求数据
+  /// [queryParameters] 请求参数
+  /// [jsonContentType] 请求参数格式
+  /// [options] 配置
+  /// [cancelToken] 取消
+  ///
+  Future<dynamic> delete(
+    String path, {
+    params,
+    Map<String, dynamic>? queryParameters,
+    String? jsonContentType = Headers.jsonContentType,
+    Options? options,
+    CancelToken? cancelToken,
+  }) async {
+    Options customOptions = options ?? Options();
+    customOptions.contentType = jsonContentType;
+    return await _dio.delete(
+      path,
+      data: params,
+      queryParameters: queryParameters,
+      options: customOptions,
+      cancelToken: cancelToken ?? _cancelToken,
+    );
+  }
+
   /// download 下载
   ///
   /// [path] 请求地址

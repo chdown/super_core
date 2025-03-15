@@ -3,6 +3,7 @@ import 'package:super_core/super_core.dart';
 
 /// 错误处理拦截器
 /// 请求是传参[ignoreCheck]，错误处理器会忽略检查，可用于处理接口返回的特殊code值进行处理
+/// 请求是传参[ignoreErrorCodes]，错误处理器会忽略该code，可用于处理接口返回的特殊code值进行处理
 class SuperErrorInterceptor extends Interceptor {
   static String sendTimeoutMsg = "请求服务器超时，请稍后再试！";
   static String connectionTimeoutMsg = "连接服务器超时，请稍后再试！";
@@ -15,9 +16,11 @@ class SuperErrorInterceptor extends Interceptor {
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
+    List<int> ignoreErrorCodes = response.requestOptions.extra["ignoreErrorCodes"] ?? <int>[];
+    ignoreErrorCodes.addAll(SuperNetConfig.successData);
     bool ignoreCheck = (response.requestOptions.extra["ignoreCheck"] ?? false) || response.data is! Map<dynamic, dynamic>; // 是否忽略检查
     var isMath = response.data is Map<String, dynamic> && (response.data as Map).containsKey(SuperNetConfig.successParam);
-    bool isSuccess = ignoreCheck || (isMath && SuperNetConfig.successData.contains(response.data[SuperNetConfig.successParam]));
+    bool isSuccess = ignoreCheck || (isMath && ignoreErrorCodes.contains(response.data[SuperNetConfig.successParam]));
     if (isSuccess) {
       super.onResponse(response, handler);
     } else {

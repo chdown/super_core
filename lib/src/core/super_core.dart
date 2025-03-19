@@ -12,10 +12,10 @@ mixin SuperCore {
   /// 展示load缺省处理
   /// [loadEnum] 加载类型
   /// [loadState] 加载状态
-  FutureOr<void> showState(LoadConfig loadConfig, LoadEnum loadEnum, LoadState loadState, String errorMsg);
+  showState(LoadConfig loadConfig, LoadEnum loadEnum, LoadState loadState, String errorMsg);
 
   /// 输出toast
-  FutureOr<void> showToast(String? message);
+  showToast(String? message);
 
   /// 消费错误：捕获异常后不展示toast、load缺省处理
   /// [return] 返回true时错误将不再往下进行

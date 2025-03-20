@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:super_core/src/http/error/app_data_error.dart';
+import 'package:super_core/src/http/error/app_error.dart';
 import 'package:super_core/src/http/error/app_net_error.dart';
 import 'package:super_core/super_core.dart';
 
@@ -73,11 +74,13 @@ mixin SuperCore {
 
   /// 获取错误信息，字类可自用实现进行单独的日志处理
   String getErrorMsg(Object error) {
-    String msg = "未知业务错误！";
+    String msg = "";
     if (error is DioException) {
       msg = error.message ?? "未知请求错误";
-    } else if (error is AppNetError || error is AppDataError) {
+    } else if (error is AppNetError || error is AppDataError || error is AppError) {
       msg = error.toString();
+    } else {
+      msg = error.toString()
     }
     return msg;
   }

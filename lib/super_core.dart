@@ -24,6 +24,7 @@ export 'src/ext/widget/ex_padding.dart';
 export 'src/ext/widget/ex_sliver.dart';
 export 'src/http/error/app_data_error.dart';
 export 'src/http/error/app_net_error.dart';
+export 'src/http/error/app_error.dart';
 export 'src/http/interceptors/super_error_interceptor.dart';
 export 'src/http/interceptors/super_header_interceptor.dart';
 export 'src/http/interceptors/super_log_interceptor.dart';

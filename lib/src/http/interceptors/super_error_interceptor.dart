@@ -13,6 +13,7 @@ class SuperErrorInterceptor extends Interceptor {
   static String receiveTimeoutMsg = "响应超时，请稍后再试！";
   static String unknownMsg = "未知异常，请稍后再试！";
   static String badResponseMsg = "服务器异常，请稍后重试！";
+  static String requestMsg = "网络请求异常，请稍后重试！";
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {

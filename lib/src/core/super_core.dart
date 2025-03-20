@@ -76,11 +76,11 @@ mixin SuperCore {
   String getErrorMsg(Object error) {
     String msg = "";
     if (error is DioException) {
-      msg = error.message ?? "未知请求错误";
+      msg = error.message ?? SuperErrorInterceptor.requestMsg;
     } else if (error is AppNetError || error is AppDataError || error is AppError) {
       msg = error.toString();
     } else {
-      msg = error.toString()
+      msg = error.toString();
     }
     return msg;
   }

@@ -76,7 +76,7 @@ mixin SuperCore {
   String getErrorMsg(Object error) {
     String msg = "";
     if (error is DioException) {
-      msg = error.message ?? SuperErrorInterceptor.requestMsg;
+      msg = error.message ?? HttpErrorMsg.requestMsg();
     } else if (error is AppNetError || error is AppDataError || error is AppError) {
       msg = error.toString();
     } else {

@@ -14,7 +14,7 @@ class Config {
     SuperNetConfig.errorMsgParam = "errorMsg";
     SuperNetConfig.baseUrl = () => ApiBaseUrl.baseUrl;
     SuperNetConfig.interceptors = [
-      SuperHeaderInterceptor(() async {
+      SuperHeaderInterceptor((options) async {
         return Future.value({});
       }),
       SuperErrorInterceptor(),

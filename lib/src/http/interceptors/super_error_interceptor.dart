@@ -1,19 +1,11 @@
 import 'package:dio/dio.dart';
+import 'package:super_core/src/http/http_error_msg.dart';
 import 'package:super_core/super_core.dart';
 
 /// 错误处理拦截器
 /// 请求是传参[ignoreCheck]，错误处理器会忽略检查，可用于处理接口返回的特殊code值进行处理
 /// 请求是传参[ignoreErrorCodes]，错误处理器会忽略该code，可用于处理接口返回的特殊code值进行处理
 class SuperErrorInterceptor extends Interceptor {
-  static String sendTimeoutMsg = "请求服务器超时，请稍后再试！";
-  static String connectionTimeoutMsg = "连接服务器超时，请稍后再试！";
-  static String connectionErrorMsg = "连接服务器异常，请稍后再试！";
-  static String badCertificateMsg = "请求证书异常，请稍后再试！";
-  static String cancelMsg = "请求被异常取消，请稍后再试！";
-  static String receiveTimeoutMsg = "响应超时，请稍后再试！";
-  static String unknownMsg = "未知异常，请稍后再试！";
-  static String badResponseMsg = "服务器异常，请稍后重试！";
-  static String requestMsg = "网络请求异常，请稍后重试！";
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
@@ -46,21 +38,21 @@ class SuperErrorInterceptor extends Interceptor {
   String errorMsg(DioException error) {
     switch (error.type) {
       case DioExceptionType.sendTimeout:
-        return sendTimeoutMsg;
+        return HttpErrorMsg.sendTimeoutMsg();
       case DioExceptionType.connectionTimeout:
-        return connectionTimeoutMsg;
+        return HttpErrorMsg.connectionTimeoutMsg();
       case DioExceptionType.connectionError:
-        return connectionErrorMsg;
+        return HttpErrorMsg.connectionErrorMsg();
       case DioExceptionType.receiveTimeout:
-        return receiveTimeoutMsg;
+        return HttpErrorMsg.receiveTimeoutMsg();
       case DioExceptionType.badCertificate:
-        return badCertificateMsg;
+        return HttpErrorMsg.badCertificateMsg();
       case DioExceptionType.cancel:
-        return cancelMsg;
+        return HttpErrorMsg.cancelMsg();
       case DioExceptionType.unknown:
-        return error.message ?? unknownMsg;
+        return error.message ?? HttpErrorMsg.unknownMsg();
       case DioExceptionType.badResponse:
-        return badResponseMsg;
+        return HttpErrorMsg.badResponseMsg();
     }
   }
 }

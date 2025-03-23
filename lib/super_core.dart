@@ -15,6 +15,7 @@ export 'src/ext/ex_map.dart';
 export 'src/ext/ex_map_null.dart';
 export 'src/ext/ex_string.dart';
 export 'src/ext/ex_t.dart';
+export 'src/ext/ex_timer.dart';
 export 'src/ext/size/ex_padding.dart';
 export 'src/ext/size/ex_sized_box.dart';
 export 'src/ext/widget/ex_align.dart';

@@ -13,25 +13,25 @@ extension ExGesture on Widget {
     Function()? onTap,
     Function()? onLongPress,
     double? borderRadius,
-    bool isDebounce = true,
-  }) =>
-      Material(
-        color: Colors.transparent,
-        child: Ink(
-          child: InkWell(
-            borderRadius: borderRadius != null ? BorderRadius.all(Radius.circular(borderRadius)) : null,
-            onTap: onTap == null
-                ? null
-                : !isDebounce
-                    ? onTap
-                    : () {
-                        onTap();
-                      }.debounce(),
-            onLongPress: onLongPress,
-            child: this,
-          ),
+    int debounceTime = 500,
+  }) {
+    var tmpOnTap = debounceTime <= 0
+        ? onTap
+        : () {
+            onTap?.call();
+          }.debounce(debounceTime);
+    return Material(
+      color: Colors.transparent,
+      child: Ink(
+        child: InkWell(
+          borderRadius: borderRadius != null ? BorderRadius.all(Radius.circular(borderRadius)) : null,
+          onTap: onTap == null ? null : tmpOnTap,
+          onLongPress: onLongPress,
+          child: this,
         ),
-      );
+      ),
+    );
+  }
 
   /// 手势
   Widget onTap(
@@ -40,22 +40,22 @@ extension ExGesture on Widget {
     HitTestBehavior? behavior,
     bool excludeFromSemantics = false,
     DragStartBehavior dragStartBehavior = DragStartBehavior.start,
-    bool isDebounce = true,
-  }) =>
-      GestureDetector(
-        key: key,
-        onTap: onTap == null
-            ? null
-            : !isDebounce
-                ? onTap
-                : () {
-                    onTap();
-                  }.debounce(),
-        behavior: behavior ?? HitTestBehavior.opaque,
-        excludeFromSemantics: excludeFromSemantics,
-        dragStartBehavior: dragStartBehavior,
-        child: this,
-      );
+    int debounceTime = 500,
+  }) {
+    var tmpOnTap = debounceTime <= 0
+        ? onTap
+        : () {
+            onTap?.call();
+          }.debounce(debounceTime);
+    return GestureDetector(
+      key: key,
+      onTap: onTap == null ? null : tmpOnTap,
+      behavior: behavior ?? HitTestBehavior.opaque,
+      excludeFromSemantics: excludeFromSemantics,
+      dragStartBehavior: dragStartBehavior,
+      child: this,
+    );
+  }
 
   /// 长按手势
   Widget onLongPress(

@@ -26,6 +26,9 @@ class SuperNetConfig {
   /// dio其他扩展
   static Dio Function(Dio dio) extDio = (dio) => dio;
 
+  /// 展示具体错误
+  static bool showDetailError = true;
+
   /// 网络code字段
   static String successParam = 'code';
 

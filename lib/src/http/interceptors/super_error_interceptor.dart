@@ -6,7 +6,6 @@ import 'package:super_core/super_core.dart';
 /// 请求是传参[ignoreCheck]，错误处理器会忽略检查，可用于处理接口返回的特殊code值进行处理
 /// 请求是传参[ignoreErrorCodes]，错误处理器会忽略该code，可用于处理接口返回的特殊code值进行处理
 class SuperErrorInterceptor extends Interceptor {
-
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
     List<int> ignoreErrorCodes = response.requestOptions.extra["ignoreErrorCodes"] ?? <int>[];
@@ -23,7 +22,7 @@ class SuperErrorInterceptor extends Interceptor {
           requestOptions: response.requestOptions,
           response: response,
           type: DioExceptionType.unknown,
-          message: response.data[SuperNetConfig.errorMsgParam],
+          message: response.data[SuperNetConfig.errorMsgParam] ?? response.data.toString(),
         ),
         true,
       );
@@ -36,6 +35,7 @@ class SuperErrorInterceptor extends Interceptor {
   }
 
   String errorMsg(DioException error) {
+    if (SuperNetConfig.showDetailError) return error.toString();
     switch (error.type) {
       case DioExceptionType.sendTimeout:
         return HttpErrorMsg.sendTimeoutMsg();

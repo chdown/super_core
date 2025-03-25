@@ -41,6 +41,7 @@ class SuperHttp {
           client.findProxy = (uri) {
             return "PROXY ${SuperNetConfig.proxyUrl()}";
           };
+          client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
           return client;
         },
       );

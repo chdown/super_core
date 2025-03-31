@@ -6,7 +6,7 @@ class LogUtil {
 
   /// 配置输出 Log
   static LogOutput? output;
-  static bool isReleaseError = false;
+  static bool isForceShow = false;
 
   static final _log = Logger(
     output: output,
@@ -19,7 +19,7 @@ class LogUtil {
     Object? error,
     StackTrace? stackTrace,
   }) {
-    if (kDebugMode) _log.d(message, time: time, error: error, stackTrace: stackTrace);
+    if (kDebugMode || isForceShow) _log.d(message, time: time, error: error, stackTrace: stackTrace);
   }
 
   static void i(
@@ -28,7 +28,7 @@ class LogUtil {
     Object? error,
     StackTrace? stackTrace,
   }) {
-    if (kDebugMode) _log.i(message, time: time, error: error, stackTrace: stackTrace);
+    if (kDebugMode || isForceShow) _log.i(message, time: time, error: error, stackTrace: stackTrace);
   }
 
   static void e(
@@ -37,7 +37,7 @@ class LogUtil {
     Object? error,
     StackTrace? stackTrace,
   }) {
-    if (kDebugMode || isReleaseError) _log.e(message, time: time, error: error, stackTrace: stackTrace);
+    if (kDebugMode || isForceShow) _log.e(message, time: time, error: error, stackTrace: stackTrace);
   }
 
   static void w(
@@ -46,7 +46,7 @@ class LogUtil {
     Object? error,
     StackTrace? stackTrace,
   }) {
-    if (kDebugMode) _log.w(message, time: time, error: error, stackTrace: stackTrace);
+    if (kDebugMode || isForceShow) _log.w(message, time: time, error: error, stackTrace: stackTrace);
   }
 
   static void c(
@@ -56,6 +56,6 @@ class LogUtil {
     Object? error,
     StackTrace? stackTrace,
   }) {
-    if (kDebugMode) _log.log(level, message, time: time, error: error, stackTrace: stackTrace);
+    if (kDebugMode || isForceShow) _log.log(level, message, time: time, error: error, stackTrace: stackTrace);
   }
 }

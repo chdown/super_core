@@ -6,10 +6,12 @@ class LogUtil {
 
   /// 配置输出 Log
   static LogOutput? output;
-  static bool isForceShow = false;
+  // log默认只有debug才输出，如果需要全部输出，则设置filter
+  static LogFilter? filter;
 
   static final _log = Logger(
     output: output,
+    filter: filter,
     printer: PrettyPrinter(colors: false, dateTimeFormat: DateTimeFormat.none, methodCount: 0),
   );
 
@@ -19,7 +21,7 @@ class LogUtil {
     Object? error,
     StackTrace? stackTrace,
   }) {
-    if (kDebugMode || isForceShow) _log.d(message, time: time, error: error, stackTrace: stackTrace);
+    _log.d(message, time: time, error: error, stackTrace: stackTrace);
   }
 
   static void i(
@@ -28,7 +30,7 @@ class LogUtil {
     Object? error,
     StackTrace? stackTrace,
   }) {
-    if (kDebugMode || isForceShow) _log.i(message, time: time, error: error, stackTrace: stackTrace);
+    _log.i(message, time: time, error: error, stackTrace: stackTrace);
   }
 
   static void e(
@@ -37,7 +39,7 @@ class LogUtil {
     Object? error,
     StackTrace? stackTrace,
   }) {
-    if (kDebugMode || isForceShow) _log.e(message, time: time, error: error, stackTrace: stackTrace);
+    _log.e(message, time: time, error: error, stackTrace: stackTrace);
   }
 
   static void w(
@@ -46,7 +48,7 @@ class LogUtil {
     Object? error,
     StackTrace? stackTrace,
   }) {
-    if (kDebugMode || isForceShow) _log.w(message, time: time, error: error, stackTrace: stackTrace);
+    _log.w(message, time: time, error: error, stackTrace: stackTrace);
   }
 
   static void c(
@@ -56,6 +58,6 @@ class LogUtil {
     Object? error,
     StackTrace? stackTrace,
   }) {
-    if (kDebugMode || isForceShow) _log.log(level, message, time: time, error: error, stackTrace: stackTrace);
+    _log.log(level, message, time: time, error: error, stackTrace: stackTrace);
   }
 }

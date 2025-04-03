@@ -13,6 +13,7 @@ class LoadConfig {
   VoidCallback? success; // 成功回调
   StringCallback? error; // 错误回调
   VoidCallback? finish; // 完成回调
+  String? loadingText; // loading案
   bool isErrorPage; // 非[LoadEnum.page]、[LoadEnum.none]是否展示错误page
   bool isShowToast; // 是否展示错误toast
   Object? config; // 扩展参数
@@ -25,6 +26,7 @@ class LoadConfig {
     this.success,
     this.error,
     this.finish,
+    this.loadingText,
     this.isErrorPage = false,
     this.isShowToast = true,
     this.config,

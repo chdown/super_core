@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:super_core/src/utils/log_util.dart';
@@ -21,9 +23,9 @@ class SuperLogInterceptor extends Interceptor {
       'url': '${rep.requestOptions.uri}',
       'headers': rep.requestOptions.headers,
       'requestQuery': rep.requestOptions.queryParameters,
-      'requestData': rep.requestOptions.data.toString(),
+      'requestData': (rep.requestOptions.data is Map) ? jsonEncode(rep.requestOptions.data) : rep.requestOptions.data,
       'responseMessage': rep.message,
-      'responseData': rep.response?.data.toString(),
+      'responseData': (rep.response?.data is Map) ? jsonEncode(rep.response?.data) : rep.requestOptions.data,
     };
     if (logEnable) LogUtil.e(log, stackTrace: rep.stackTrace);
     super.onError(rep, handler);
@@ -41,8 +43,8 @@ class SuperLogInterceptor extends Interceptor {
       'url': '${rep.requestOptions.uri}',
       'headers': rep.requestOptions.headers,
       'requestQuery': rep.requestOptions.queryParameters,
-      'requestData': requestData.toString(),
-      'responseData': rep.data.toString(),
+      'requestData': (requestData is Map) ? jsonEncode(requestData) : requestData.toString(),
+      'responseData': (rep.data is Map) ? jsonEncode(requestData) : rep.data,
     };
     if (logEnable) LogUtil.i(log);
     super.onResponse(rep, handler);

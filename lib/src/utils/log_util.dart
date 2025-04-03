@@ -4,15 +4,18 @@ import 'package:logger/logger.dart';
 class LogUtil {
   LogUtil._();
 
+  static LogPrinter? printer;
+
   /// 配置输出 Log
   static LogOutput? output;
+
   // log默认只有debug才输出，如果需要全部输出，则设置filter
   static LogFilter? filter;
 
   static final _log = Logger(
     output: output,
     filter: filter,
-    printer: PrettyPrinter(colors: false, dateTimeFormat: DateTimeFormat.none, methodCount: 0),
+    printer: printer ?? PrettyPrinter(colors: false, dateTimeFormat: DateTimeFormat.none, methodCount: 0),
   );
 
   static void d(

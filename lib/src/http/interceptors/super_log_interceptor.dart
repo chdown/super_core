@@ -25,7 +25,7 @@ class SuperLogInterceptor extends Interceptor {
       'responseMessage': rep.message,
       'responseData': rep.response?.data,
     };
-    if (!kReleaseMode && logEnable) LogUtil.e(log, stackTrace: rep.stackTrace);
+    if (logEnable) LogUtil.e(log, stackTrace: rep.stackTrace);
     super.onError(rep, handler);
   }
 
@@ -44,7 +44,7 @@ class SuperLogInterceptor extends Interceptor {
       'requestData': requestData,
       'responseData': rep.data,
     };
-    if (!kReleaseMode && logEnable) LogUtil.i(log);
+    if (logEnable) LogUtil.i(log);
     super.onResponse(rep, handler);
   }
 }

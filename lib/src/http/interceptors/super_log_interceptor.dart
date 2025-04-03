@@ -17,16 +17,10 @@ class SuperLogInterceptor extends Interceptor {
   void onError(DioException rep, ErrorInterceptorHandler handler) {
     var time = DateTime.now().millisecondsSinceEpoch - rep.requestOptions.extra["ts"];
     var logEnable = rep.requestOptions.extra["logEnable"] ?? true;
-    Map log = {
-      'http': rep.requestOptions.method,
-      'time': time,
-      'url': '${rep.requestOptions.uri}',
-      'headers': rep.requestOptions.headers,
-      'requestQuery': rep.requestOptions.queryParameters,
-      'requestData': (rep.requestOptions.data is Map) ? jsonEncode(rep.requestOptions.data) : rep.requestOptions.data,
-      'responseMessage': rep.message,
-      'responseData': (rep.response?.data is Map) ? jsonEncode(rep.response?.data) : rep.requestOptions.data,
-    };
+
+    String log =
+        '🌐🌐⚠️⚠️${rep.requestOptions.uri}  ${rep.requestOptions.method}  ${time}ms⚠️⚠️🌐🌐\n【请求头】${rep.requestOptions.headers}\n【请求参数】${JsonEncoder().convert(rep.requestOptions.data ?? rep.requestOptions.queryParameters)}\n【返回参数】${JsonEncoder().convert(rep.response?.data)}\n【错误信息】${JsonEncoder().convert(rep.message)}';
+
     if (logEnable) LogUtil.e(log, stackTrace: rep.stackTrace);
     super.onError(rep, handler);
   }
@@ -37,15 +31,9 @@ class SuperLogInterceptor extends Interceptor {
     var logEnable = rep.requestOptions.extra["logEnable"] ?? true;
     var responseType = rep.requestOptions.responseType;
     var requestData = responseType == ResponseType.bytes || responseType == ResponseType.stream ? responseType.name : rep.requestOptions.data;
-    Map log = {
-      'http': rep.requestOptions.method,
-      'time': time,
-      'url': '${rep.requestOptions.uri}',
-      'headers': rep.requestOptions.headers,
-      'requestQuery': rep.requestOptions.queryParameters,
-      'requestData': (requestData is Map) ? jsonEncode(requestData) : requestData.toString(),
-      'responseData': (rep.data is Map) ? jsonEncode(requestData) : rep.data,
-    };
+
+    String log =
+        '🌐🌐${rep.requestOptions.uri}  ${rep.requestOptions.method}  ${time}ms🌐🌐🌐🌐\n【请求头】${rep.requestOptions.headers}\n【请求参数】${JsonEncoder().convert(rep.requestOptions.data ?? rep.requestOptions.queryParameters)}\n【返回参数】${JsonEncoder().convert(rep.data)}';
     if (logEnable) LogUtil.i(log);
     super.onResponse(rep, handler);
   }

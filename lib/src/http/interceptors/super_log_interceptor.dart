@@ -21,9 +21,9 @@ class SuperLogInterceptor extends Interceptor {
       'url': '${rep.requestOptions.uri}',
       'headers': rep.requestOptions.headers,
       'requestQuery': rep.requestOptions.queryParameters,
-      'requestData': rep.requestOptions.data,
+      'requestData': rep.requestOptions.data.toString(),
       'responseMessage': rep.message,
-      'responseData': rep.response?.data,
+      'responseData': rep.response?.data.toString(),
     };
     if (logEnable) LogUtil.e(log, stackTrace: rep.stackTrace);
     super.onError(rep, handler);
@@ -41,8 +41,8 @@ class SuperLogInterceptor extends Interceptor {
       'url': '${rep.requestOptions.uri}',
       'headers': rep.requestOptions.headers,
       'requestQuery': rep.requestOptions.queryParameters,
-      'requestData': requestData,
-      'responseData': rep.data,
+      'requestData': requestData.toString(),
+      'responseData': rep.data.toString(),
     };
     if (logEnable) LogUtil.i(log);
     super.onResponse(rep, handler);

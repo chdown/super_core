@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
 
+import 'dev_logger.dart';
+
 class LogUtil {
   LogUtil._();
 
@@ -13,9 +15,9 @@ class LogUtil {
   static LogFilter? filter;
 
   static final _log = Logger(
-    output: output,
+    output: DevLogger(),
     filter: filter,
-    printer: printer ?? PrettyPrinter(colors: false, dateTimeFormat: DateTimeFormat.none, methodCount: 0),
+    printer: printer ?? PrettyPrinter(colors: false, dateTimeFormat: DateTimeFormat.none, methodCount: 0,errorMethodCount: 16),
   );
 
   static void d(

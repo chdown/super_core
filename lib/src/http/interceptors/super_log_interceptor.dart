@@ -17,10 +17,13 @@ class SuperLogInterceptor extends Interceptor {
   void onError(DioException rep, ErrorInterceptorHandler handler) {
     var time = DateTime.now().millisecondsSinceEpoch - rep.requestOptions.extra["ts"];
     var logEnable = rep.requestOptions.extra["logEnable"] ?? true;
-
-    String log =
-        '🌐🌐⚠️⚠️ ${rep.requestOptions.uri}  ${rep.requestOptions.method}  ${time}ms ⚠️⚠️🌐🌐\n【请求头】${JsonEncoder().convert(rep.requestOptions.headers)}\n【请求参数】${JsonEncoder().convert(rep.requestOptions.data ?? rep.requestOptions.queryParameters)}\n【返回参数】${JsonEncoder().convert(rep.response?.data)}\n【错误信息】${JsonEncoder().convert(rep.message)}';
-
+    String log = "打印日志异常";
+    try {
+      log =
+          '🌐🌐⚠️⚠️ ${rep.requestOptions.uri}  ${rep.requestOptions.method}  ${time}ms ⚠️⚠️🌐🌐\n【请求头】${JsonEncoder().convert(rep.requestOptions.headers)}\n【请求参数】${JsonEncoder().convert(rep.requestOptions.data ?? rep.requestOptions.queryParameters)}\n【返回参数】${JsonEncoder().convert(rep.response?.data)}\n【错误信息】${JsonEncoder().convert(rep.message)}';
+    } catch (ex) {
+      log = "打印日志异常";
+    }
     if (logEnable) LogUtil.e(log, stackTrace: rep.stackTrace);
     super.onError(rep, handler);
   }
@@ -31,9 +34,13 @@ class SuperLogInterceptor extends Interceptor {
     var logEnable = rep.requestOptions.extra["logEnable"] ?? true;
     var responseType = rep.requestOptions.responseType;
     var requestData = responseType == ResponseType.bytes || responseType == ResponseType.stream ? responseType.name : rep.requestOptions.data;
-
-    String log =
-        '🌐🌐🌐🌐 ${rep.requestOptions.uri}  ${rep.requestOptions.method}  ${time}ms 🌐🌐🌐🌐\n【请求头】${JsonEncoder().convert(rep.requestOptions.headers)}\n【请求参数】${JsonEncoder().convert(rep.requestOptions.data ?? rep.requestOptions.queryParameters)}\n【返回参数】${JsonEncoder().convert(rep.data)}';
+    String log = "打印日志异常";
+    try {
+      log =
+          '🌐🌐🌐🌐 ${rep.requestOptions.uri}  ${rep.requestOptions.method}  ${time}ms 🌐🌐🌐🌐\n【请求头】${JsonEncoder().convert(rep.requestOptions.headers)}\n【请求参数】${JsonEncoder().convert(rep.requestOptions.data ?? rep.requestOptions.queryParameters)}\n【返回参数】${JsonEncoder().convert(requestData)}';
+    } catch (ex) {
+      log = "打印日志异常";
+    }
     if (logEnable) LogUtil.i(log);
     super.onResponse(rep, handler);
   }

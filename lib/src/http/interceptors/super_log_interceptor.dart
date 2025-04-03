@@ -19,7 +19,7 @@ class SuperLogInterceptor extends Interceptor {
     var logEnable = rep.requestOptions.extra["logEnable"] ?? true;
 
     String log =
-        '🌐🌐⚠️⚠️${rep.requestOptions.uri}  ${rep.requestOptions.method}  ${time}ms⚠️⚠️🌐🌐\n【请求头】${rep.requestOptions.headers}\n【请求参数】${JsonEncoder().convert(rep.requestOptions.data ?? rep.requestOptions.queryParameters)}\n【返回参数】${JsonEncoder().convert(rep.response?.data)}\n【错误信息】${JsonEncoder().convert(rep.message)}';
+        '🌐🌐⚠️⚠️ ${rep.requestOptions.uri}  ${rep.requestOptions.method}  ${time}ms ⚠️⚠️🌐🌐\n【请求头】${JsonEncoder().convert(rep.requestOptions.headers)}\n【请求参数】${JsonEncoder().convert(rep.requestOptions.data ?? rep.requestOptions.queryParameters)}\n【返回参数】${JsonEncoder().convert(rep.response?.data)}\n【错误信息】${JsonEncoder().convert(rep.message)}';
 
     if (logEnable) LogUtil.e(log, stackTrace: rep.stackTrace);
     super.onError(rep, handler);
@@ -33,7 +33,7 @@ class SuperLogInterceptor extends Interceptor {
     var requestData = responseType == ResponseType.bytes || responseType == ResponseType.stream ? responseType.name : rep.requestOptions.data;
 
     String log =
-        '🌐🌐${rep.requestOptions.uri}  ${rep.requestOptions.method}  ${time}ms🌐🌐🌐🌐\n【请求头】${rep.requestOptions.headers}\n【请求参数】${JsonEncoder().convert(rep.requestOptions.data ?? rep.requestOptions.queryParameters)}\n【返回参数】${JsonEncoder().convert(rep.data)}';
+        '🌐🌐🌐🌐 ${rep.requestOptions.uri}  ${rep.requestOptions.method}  ${time}ms 🌐🌐🌐🌐\n【请求头】${JsonEncoder().convert(rep.requestOptions.headers)}\n【请求参数】${JsonEncoder().convert(rep.requestOptions.data ?? rep.requestOptions.queryParameters)}\n【返回参数】${JsonEncoder().convert(rep.data)}';
     if (logEnable) LogUtil.i(log);
     super.onResponse(rep, handler);
   }

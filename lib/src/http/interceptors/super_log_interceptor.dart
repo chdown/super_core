@@ -33,7 +33,7 @@ class SuperLogInterceptor extends Interceptor {
     var time = DateTime.now().millisecondsSinceEpoch - rep.requestOptions.extra["ts"];
     var logEnable = rep.requestOptions.extra["logEnable"] ?? true;
     var responseType = rep.requestOptions.responseType;
-    var requestData = responseType == ResponseType.bytes || responseType == ResponseType.stream ? responseType.name : rep.requestOptions.data;
+    var requestData = (responseType == ResponseType.bytes || responseType == ResponseType.stream) ? responseType.name : rep.requestOptions.data;
     String log = "打印日志异常";
     try {
       log =

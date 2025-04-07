@@ -35,6 +35,7 @@ export 'src/http/http_error_msg.dart';
 export 'src/utils/date_util.dart';
 export 'src/utils/enum/date_enum.dart';
 export 'src/utils/log_util.dart';
+export 'src/utils/dev_logger.dart';
 export 'src/utils/num_util.dart';
 export 'src/utils/obj_util.dart';
 export 'src/utils/plat_utils.dart';

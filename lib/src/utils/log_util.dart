@@ -15,9 +15,9 @@ class LogUtil {
   static LogFilter? filter;
 
   static final _log = Logger(
-    output: DevLogger(),
+    output: output ?? DevLogger(),
     filter: filter,
-    printer: printer ?? PrettyPrinter(colors: false, dateTimeFormat: DateTimeFormat.none, methodCount: 0,errorMethodCount: 16),
+    printer: printer ?? PrettyPrinter(colors: false, dateTimeFormat: DateTimeFormat.none, methodCount: 0, errorMethodCount: 16),
   );
 
   static void d(

@@ -24,6 +24,9 @@ class MainPage extends StatelessWidget {
               child: SuperBody(
                 topBody: Row(
                   children: [
+                    SuperText(text: "11111111111").onTap(() {
+                     print("222222222222222222222222");
+                    }),
                     SuperButton(
                       width: 80,
                       margin: const EdgeInsets.all(10),

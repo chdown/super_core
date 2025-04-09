@@ -7,19 +7,16 @@ import 'package:super_core/super_core.dart';
 /// @description Align扩展
 ///
 extension ExGesture on Widget {
-  // 墨水纹
+  /// 墨水纹
+  /// [debounceTime] 为0时取消节流
   Widget inkWell({
     Key? key,
     Function()? onTap,
     Function()? onLongPress,
     double? borderRadius,
-    int debounceTime = 500,
+    int? debounceTime,
   }) {
-    var tmpOnTap = debounceTime <= 0
-        ? onTap
-        : () {
-            onTap?.call();
-          }.debounce(debounceTime);
+    var tmpOnTap = debounceTime == 0 ? onTap : onTap.debounce(debounceTime ?? SuperNetConfig.debounceTime);
     return Material(
       color: Colors.transparent,
       child: Ink(
@@ -40,13 +37,9 @@ extension ExGesture on Widget {
     HitTestBehavior? behavior,
     bool excludeFromSemantics = false,
     DragStartBehavior dragStartBehavior = DragStartBehavior.start,
-    int debounceTime = 500,
+    int? debounceTime,
   }) {
-    var tmpOnTap = debounceTime <= 0
-        ? onTap
-        : () {
-            onTap?.call();
-          }.debounce(debounceTime);
+    var tmpOnTap = debounceTime == 0 ? onTap : onTap.debounce(debounceTime ?? SuperNetConfig.debounceTime);
     return GestureDetector(
       key: key,
       onTap: onTap == null ? null : tmpOnTap,

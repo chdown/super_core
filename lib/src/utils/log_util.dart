@@ -6,7 +6,11 @@ import 'dev_logger.dart';
 class LogUtil {
   LogUtil._();
 
+  /// 配置输出 Log
   static LogPrinter? printer;
+
+  /// 是否输出emoji
+  static bool? printEmojis;
 
   /// 配置输出 Log
   static LogOutput? output;
@@ -17,7 +21,14 @@ class LogUtil {
   static final _log = Logger(
     output: output ?? DevLogger(),
     filter: filter,
-    printer: printer ?? PrettyPrinter(colors: false, dateTimeFormat: DateTimeFormat.none, methodCount: 0, errorMethodCount: 16),
+    printer: printer ??
+        PrettyPrinter(
+          colors: false,
+          dateTimeFormat: DateTimeFormat.none,
+          methodCount: 0,
+          errorMethodCount: 16,
+          printEmojis: printEmojis ?? true,
+        ),
   );
 
   static void d(

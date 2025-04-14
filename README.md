@@ -1,396 +1,276 @@
-根据 `chdown/super_core` 仓库中的 `lib/super_core.dart` 文件及其引用的相关代码文件，生成以下详细的 README 使用文档：
+# Super Core
 
----
+一个全面的 Flutter 工具包，提供了丰富的工具和扩展功能，用于简化 Flutter 开发。该包采用模块化设计，主要包含以下几个核心模块：
 
-# SuperCore
+## 项目结构
 
-`SuperCore` 是一个 Dart 库，提供了一系列核心组件和扩展功能，旨在简化应用程序开发中的常见任务，如加载状态管理、错误处理、网络请求等。
+```
+lib/
+├── src/
+│   ├── config/          # 配置相关
+│   │   └── super_net_config.dart
+│   ├── core/            # 核心功能
+│   │   ├── load_config.dart
+│   │   ├── load_enum.dart
+│   │   ├── load_state.dart
+│   │   ├── super_core.dart
+│   │   └── super_limit.dart
+│   ├── ext/             # 扩展功能
+│   │   ├── ex_bool.dart
+│   │   ├── ex_context.dart
+│   │   ├── ex_function.dart
+│   │   ├── ex_int.dart
+│   │   ├── ex_list.dart
+│   │   ├── ex_map.dart
+│   │   ├── ex_map_null.dart
+│   │   ├── ex_string.dart
+│   │   ├── ex_t.dart
+│   │   ├── size/
+│   │   └── widget/
+│   ├── http/            # 网络请求
+│   │   ├── error/
+│   │   ├── interceptors/
+│   │   └── super_http.dart
+│   └── utils/           # 工具类
+│       ├── date_util.dart
+│       ├── log_util.dart
+│       ├── num_util.dart
+│       ├── obj_util.dart
+│       └── plat_utils.dart
+└── super_core.dart      # 主入口文件
+```
 
-## 功能
+## 核心模块
 
-- 加载状态管理
+### 1. 配置模块 (config)
+- `SuperNetConfig`: 网络配置类，用于配置网络请求的基础参数
+  ```dart
+  class SuperNetConfig {
+    final String baseUrl;
+    final int connectTimeout;
+    final int receiveTimeout;
+    // ...
+  }
+  ```
+
+### 2. 核心功能模块 (core)
+- `SuperCore`: 核心混入类，提供基础功能
+  ```dart
+  mixin SuperCore {
+    void showState(LoadConfig loadConfig, LoadEnum loadEnum, LoadState loadState, String errorMsg);
+    Future request<T>({...});
+  }
+  ```
+- `LoadConfig`: 加载配置类
+- `LoadEnum`: 加载状态枚举
+- `LoadState`: 加载状态类
+- `SuperLimit`: 限制控制类
+
+### 3. 扩展模块 (ext)
+- 基础类型扩展
+  - `ex_bool.dart`: 布尔值扩展
+  - `ex_context.dart`: 上下文扩展
+  - `ex_function.dart`: 函数扩展
+  - `ex_int.dart`: 整数扩展
+  - `ex_list.dart`: 列表扩展
+  - `ex_map.dart`: Map扩展
+  - `ex_string.dart`: 字符串扩展
+  - `ex_t.dart`: 泛型扩展
+
+- Widget扩展
+  - `size/`: 尺寸相关扩展
+  - `widget/`: Widget相关扩展
+
+### 4. 网络请求模块 (http)
 - 错误处理
-- 网络请求拦截器
-- 常用工具类和扩展方法
+  - `AppDataError`: 数据错误
+  - `AppNetError`: 网络错误
+  - `AppError`: 通用错误
 
-## 安装
+- 拦截器
+  - `SuperErrorInterceptor`: 错误拦截器
+  - `SuperHeaderInterceptor`: 请求头拦截器
+  - `SuperLogInterceptor`: 日志拦截器
+  - `SuperTokenInterceptor`: Token拦截器
 
-请确保在 `pubspec.yaml` 文件中添加了 `super_core` 依赖：
+- HTTP客户端
+  - `SuperHttp`: HTTP请求工具类
+  - `HttpMethod`: HTTP方法枚举
+  - `HttpErrorMsg`: 错误消息处理
 
-```yaml
-dependencies:
-  super_core:
-    git:
-      url: https://github.com/chdown/super_core.git
-```
+### 5. 工具模块 (utils)
+- `DateUtil`: 日期工具类
+- `LogUtil`: 日志工具类
+- `NumUtil`: 数字工具类
+- `ObjUtil`: 对象工具类
+- `PlatUtils`: 平台工具类
 
-然后运行 `flutter pub get` 安装依赖。
+## 框架管理
 
-## 导入
+Super Core 是一个基于 GetX 和 Dio 的 Flutter 开发框架，主要解决以下问题：
 
-在您的 Dart 文件中导入 `super_core`：
+1. **状态管理**：基于 GetX 的状态管理方案
+2. **网络请求**：基于 Dio 的网络请求封装
+3. **UI 组件**：常用 Widget 的扩展和封装
+4. **工具类**：开发中常用的工具方法
 
-```dart
-import 'package:super_core/super_core.dart';
-```
+### 框架特点
 
-## 主要模块和使用方法
+- 统一的错误处理机制
+- 自动的加载状态管理
+- 便捷的网络请求封装
+- 丰富的扩展方法
+- 完整的日志系统
 
-### 核心模块
+### 核心控制器 (BaseController)
 
-#### `SuperCore`
+BaseController 是整个框架的核心组件，它继承自 GetX 的 GetxController 并混入了 SuperCore，提供了以下核心功能：
 
-`SuperCore` 是一个混入，提供了加载状态管理和错误处理的基本功能。
+1. **状态管理**
+   - 自动处理加载状态
+   - 统一的错误处理
+   - 便捷的数据刷新
 
-```dart
-mixin SuperCore {
-  void showState(LoadConfig loadConfig, LoadEnum loadEnum, LoadState loadState, String errorMsg);
-  void showToast(String? message);
-  Future<bool> consumptionError(Object e, StackTrace? trace) async => false;
-  Future request<T>({
-    required Future<dynamic> Function() request,
-    LoadEnum loadEnum = LoadEnum.loading,
-    LoadConfig? loadConfig,
-  }) async;
-}
-```
+2. **网络请求**
+   - 统一的请求封装
+   - 自动的错误处理
+   - 便捷的响应处理
 
-| 方法                | 参数                                                                                   | 类型                                | 说明                         |
-| ------------------- | -------------------------------------------------------------------------------------- | ----------------------------------- | ---------------------------- |
-| `showState`         | `loadConfig` `loadEnum` `loadState` `errorMsg`                                          | `LoadConfig` `LoadEnum` `LoadState` `String` | 展示加载状态                 |
-| `showToast`         | `message`                                                                              | `String?`                          | 显示 toast 消息              |
-| `consumptionError`  | `e` `trace`                                                                             | `Object` `StackTrace?`              | 处理错误并防止显示 toast 或默认加载状态 |
-| `request`           | `request` `loadEnum` `loadConfig`                                                      | `Future<dynamic> Function()` `LoadEnum` `LoadConfig?` | 处理数据请求并自动管理加载状态 |
-
-### 错误处理
-
-#### `AppDataError`
-
-处理数据错误。
-
-```dart
-class AppDataError extends Error {
-  static String errorDataMsg = "数据错误，请稍后再试！";
-  String toString() {
-    return errorDataMsg;
-  }
-}
-```
-
-#### `AppNetError`
-
-处理网络连接错误。
+3. **生命周期管理**
+   - 页面初始化
+   - 数据加载
+   - 资源释放
 
 ```dart
-class AppNetError extends Error {
-  static String errorNetUnConnectionMsg = "无法连接服务器，请检查您的网络环境！";
-  String toString() {
-    return errorNetUnConnectionMsg;
-  }
-}
-```
-
-### 网络请求拦截器
-
-#### `SuperErrorInterceptor`
-
-处理网络请求中的错误。
-
-```dart
-class SuperErrorInterceptor extends Interceptor {
+class BaseController extends GetxController with SuperCore {
+  // 加载状态
+  final isLoading = false.obs;
+  final isRefreshing = false.obs;
+  final isLoadMore = false.obs;
+  
+  // 错误状态
+  final errorMsg = ''.obs;
+  final hasError = false.obs;
+  
   @override
-  void onError(DioError err, ErrorInterceptorHandler handler) {
-    // 处理错误逻辑
+  void onInit() {
+    super.onInit();
+    loadData();
+  }
+  
+  // 加载数据
+  Future<void> loadData() async {
+    try {
+      isLoading.value = true;
+      final response = await SuperHttp.get('/api/data');
+      // 处理数据
+    } catch (e) {
+      handleError(e);
+    } finally {
+      isLoading.value = false;
+    }
+  }
+  
+  // 错误处理
+  void handleError(dynamic error) {
+    errorMsg.value = getErrorMsg(error);
+    hasError.value = true;
+    showError(errorMsg.value);
   }
 }
 ```
 
-#### `SuperHeaderInterceptor`
+### 框架使用指南
 
-添加请求头拦截器。
+#### 1. 项目初始化
 
 ```dart
-class SuperHeaderInterceptor extends Interceptor {
+void main() {
+  // 初始化网络配置
+  SuperNetConfig config = SuperNetConfig(
+    baseUrl: 'https://api.example.com',
+    connectTimeout: 5000,
+    receiveTimeout: 3000,
+  );
+  
+  // 初始化 GetX
+  GetMaterialApp(
+    title: 'Super Core Demo',
+    initialRoute: AppPages.INITIAL,
+    getPages: AppPages.routes,
+    defaultTransition: Transition.fade,
+  );
+}
+```
+
+#### 2. 控制器开发
+
+```dart
+class HomeController extends BaseController {
+  final userList = <User>[].obs;
+  
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    // 添加请求头逻辑
+  Future<void> loadData() async {
+    try {
+      final response = await SuperHttp.get(
+        '/api/users',
+        queryParameters: {'page': 1},
+      );
+      userList.value = User.fromJsonList(response.data);
+    } catch (e) {
+      handleError(e);
+    }
   }
 }
 ```
 
-#### `SuperLogInterceptor`
-
-日志拦截器，用于记录请求和响应日志。
+#### 3. 页面开发
 
 ```dart
-class SuperLogInterceptor extends Interceptor {
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
+
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    // 记录请求日志
+  Widget build(BuildContext context) {
+    return GetBuilder<HomeController>(
+      init: HomeController(),
+      builder: (controller) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text('首页'),
+          ),
+          body: _buildBody(controller),
+        );
+      },
+    );
   }
-  @override
-  void onResponse(Response response, ResponseInterceptorHandler handler) {
-    // 记录响应日志
-  }
-}
-```
 
-#### `SuperTokenInterceptor`
+  Widget _buildBody(HomeController controller) {
+    if (controller.isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
 
-处理请求中的 token。
+    if (controller.hasError) {
+      return Center(
+        child: Text(controller.errorMsg),
+      );
+    }
 
-```dart
-class SuperTokenInterceptor extends Interceptor {
-  @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    // 处理 token 逻辑
-  }
-}
-```
-
-### 常用工具类和扩展方法
-
-#### `DateUtil`
-
-日期工具类，提供常用日期处理方法。
-
-```dart
-class DateUtil {
-  static String format(DateTime date, {String format = 'yyyy-MM-dd'}) {
-    // 格式化日期
-  }
-}
-```
-
-#### `LogUtil`
-
-日志工具类，提供日志记录方法。
-
-```dart
-class LogUtil {
-  static void d(String message) {
-    // 记录调试日志
-  }
-  static void e(String message) {
-    // 记录错误日志
+    return ListView.builder(
+      itemCount: controller.userList.length,
+      itemBuilder: (context, index) {
+        final user = controller.userList[index];
+        return ListTile(
+          title: Text(user.name),
+          subtitle: Text(user.email),
+          onTap: () => controller.onUserTap(user),
+        );
+      },
+    );
   }
 }
 ```
 
-#### `NumUtil`
+## 贡献指南
 
-数字工具类，提供常用数字处理方法。
-
-```dart
-class NumUtil {
-  static double add(double a, double b) {
-    // 加法运算
-  }
-}
-```
-
-#### `ObjUtil`
-
-对象工具类，提供常用对象处理方法。
-
-```dart
-class ObjUtil {
-  static bool isEmpty(Object? obj) {
-    // 判断对象是否为空
-  }
-}
-```
-
-### 扩展方法
-
-#### `ex_bool.dart`
-
-为 `bool` 类型添加扩展方法。
-
-```dart
-extension BoolExtension on bool {
-  bool toggle() {
-    return !this;
-  }
-}
-```
-
-#### `ex_context.dart`
-
-为 `BuildContext` 添加扩展方法。
-
-```dart
-extension ContextExtension on BuildContext {
-  void showDialog(String message) {
-    // 显示对话框
-  }
-}
-```
-
-#### `ex_function.dart`
-
-为 `Function` 类型添加扩展方法。
-
-```dart
-extension FunctionExtension on Function {
-  void callWithDelay(Duration delay) {
-    Future.delayed(delay, () => this());
-  }
-}
-```
-
-#### `ex_int.dart`
-
-为 `int` 类型添加扩展方法。
-
-```dart
-extension IntExtension on int {
-  int increment() {
-    return this + 1;
-  }
-}
-```
-
-#### `ex_list.dart`
-
-为 `List` 类型添加扩展方法。
-
-```dart
-extension ListExtension<T> on List<T> {
-  void addIfNotExist(T value) {
-    if (!contains(value)) add(value);
-  }
-}
-```
-
-#### `ex_map.dart`
-
-为 `Map` 类型添加扩展方法。
-
-```dart
-extension MapExtension<K, V> on Map<K, V> {
-  V? getOrDefault(K key, V defaultValue) {
-    return this[key] ?? defaultValue;
-  }
-}
-```
-
-#### `ex_map_null.dart`
-
-为 `Map` 类型添加空值处理扩展方法。
-
-```dart
-extension MapNullExtension<K, V> on Map<K, V?> {
-  void removeNullValues() {
-    removeWhere((key, value) => value == null);
-  }
-}
-```
-
-#### `ex_string.dart`
-
-为 `String` 类型添加扩展方法。
-
-```dart
-extension StringExtension on String {
-  bool isNullOrEmpty() {
-    return this == null || this.isEmpty;
-  }
-}
-```
-
-#### `ex_t.dart`
-
-为任意类型添加扩展方法。
-
-```dart
-extension GenericExtension<T> on T {
-  void let(Function(T it) block) {
-    block(this);
-  }
-}
-```
-
-#### `ex_padding.dart`
-
-为 `Padding` 小部件添加扩展方法。
-
-```dart
-extension PaddingExtension on Padding {
-  Padding copyWith(EdgeInsetsGeometry padding) {
-    return Padding(padding: padding, child: child);
-  }
-}
-```
-
-#### `ex_sized_box.dart`
-
-为 `SizedBox` 小部件添加扩展方法。
-
-```dart
-extension SizedBoxExtension on SizedBox {
-  SizedBox copyWith({double? width, double? height}) {
-    return SizedBox(width: width ?? this.width, height: height ?? this.height);
-  }
-}
-```
-
-#### `ex_align.dart`
-
-为 `Align` 小部件添加扩展方法。
-
-```dart
-extension AlignExtension on Align {
-  Align copyWith({AlignmentGeometry? alignment, double? widthFactor, double? heightFactor}) {
-    return Align(alignment: alignment ?? this.alignment, widthFactor: widthFactor ?? this.widthFactor, heightFactor: heightFactor ?? this.heightFactor);
-  }
-}
-```
-
-#### `ex_clip.dart`
-
-为 `Clip` 小部件添加扩展方法。
-
-```dart
-extension ClipExtension on Clip {
-  Clip copyWith({Clip? clipBehavior}) {
-    return Clip(clipBehavior: clipBehavior ?? this.clipBehavior);
-  }
-}
-```
-
-#### `ex_gesture.dart`
-
-为 `GestureDetector` 小部件添加扩展方法。
-
-```dart
-extension GestureExtension on GestureDetector {
-  GestureDetector copyWith({VoidCallback? onTap}) {
-    return GestureDetector(onTap: onTap ?? this.onTap);
-  }
-}
-```
-
-#### `ex_padding.dart`
-
-为 `Padding` 小部件添加扩展方法。
-
-```dart
-extension PaddingExtension on Padding {
-  Padding copyWith(EdgeInsetsGeometry padding) {
-    return Padding(padding: padding, child: child);
-  }
-}
-```
-
-#### `ex_sliver.dart`
-
-为 `Sliver` 小部件添加扩展方法。
-
-```dart
-extension SliverExtension on Sliver {
-  Sliver copyWith({Widget? sliver}) {
-    return Sliver(sliver: sliver ?? this.sliver);
-  }
-}
-```
+欢迎提交 Pull Request 或 Issue 来帮助改进这个项目。

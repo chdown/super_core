@@ -39,5 +39,5 @@ class SuperNetConfig {
   static List<int> successData = [200];
 
   /// 防抖默认时间
-  static int debounceTime = 1000;
+  static int debounceTime = 500;
 }

@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:super_core/src/utils/date_util.dart';
 import 'package:super_core/src/utils/log_util.dart';
+import 'package:super_core/super_core.dart';
 
 /// 日志输出
 /// 可在请求[Options.extra]增加参数"logEnable",值为[bool]值，以过滤日志输出
@@ -20,7 +22,7 @@ class SuperLogInterceptor extends Interceptor {
     String log = "打印日志异常";
     try {
       log =
-          '🌐🌐⚠️⚠️ ${rep.requestOptions.uri}  ${rep.requestOptions.method}  ${time}ms ⚠️⚠️🌐🌐\n【请求头】${JsonEncoder().convert(rep.requestOptions.headers)}\n【请求参数】${JsonEncoder().convert(rep.requestOptions.data ?? rep.requestOptions.queryParameters)}\n【返回参数】${JsonEncoder().convert(rep.response?.data)}\n【错误信息】${JsonEncoder().convert(rep.message)}';
+          '🌐🌐⚠️⚠️ ${rep.requestOptions.uri}  ${rep.requestOptions.method}  ${DateUtil.getNowDateStr(format: DateEnum.normYmdHms)}  ${time}ms ⚠️⚠️🌐🌐\n【请求头】${JsonEncoder().convert(rep.requestOptions.headers)}\n【请求参数】${JsonEncoder().convert(rep.requestOptions.data ?? rep.requestOptions.queryParameters)}\n【返回参数】${JsonEncoder().convert(rep.response?.data)}\n【错误信息】${JsonEncoder().convert(rep.message)}';
     } catch (ex) {
       log = "打印日志异常";
     }
@@ -37,7 +39,7 @@ class SuperLogInterceptor extends Interceptor {
     String log = "打印日志异常";
     try {
       log =
-          '🌐🌐🌐🌐 ${rep.requestOptions.uri}  ${rep.requestOptions.method}  ${time}ms 🌐🌐🌐🌐\n【请求头】${JsonEncoder().convert(rep.requestOptions.headers)}\n【请求参数】${JsonEncoder().convert(rep.requestOptions.data ?? rep.requestOptions.queryParameters)}\n【返回参数】${JsonEncoder().convert(requestData)}';
+          '🌐🌐🌐🌐 ${rep.requestOptions.uri}  ${rep.requestOptions.method}  ${DateUtil.getNowDateStr(format: DateEnum.normYmdHms)}  ${time}ms 🌐🌐🌐🌐\n【请求头】${JsonEncoder().convert(rep.requestOptions.headers)}\n【请求参数】${JsonEncoder().convert(rep.requestOptions.data ?? rep.requestOptions.queryParameters)}\n【返回参数】${JsonEncoder().convert(requestData)}';
     } catch (ex) {
       log = "打印日志异常";
     }

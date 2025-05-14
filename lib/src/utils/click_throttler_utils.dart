@@ -7,6 +7,7 @@ class ClickThrottlerUtils{
   static bool _locked = false;
 
   static bool canClick([Duration duration = const Duration(milliseconds: 500)]) {
+    if (duration == Duration.zero) return true;
     if (_locked) return false;
 
     _locked = true;

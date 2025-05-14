@@ -1,5 +1,8 @@
+import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:super_core/src/utils/click_throttler_utils.dart';
 import 'package:super_core/super_core.dart';
 
 /// @author : ch
@@ -16,13 +19,17 @@ extension ExGesture on Widget {
     double? borderRadius,
     int? debounceTime,
   }) {
-    var tmpOnTap = debounceTime == 0 ? onTap : onTap.debounce(debounceTime ?? SuperNetConfig.debounceTime);
     return Material(
       color: Colors.transparent,
       child: Ink(
         child: InkWell(
           borderRadius: borderRadius != null ? BorderRadius.all(Radius.circular(borderRadius)) : null,
-          onTap: onTap == null ? null : tmpOnTap,
+          onTap: onTap == null
+              ? null
+              : () {
+                  if (!ClickThrottlerUtils.canClick(Duration(milliseconds: debounceTime ?? SuperNetConfig.debounceTime))) return;
+                  onTap.call();
+                },
           onLongPress: onLongPress,
           child: this,
         ),
@@ -39,10 +46,14 @@ extension ExGesture on Widget {
     DragStartBehavior dragStartBehavior = DragStartBehavior.start,
     int? debounceTime,
   }) {
-    var tmpOnTap = debounceTime == 0 ? onTap : onTap.debounce(debounceTime ?? SuperNetConfig.debounceTime);
     return GestureDetector(
       key: key,
-      onTap: onTap == null ? null : tmpOnTap,
+      onTap: onTap == null
+          ? null
+          : () {
+              if (!ClickThrottlerUtils.canClick(Duration(milliseconds: debounceTime ?? SuperNetConfig.debounceTime))) return;
+              onTap.call();
+            },
       behavior: behavior ?? HitTestBehavior.opaque,
       excludeFromSemantics: excludeFromSemantics,
       dragStartBehavior: dragStartBehavior,

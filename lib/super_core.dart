@@ -8,7 +8,6 @@ export 'src/core/super_core.dart';
 export 'src/core/super_limit.dart';
 export 'src/ext/ex_bool.dart';
 export 'src/ext/ex_context.dart';
-export 'src/ext/ex_function.dart';
 export 'src/ext/ex_int.dart';
 export 'src/ext/ex_list.dart';
 export 'src/ext/ex_map.dart';

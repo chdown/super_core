@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:super_core/src/http/http_error_msg.dart';
 import 'package:super_core/super_core.dart';
 
 /// 错误处理拦截器
@@ -8,9 +7,9 @@ import 'package:super_core/super_core.dart';
 class SuperErrorInterceptor extends Interceptor {
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    List<int> ignoreErrorCodes = response.requestOptions.extra["ignoreErrorCodes"] ?? <int>[];
+    List<int> ignoreErrorCodes = response.requestOptions.extra[SuperNetConfig.paramIgnoreErrorCodes] ?? <int>[];
     ignoreErrorCodes.addAll(SuperNetConfig.successData);
-    bool ignoreCheck = (response.requestOptions.extra["ignoreCheck"] ?? false) || response.data is! Map<dynamic, dynamic>; // 是否忽略检查
+    bool ignoreCheck = (response.requestOptions.extra[SuperNetConfig.paramIgnoreCheck] ?? false) || response.data is! Map<dynamic, dynamic>; // 是否忽略检查
     var isMath = response.data is Map<String, dynamic> && (response.data as Map).containsKey(SuperNetConfig.successParam);
     bool isSuccess = ignoreCheck || (isMath && ignoreErrorCodes.contains(response.data[SuperNetConfig.successParam]));
     if (isSuccess) {

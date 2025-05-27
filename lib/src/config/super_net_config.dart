@@ -40,4 +40,10 @@ class SuperNetConfig {
 
   /// 防抖默认时间
   static int debounceTime = 500;
+
+  /// 忽略错误codes，在[super_error_interceptor]中使用
+  static String paramIgnoreErrorCodes = 'ignoreErrorCodes';
+
+  /// 忽略检查，在[super_error_interceptor]中使用
+  static String paramIgnoreCheck = 'ignoreCheck';
 }

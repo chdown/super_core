@@ -29,6 +29,15 @@ extension ListExt<T> on List<T>? {
     return null;
   }
 
+  /// Generate forEach but gives index for each element
+  void forEachIndexed(void Function(T element, int index) action) {
+    if (this == null) return;
+    var index = 0;
+    for (var element in this!) {
+      action(element, index++);
+    }
+  }
+
   /// 返回空数组
   List<T> empty() {
     return <T>[];

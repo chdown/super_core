@@ -15,11 +15,16 @@ Future<T> requestLimit<T>(
 }) async {
   int tmpTime = DateTime.now().millisecondsSinceEpoch;
   limitTagMap[tag] = tmpTime;
-  dynamic result = await request();
-  if (tmpTime != limitTagMap[tag]) {
+  try {
+    dynamic result = await request();
+    if (tmpTime != limitTagMap[tag]) {
+      error?.call();
+    } else {
+      success?.call(result);
+    }
+    return result;
+  } catch (e) {
     error?.call();
-  } else {
-    success?.call(result);
+    rethrow;
   }
-  return result;
 }

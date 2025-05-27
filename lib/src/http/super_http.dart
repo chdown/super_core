@@ -12,18 +12,19 @@ import 'package:super_core/src/http/http_method.dart';
 ///
 
 class SuperHttp {
+  static final SuperHttp _instance = SuperHttp._internal();
   final CancelToken _cancelToken = CancelToken();
-  static SuperHttp? _instance;
-  late Dio _dio;
+  late var _dio;
 
-  static SuperHttp get instance {
-    return _instance ??= SuperHttp();
+  factory SuperHttp() => _instance;
+
+  static get instance => _instance;
+
+  SuperHttp._internal() {
+    _dio = _initDio();
   }
 
-  Dio getDio() => _dio;
-
-  SuperHttp() {
-    /// 网络配置
+  Dio _initDio() {
     final options = BaseOptions(
       baseUrl: SuperNetConfig.baseUrl(),
       connectTimeout: Duration(milliseconds: SuperNetConfig.connectTimeout),
@@ -31,40 +32,38 @@ class SuperHttp {
       receiveTimeout: Duration(milliseconds: SuperNetConfig.receiveTimeout),
     );
 
-    _dio = Dio(options);
+    var dio = Dio(options);
 
     /// 请求代理地址，仅初始化生效
     if (SuperNetConfig.proxyUrl().isNotEmpty) {
-      _dio.httpClientAdapter = IOHttpClientAdapter(
+      dio.httpClientAdapter = IOHttpClientAdapter(
         createHttpClient: () {
           final client = HttpClient();
-          client.findProxy = (uri) {
-            return "PROXY ${SuperNetConfig.proxyUrl()}";
-          };
-          client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+          if (SuperNetConfig.proxyUrl().isNotEmpty) {
+            client.findProxy = (uri) => "PROXY ${SuperNetConfig.proxyUrl()}";
+          }
+          client.badCertificateCallback = (_, __, ___) => true;
           return client;
         },
       );
     }
 
     /// 扩展dio
-    _dio = SuperNetConfig.extDio(_dio);
+    dio = SuperNetConfig.extDio(dio);
 
     // 设置Dio的拦截器
-    for (Interceptor interceptor in SuperNetConfig.interceptors) {
-      _dio.interceptors.add(interceptor);
-    }
+    dio.interceptors.addAll(SuperNetConfig.interceptors);
+
+    return dio;
   }
 
-  /// 取消请求
-  void cancelRequests() {
-    _cancelToken.cancel("cancelled");
-  }
+  Dio get dio => _dio;
 
-  /// 重制Dio实例方法
-  static reset() {
-    _instance = SuperHttp();
-  }
+  /// 取消所有请求
+  void cancelRequests() => _cancelToken.cancel("cancelled");
+
+  /// 重置 Dio 实例
+  static void reset() => _instance._dio = _instance._initDio();
 
   /// req 请求方法
   ///

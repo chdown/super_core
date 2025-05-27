@@ -18,7 +18,7 @@ class SuperHttp {
 
   factory SuperHttp() => _instance;
 
-  static get instance => _instance;
+  static SuperHttp get instance => _instance;
 
   SuperHttp._internal() {
     _dio = _initDio();
@@ -51,8 +51,12 @@ class SuperHttp {
     /// 扩展dio
     dio = SuperNetConfig.extDio(dio);
 
-    // 设置Dio的拦截器
+    /// 设置Dio的拦截器
+    /// 内置拦截器：[SuperHeaderInterceptor] [SuperErrorInterceptor] [SuperTokenInterceptor] [SuperLogInterceptor]
+    /// dio刷新参考[https://github.com/cfug/dio/blob/main/example_dart/lib/queued_interceptor_crsftoken.dart]
     dio.interceptors.addAll(SuperNetConfig.interceptors);
+
+    dio.clone();
 
     return dio;
   }

@@ -18,9 +18,6 @@ class Config {
         return Future.value({});
       }),
       SuperErrorInterceptor(),
-      SuperTokenInterceptor(() {
-        DialogUtils.toast("tokemn");
-      }, true),
       SuperLogInterceptor(),
     ];
   }

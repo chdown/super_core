@@ -7,7 +7,7 @@
 /// Signature of callbacks that accept a single argument and return no data.
 typedef StringCallback = void Function(String);
 
-extension LetRunApply<T> on T {
+extension ExtFunction<T> on T {
   /// let 函数与之前的示例相同，它接受一个闭包并返回其结果。
   R let<R>(R Function(T) block) {
     return block(this);

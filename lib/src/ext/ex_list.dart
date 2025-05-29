@@ -4,7 +4,7 @@ import 'package:super_core/src/utils/obj_util.dart';
 /// @date 2024-02-18 09:34:57
 /// @description Iterable方法
 ///
-extension ListExt<T> on List<T>? {
+extension ExtList<T> on List<T>? {
   /// 是否为null或空
   bool get isEmptyOrNull => ObjUtil.isEmpty(this);
 

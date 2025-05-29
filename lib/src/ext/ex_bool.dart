@@ -2,7 +2,7 @@
 /// @date 2024-02-18 09:34:57
 /// @description bool方法
 ///
-extension BoolExtension on bool? {
+extension ExtensionBool on bool? {
   /// 取value
   int get intValue {
     if (this == null) return 0;

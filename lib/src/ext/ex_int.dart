@@ -4,7 +4,7 @@ import 'package:super_core/super_core.dart';
 /// @date 2024-02-18 09:34:57
 /// @description bool方法
 ///
-extension IntExtension on int? {
+extension ExtensionInt on int? {
 
   /// 是否为null或空
   bool get isEmptyOrNull => ObjUtil.isEmpty(this);

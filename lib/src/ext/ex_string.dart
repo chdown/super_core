@@ -7,7 +7,7 @@ import 'package:super_core/super_core.dart';
 /// @date 2024-02-18 09:34:57
 /// @description String方法
 ///
-extension StringExtension on String? {
+extension ExtString on String? {
   /// 是否为null或空
   bool get isEmptyOrNull => ObjUtil.isEmpty(this);
 

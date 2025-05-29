@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 /// @date 2024-02-18 09:34:57
 /// @description context方法
 ///
-extension ContextExtension on BuildContext {
+extension ExtensionContext on BuildContext {
   EdgeInsets _padding() => MediaQuery.paddingOf(this);
 
   /// 各种尺寸信息

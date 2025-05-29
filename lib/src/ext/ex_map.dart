@@ -2,7 +2,7 @@
 /// @date 2024-04-24 10:54:05
 /// @description Map扩展类
 ///
-extension MapExtension<K, V> on Map<K, V> {
+extension ExtensionMap<K, V> on Map<K, V> {
   Map<K, V> where(bool Function(K k, V v) test) {
     Map<K, V> newMap = {};
     forEach((key, value) {

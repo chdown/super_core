@@ -5,6 +5,9 @@ import 'package:dio/dio.dart';
 /// @description 网络配置
 ///
 class SuperNetConfig {
+
+  SuperNetConfig._();
+
   /// 数据请求地址
   static String Function() baseUrl = () => '';
 

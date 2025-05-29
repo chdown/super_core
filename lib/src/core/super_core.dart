@@ -23,17 +23,22 @@ mixin SuperCore {
   /// [request] 请求包装类，
   /// [loadEnum] 请求数据的方式
   /// [loadConfig] Load加载配置
+  /// [timeout] 超时设置
   /// return 返回最终[List]数据的情况下，会自动进行空页面显示处理
   Future request<T>({
     required Future<dynamic> Function() request,
     LoadEnum loadEnum = LoadEnum.loading,
     LoadConfig? loadConfig,
+    Duration? timeout,
   }) async {
     loadConfig ??= LoadConfig();
     try {
+      Duration? tmpTimeout = timeout ?? SuperConfig.requestTimeout;
       await requestAfter();
       _showState(loadConfig, loadEnum, LoadState.start);
-      dynamic result = await request(); // 请求数据
+      dynamic result = tmpTimeout == null
+          ? await request()
+          : await request().timeout(tmpTimeout, onTimeout: () => throw AppError(SuperConfig.errorRequestTimeout())); // 请求数据
       bool isEmpty = result != null && result is List && result.isEmpty;
       _showState(loadConfig, loadEnum, isEmpty ? LoadState.successEmpty : LoadState.success);
     } catch (error, stackTrace) {

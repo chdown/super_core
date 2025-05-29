@@ -38,7 +38,13 @@ class MainController extends BaseController {
   }
 
   cancel() {
-    cancelToken.cancel();
+    request(
+      request: () async {
+        await Future.delayed(Duration(seconds: 20));
+      },
+      timeout: Duration(seconds: 10),
+    );
+    // cancelToken.cancel();
     // onRefresh(loadEnum: LoadEnum.page);
   }
 }

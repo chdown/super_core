@@ -10,10 +10,10 @@ mixin SuperCore {
   /// 展示load缺省处理
   /// [loadEnum] 加载类型
   /// [loadState] 加载状态
-  showState(LoadConfig loadConfig, LoadEnum loadEnum, LoadState loadState, String errorMsg);
+  void showState(LoadConfig loadConfig, LoadEnum loadEnum, LoadState loadState, String errorMsg);
 
   /// 输出toast
-  showToast(String? message);
+  void showToast(String? message);
 
   /// 消费错误：捕获异常后不展示toast、load缺省处理
   /// [return] 返回true时错误将不再往下进行
@@ -32,7 +32,7 @@ mixin SuperCore {
     loadConfig ??= LoadConfig();
     try {
       await requestAfter();
-      await _showState(loadConfig, loadEnum, LoadState.start);
+      _showState(loadConfig, loadEnum, LoadState.start);
       dynamic result = await request(); // 请求数据
       bool isEmpty = result != null && result is List && result.isEmpty;
       _showState(loadConfig, loadEnum, isEmpty ? LoadState.successEmpty : LoadState.success);
@@ -51,9 +51,9 @@ mixin SuperCore {
   /// [loadEnum] 加载类型
   /// [loadState] 加载状态
   /// [errorMsg] 错误信息，error时展示
-  FutureOr<void> _showState(LoadConfig loadConfig, LoadEnum loadEnum, LoadState loadState, {String errorMsg = ''}) async {
+  void _showState(LoadConfig loadConfig, LoadEnum loadEnum, LoadState loadState, {String errorMsg = ''}) {
     /// 输出toast
-    if (errorMsg.isNotEmpty && loadConfig.isShowToast) await showToast(errorMsg);
+    if (errorMsg.isNotEmpty && loadConfig.isShowToast) showToast(errorMsg);
 
     /// 配置回调
     if (loadState == LoadState.start) loadConfig.start?.call();
@@ -62,7 +62,7 @@ mixin SuperCore {
     if (loadState == LoadState.finish) loadConfig.finish?.call();
 
     /// load处理
-    await showState(loadConfig, loadEnum, loadState, errorMsg);
+    showState(loadConfig, loadEnum, loadState, errorMsg);
   }
 
   /// 请求前置处理，可以用来进行：

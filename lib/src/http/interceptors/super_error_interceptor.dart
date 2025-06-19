@@ -2,8 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:super_core/super_core.dart';
 
 /// 错误处理拦截器
-/// 请求是传参[ignoreCheck]，错误处理器会忽略检查，可用于处理接口返回的特殊code值进行处理
-/// 请求是传参[ignoreErrorCodes]，错误处理器会忽略该code，可用于处理接口返回的特殊code值进行处理
+/// 请求是传参[SuperNetConfig.ignoreCheck]，错误处理器会忽略检查，可用于处理接口返回的特殊code值进行处理
+/// 请求是传参[SuperNetConfig.ignoreErrorCodes]，错误处理器会忽略该code，可用于处理接口返回的特殊code值进行处理
 class SuperErrorInterceptor extends Interceptor {
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {

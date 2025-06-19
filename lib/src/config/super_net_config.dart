@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:super_core/super_core.dart';
 
 /// @author : ch
 /// @date 2024-03-06 14:20:15
@@ -44,9 +45,9 @@ class SuperNetConfig {
   /// 防抖默认时间
   static int debounceTime = 500;
 
-  /// 忽略错误codes，在[super_error_interceptor]中使用
+  /// 忽略错误codes，key值，在[SuperErrorInterceptor]中使用
   static String paramIgnoreErrorCodes = 'ignoreErrorCodes';
 
-  /// 忽略检查，在[super_error_interceptor]中使用
+  /// 忽略检查，key值，在[SuperErrorInterceptor]中使用
   static String paramIgnoreCheck = 'ignoreCheck';
 }

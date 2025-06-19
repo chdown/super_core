@@ -17,13 +17,16 @@ class LogUtil {
   // log默认只有debug才输出，如果需要全部输出，则设置filter
   static LogFilter? filter;
 
+  // 日期格式
+  static DateTimeFormatter? dateTimeFormatter;
+
   static final _log = Logger(
     output: output ?? DevLogger(),
     filter: filter,
     printer: printer ??
         PrettyPrinter(
           colors: false,
-          dateTimeFormat: DateTimeFormat.none,
+          dateTimeFormat: dateTimeFormatter ?? DateTimeFormat.none,
           methodCount: 0,
           errorMethodCount: 16,
           printEmojis: printEmojis ?? true,

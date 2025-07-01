@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:super_core/super_core.dart';
 
@@ -49,9 +51,21 @@ class SuperErrorInterceptor extends Interceptor {
       case DioExceptionType.cancel:
         return HttpErrorMsg.cancelMsg();
       case DioExceptionType.unknown:
-        return error.message ?? HttpErrorMsg.unknownMsg();
+        return tryGetErrorMsg(error).emptyToNew(HttpErrorMsg.unknownMsg());
       case DioExceptionType.badResponse:
-        return HttpErrorMsg.badResponseMsg();
+        return tryGetErrorMsg(error).emptyToNew(HttpErrorMsg.badResponseMsg());
+    }
+  }
+
+  String? tryGetErrorMsg(DioException error) {
+    try {
+      final map = jsonDecode(jsonEncode(error.response?.data ?? ""));
+      if (map is Map && map.containsKey(SuperNetConfig.errorMsgParam)) {
+        return map[SuperNetConfig.errorMsgParam];
+      }
+      return error.message;
+    } catch (ex) {
+      return error.message;
     }
   }
 }

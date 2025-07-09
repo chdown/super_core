@@ -122,7 +122,7 @@ class SuperErrorInterceptor extends Interceptor {
     try {
       Map map = {};
       if (error.response?.data is Map) {
-        map = error.response?.data;
+        map = jsonDecode(jsonEncode(error.response?.data));
       }else if (error.response?.data is String) {
         map = jsonDecode(error.response?.data ?? "");
       }

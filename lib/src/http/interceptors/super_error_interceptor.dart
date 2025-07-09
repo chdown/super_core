@@ -120,8 +120,13 @@ class SuperErrorInterceptor extends Interceptor {
   /// 尝试从响应中提取错误信息
   String? tryGetErrorMsg(DioException error) {
     try {
-      final map = jsonDecode(jsonEncode(error.response?.data ?? ""));
-      if (map is Map && map.containsKey(SuperNetConfig.errorMsgParam)) {
+      Map map = {};
+      if (error.response?.data is Map) {
+        map = error.response?.data;
+      }else if (error.response?.data is String) {
+        map = jsonDecode(error.response?.data ?? "");
+      }
+      if (map.containsKey(SuperNetConfig.errorMsgParam)) {
         return map[SuperNetConfig.errorMsgParam];
       }
       return error.message;

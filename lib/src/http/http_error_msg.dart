@@ -41,5 +41,5 @@ class HttpErrorMsg {
   static String Function() gatewayTimeoutMsg = () => "网关超时，请稍后重试！";
   
   // 区域限制错误消息
-  static String Function() regionBlockedMsg = () => "该内容在您所在的地区不可用！";
+  static String Function() regionBlockedMsg = () => "您所在的地区暂不可用！";
 }

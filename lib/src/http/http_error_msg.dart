@@ -24,4 +24,22 @@ class HttpErrorMsg {
   static String Function() badResponseMsg = () => "服务器异常，请稍后重试！";
 
   static String Function() requestMsg = () => "网络请求异常，请稍后重试！";
+   
+  // HTTP状态码错误消息
+  static String Function() unauthorizedMsg = () => "未授权，请重新登录！";
+   
+  static String Function() forbiddenMsg = () => "无访问权限，请联系管理员！";
+   
+  static String Function() notFoundMsg = () => "请求资源不存在，请稍后重试！";
+   
+  static String Function() serverErrorMsg = () => "服务器内部错误，请稍后重试！";
+   
+  static String Function() badGatewayMsg = () => "网关错误，请稍后重试！";
+   
+  static String Function() serviceUnavailableMsg = () => "服务暂不可用，请稍后重试！";
+   
+  static String Function() gatewayTimeoutMsg = () => "网关超时，请稍后重试！";
+  
+  // 区域限制错误消息
+  static String Function() regionBlockedMsg = () => "该内容在您所在的地区不可用！";
 }

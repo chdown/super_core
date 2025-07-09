@@ -51,12 +51,73 @@ class SuperErrorInterceptor extends Interceptor {
       case DioExceptionType.cancel:
         return HttpErrorMsg.cancelMsg();
       case DioExceptionType.unknown:
-        return tryGetErrorMsg(error).emptyToNew(HttpErrorMsg.unknownMsg());
+        return tryGetErrorMsg(error) ?? HttpErrorMsg.unknownMsg();
       case DioExceptionType.badResponse:
-        return tryGetErrorMsg(error).emptyToNew(HttpErrorMsg.badResponseMsg());
+        return _handleServerError(error);
     }
   }
 
+  /// 处理服务器错误响应
+  /// 根据HTTP状态码返回相应的错误信息
+  String _handleServerError(DioException error) {
+    final statusCode = error.response?.statusCode;
+
+    // 处理不同的HTTP状态码
+    if (statusCode != null) {
+      switch (statusCode) {
+        // case 400: 错误码400，展示服务器具体错误信息，switch外部处理
+        //   return HttpErrorMsg.badRequestMsg();
+        case 401:
+          return HttpErrorMsg.unauthorizedMsg();
+        case 403:
+          // 特殊处理403状态码，检查是否为区域限制
+          if (_isRegionBlocked(error)) {
+            return HttpErrorMsg.regionBlockedMsg();
+          }
+          return HttpErrorMsg.forbiddenMsg();
+        case 404:
+          return HttpErrorMsg.notFoundMsg();
+        case 500:
+          return HttpErrorMsg.serverErrorMsg();
+        case 502:
+          return HttpErrorMsg.badGatewayMsg();
+        case 503:
+          return HttpErrorMsg.serviceUnavailableMsg();
+        case 504:
+          return HttpErrorMsg.gatewayTimeoutMsg();
+      }
+    }
+
+    // 如果没有特定处理或无法获取状态码，尝试从响应中提取错误信息
+    final errorMsg = tryGetErrorMsg(error);
+    if (errorMsg != null && errorMsg.isNotEmpty) {
+      return errorMsg;
+    }
+
+    return HttpErrorMsg.badResponseMsg();
+  }
+
+  /// 检查是否为区域限制错误
+  /// 通过检查响应内容中的关键词判断
+  bool _isRegionBlocked(DioException error) {
+    if (error.response?.statusCode != 403) {
+      return false;
+    }
+
+    try {
+      final dataString = error.response?.data.toString().toLowerCase() ?? "";
+
+      // 检查常见关键词
+      return dataString.contains("access denied") ||
+          dataString.contains("blocked") ||
+          dataString.contains("not available in your region") ||
+          dataString.contains("region blocked");
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /// 尝试从响应中提取错误信息
   String? tryGetErrorMsg(DioException error) {
     try {
       final map = jsonDecode(jsonEncode(error.response?.data ?? ""));

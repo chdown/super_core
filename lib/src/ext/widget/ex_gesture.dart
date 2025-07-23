@@ -39,6 +39,7 @@ extension ExGesture on Widget {
   Widget onTap(
     GestureTapCallback? onTap, {
     Key? key,
+    GestureLongPressCallback? onLongPress,
     HitTestBehavior? behavior,
     bool excludeFromSemantics = false,
     DragStartBehavior dragStartBehavior = DragStartBehavior.start,
@@ -46,6 +47,7 @@ extension ExGesture on Widget {
   }) {
     return GestureDetector(
       key: key,
+      onLongPress: onLongPress,
       onTap: onTap == null
           ? null
           : () {

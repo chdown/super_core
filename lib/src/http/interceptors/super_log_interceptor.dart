@@ -19,7 +19,11 @@ class SuperLogInterceptor extends Interceptor {
     try {
       log =
           '🌐🌐⚠️⚠️ ${rep.requestOptions.uri}  ${rep.requestOptions.method}  ${DateUtil.getNowDateStr(format: DateEnum.normYmdHms)}  ${time}ms ⚠️⚠️🌐🌐\n【请求头】${JsonEncoder().convert(rep.requestOptions.headers)}\n【请求参数】${JsonEncoder().convert(rep.requestOptions.data ?? rep.requestOptions.queryParameters)}\n【返回参数】${JsonEncoder().convert(rep.response?.data)}\n【错误信息】${JsonEncoder().convert(rep.message)}';
-    } catch (ex) {}
+    } catch (ex) {
+      try {
+        log = rep.toString();
+      } catch (ex) {}
+    }
     if (logEnable) LogUtil.e(log, stackTrace: rep.stackTrace);
     super.onError(rep, handler);
   }
@@ -34,7 +38,11 @@ class SuperLogInterceptor extends Interceptor {
     try {
       log =
           '🌐🌐🌐🌐 ${rep.requestOptions.uri}  ${rep.requestOptions.method}  ${DateUtil.getNowDateStr(format: DateEnum.normYmdHms)}  ${time}ms 🌐🌐🌐🌐\n【请求头】${JsonEncoder().convert(rep.requestOptions.headers)}\n【请求参数】${JsonEncoder().convert(rep.requestOptions.data ?? rep.requestOptions.queryParameters)}\n【返回参数】${JsonEncoder().convert(requestData)}';
-    } catch (ex) {}
+    } catch (ex) {
+      try {
+        log = rep.toString();
+      } catch (ex) {}
+    }
     if (logEnable) LogUtil.i(log);
     super.onResponse(rep, handler);
   }

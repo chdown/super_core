@@ -17,14 +17,13 @@ class SuperLogInterceptor extends Interceptor {
     var logEnable = rep.requestOptions.extra["logEnable"] ?? true;
     String log = "SuperLogInterceptor log print error";
     try {
-      log = '''
-      🌐🌐⚠️⚠️ ${rep.requestOptions.uri}  ${rep.requestOptions.method}  ${DateUtil.getNowDateStr(format: DateEnum.normYmdHms)}  ${time}ms ⚠️⚠️🌐🌐
+      log = '''🌐🌐⚠️⚠️ ${rep.requestOptions.uri}  ${rep.requestOptions.method}  ${DateUtil.getNowDateStr(format: DateEnum.normYmdHms)}  ${time}ms ⚠️⚠️🌐🌐
       【请求头】${getLogData(rep.requestOptions.headers)}
       【请求参数】${getLogData(rep.requestOptions.queryParameters)}
       【请求数据】${getLogData(rep.requestOptions.data)}
       【返回参数】${getLogData(rep.response?.data)}
-      【错误信息】${getLogData(rep.message)}
-      ''';
+      【错误信息】${getLogData(rep.message)}'''
+          .trimLeft();
     } catch (ex) {
       try {
         log = rep.toString();
@@ -46,8 +45,8 @@ class SuperLogInterceptor extends Interceptor {
       【请求头】${getLogData(rep.requestOptions.headers)}
       【请求参数】${getLogData(rep.requestOptions.queryParameters)}
       【请求数据】${getLogData(rep.requestOptions.data)}
-      【返回参数】${getLogData(requestData)}
-      ''';
+      【返回参数】${getLogData(requestData)}'''
+          .trimLeft();
     } catch (ex) {
       try {
         log = rep.toString();

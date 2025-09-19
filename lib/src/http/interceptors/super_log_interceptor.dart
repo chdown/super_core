@@ -17,8 +17,14 @@ class SuperLogInterceptor extends Interceptor {
     var logEnable = rep.requestOptions.extra["logEnable"] ?? true;
     String log = "SuperLogInterceptor log print error";
     try {
-      log =
-          '🌐🌐⚠️⚠️ ${rep.requestOptions.uri}  ${rep.requestOptions.method}  ${DateUtil.getNowDateStr(format: DateEnum.normYmdHms)}  ${time}ms ⚠️⚠️🌐🌐\n【请求头】${JsonEncoder().convert(rep.requestOptions.headers)}\n【请求参数】${JsonEncoder().convert(rep.requestOptions.data ?? rep.requestOptions.queryParameters)}\n【返回参数】${JsonEncoder().convert(rep.response?.data)}\n【错误信息】${JsonEncoder().convert(rep.message)}';
+      log = '''
+      🌐🌐⚠️⚠️ ${rep.requestOptions.uri}  ${rep.requestOptions.method}  ${DateUtil.getNowDateStr(format: DateEnum.normYmdHms)}  ${time}ms ⚠️⚠️🌐🌐
+      【请求头】${getLogData(rep.requestOptions.headers)}
+      【请求参数】${getLogData(rep.requestOptions.queryParameters)}
+      【请求数据】${getLogData(rep.requestOptions.data)}
+      【返回参数】${getLogData(rep.response?.data)}
+      【错误信息】${getLogData(rep.message)}
+      ''';
     } catch (ex) {
       try {
         log = rep.toString();
@@ -36,8 +42,12 @@ class SuperLogInterceptor extends Interceptor {
     var requestData = (responseType == ResponseType.bytes || responseType == ResponseType.stream) ? responseType.name : rep.data;
     String log = "SuperLogInterceptor log print response";
     try {
-      log =
-          '🌐🌐🌐🌐 ${rep.requestOptions.uri}  ${rep.requestOptions.method}  ${DateUtil.getNowDateStr(format: DateEnum.normYmdHms)}  ${time}ms 🌐🌐🌐🌐\n【请求头】${JsonEncoder().convert(rep.requestOptions.headers)}\n【请求参数】${JsonEncoder().convert(rep.requestOptions.data ?? rep.requestOptions.queryParameters)}\n【返回参数】${JsonEncoder().convert(requestData)}';
+      log = '''🌐🌐🌐🌐 ${rep.requestOptions.uri}  ${rep.requestOptions.method}  ${DateUtil.getNowDateStr(format: DateEnum.normYmdHms)}  ${time}ms 🌐🌐🌐🌐
+      【请求头】${getLogData(rep.requestOptions.headers)}
+      【请求参数】${getLogData(rep.requestOptions.queryParameters)}
+      【请求数据】${getLogData(rep.requestOptions.data)}
+      【返回参数】${getLogData(requestData)}
+      ''';
     } catch (ex) {
       try {
         log = rep.toString();
@@ -45,5 +55,13 @@ class SuperLogInterceptor extends Interceptor {
     }
     if (logEnable) LogUtil.i(log);
     super.onResponse(rep, handler);
+  }
+
+  String getLogData(dynamic data) {
+    try {
+      return jsonEncode(data);
+    } catch (ex) {
+      return data.toString();
+    }
   }
 }

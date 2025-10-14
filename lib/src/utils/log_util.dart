@@ -6,32 +6,55 @@ class LogUtil {
   LogUtil._();
 
   /// 配置输出 Log
-  static LogPrinter? printer;
+  static LogPrinter? _printer;
 
   /// 是否输出emoji
-  static bool? printEmojis;
+  static bool? _printEmojis;
 
   /// 配置输出 Log
-  static LogOutput? output;
+  static LogOutput? _output;
 
   // log默认只有debug才输出，如果需要全部输出，则设置filter
-  static LogFilter? filter;
+  static LogFilter? _filter;
 
   // 日期格式
-  static DateTimeFormatter? dateTimeFormatter;
+  static DateTimeFormatter? _dateTimeFormatter;
 
-  static final _log = Logger(
-    output: output ?? DevLogger(),
-    filter: filter,
-    printer: printer ??
-        PrettyPrinter(
-          colors: false,
-          dateTimeFormat: dateTimeFormatter ?? DateTimeFormat.none,
-          methodCount: 0,
-          errorMethodCount: 16,
-          printEmojis: printEmojis ?? true,
-        ),
-  );
+  static Logger? _instance;
+
+  static Logger get _log {
+    _instance ??= Logger(
+      output: _output ?? DevLogger(),
+      filter: _filter,
+      printer: _printer ??
+          PrettyPrinter(
+            colors: false,
+            dateTimeFormat: _dateTimeFormatter ?? DateTimeFormat.none,
+            methodCount: 0,
+            errorMethodCount: 16,
+            printEmojis: _printEmojis ?? true,
+          ),
+    );
+    return _instance!;
+  }
+
+  /// Configure logger settings.
+  /// Call this before using any log methods.
+  /// Call again to update configuration.
+  static void configure({
+    LogPrinter? printer,
+    LogOutput? output,
+    LogFilter? filter,
+    DateTimeFormatter? dateTimeFormatter,
+    bool? printEmojis,
+  }) {
+    _printer = printer;
+    _output = output;
+    _filter = filter;
+    _dateTimeFormatter = dateTimeFormatter;
+    _printEmojis = printEmojis;
+    _instance = null; // Reset to apply new config
+  }
 
   static void d(
     dynamic message, {

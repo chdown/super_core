@@ -1,13 +1,15 @@
-import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 
 class PlatUtils {
   PlatUtils._();
 
+  /// Whether the application is running on the web.
+  static bool get isWeb => kIsWeb;
+
   /// Whether the operating system is a version of
   /// [ohos](https://en.wikipedia.org/wiki/OpenHarmony).
-  static bool get isOhos => Platform.operatingSystem == 'ohos';
+  /// Note: Currently not supported by Flutter's TargetPlatform enum.
+  static bool get isOhos => !kIsWeb && defaultTargetPlatform.name.toLowerCase() == 'ohos';
 
   /// Whether the operating system is a version of
   /// [Linux](https://en.wikipedia.org/wiki/Linux).
@@ -37,9 +39,12 @@ class PlatUtils {
   /// [Fuchsia](https://en.wikipedia.org/wiki/Google_Fuchsia).
   static bool get isFuchsia => defaultTargetPlatform == TargetPlatform.fuchsia;
 
-  // isMobile
+  /// Whether the platform is mobile (Android, iOS, or OHOS).
   static bool get isMobile => isAndroid || isIOS || isOhos;
 
-  // isDesktop
+  /// Whether the platform is desktop (Windows, macOS, or Linux).
   static bool get isDesktop => isWindows || isMacOS || isLinux;
+
+  /// Whether the platform is mobile or desktop (excludes web).
+  static bool get isNative => isMobile || isDesktop;
 }

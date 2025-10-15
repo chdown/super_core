@@ -141,43 +141,117 @@ BaseController 是整个框架的核心组件，它继承自 GetX 的 GetxContro
    - 数据加载
    - 资源释放
 
+> 示例封装、引用了 ### [easy_refresh](https://pub.dev/documentation/easy_refresh/latest/) 、### [super_widget](https://github.com/chdown/super_widget)
+
 ```dart
 class BaseController extends GetxController with SuperCore {
-  // 加载状态
-  final isLoading = false.obs;
-  final isRefreshing = false.obs;
-  final isLoadMore = false.obs;
-  
-  // 错误状态
-  final errorMsg = ''.obs;
-  final hasError = false.obs;
-  
-  @override
-  void onInit() {
-    super.onInit();
-    loadData();
+  late EasyRefreshController refreshController = EasyRefreshController(
+    controlFinishLoad: true,
+    controlFinishRefresh: true,
+  );
+  late SuperLoadController loadPageController = SuperLoadController();
+
+  int pageNum = 1;
+  int pageSize = 10;
+  bool isLoopRefresh = false;
+
+  /// 下拉刷新调用的接口
+  onRefresh({LoadEnum? loadEnum, LoadConfig? loadConfig}) {
+    pageNum = 1;
+    request(
+      request: () async {
+        final result = await getData();
+        // 部分场景下，PullToRefresh嵌套了刷新，所以需要展示页面
+        if (result != false) loadPageController.showContent();
+        if (!isLoopRefresh && result != null && result is List && result.length < pageSize) {
+          refreshController.finishLoad(IndicatorResult.noMore);
+        } else if (!isLoopRefresh && result != null && result is bool && !result) {
+          refreshController.finishLoad(IndicatorResult.noMore);
+        }
+        return result;
+      },
+      loadEnum: loadEnum ?? LoadEnum.refresh,
+      loadConfig: loadConfig,
+    );
   }
-  
-  // 加载数据
-  Future<void> loadData() async {
-    try {
-      isLoading.value = true;
-      final response = await SuperHttp.get('/api/data');
-      // 处理数据
-    } catch (e) {
-      handleError(e);
-    } finally {
-      isLoading.value = false;
+
+  /// 上拉加载调用的接口，请求失败后页面计数器-1
+  onLoading() {
+    request(
+      request: () async {
+        pageNum++;
+        List? list = await getData();
+        return list;
+      },
+      loadEnum: LoadEnum.refresh,
+      loadConfig: LoadConfig(
+        error: (value) {
+          pageNum--;
+        },
+      ),
+    );
+  }
+
+  /// 请求数据调用的接口，主要引用于分页查询的接口
+  /// [pageNum] 为分页参数
+  Future getData() async => null;
+
+  @override
+  showToast(String? message) => DialogUtils.toast(message ?? "");
+
+  @override
+  showState(LoadConfig loadConfig, LoadEnum loadEnum, LoadState loadState, String errorMsg) async {
+    if (loadEnum == LoadEnum.loading) {
+      if (loadState == LoadState.start) {
+        DialogUtils.loading(loadConfig.loadingText);
+        Get.focusScope?.unfocus();
+      } else {
+        DialogUtils.dismiss();
+      }
+    } else if (loadEnum == LoadEnum.refresh) {
+      loadConfig.refreshController ??= refreshController;
+      if (loadState != LoadState.start && loadConfig.refreshController is EasyRefreshController) {
+        EasyRefreshController controller = loadConfig.refreshController as EasyRefreshController;
+        if (loadState == LoadState.finish) {
+          if (controller.headerState?.mode == IndicatorMode.processing) controller.finishRefresh();
+          if (controller.footerState?.mode == IndicatorMode.processing) controller.finishLoad();
+        }
+        if (loadState == LoadState.successEmpty) {
+          loadConfig.pageController ??= loadPageController;
+          SuperLoadController controller = loadConfig.pageController as SuperLoadController;
+          if (loadState == LoadState.successEmpty) controller.showEmpty();
+        }
+      }
+    } else if (loadEnum == LoadEnum.page) {
+      loadConfig.pageController ??= loadPageController;
+      SuperLoadController controller = loadConfig.pageController as SuperLoadController;
+      if (loadState == LoadState.start) {
+        controller.showLoading();
+        Get.focusScope?.unfocus();
+      }
+      if (loadState == LoadState.success) controller.showContent();
+      if (loadState == LoadState.successEmpty) controller.showEmpty();
+      if (loadState == LoadState.netError) controller.showNetError();
+      if (loadState == LoadState.error) controller.showError();
     }
   }
-  
-  // 错误处理
-  void handleError(dynamic error) {
-    errorMsg.value = getErrorMsg(error);
-    hasError.value = true;
-    showError(errorMsg.value);
+
+  void refreshLoadPage(List list) {
+    if (list.isEmpty) {
+      loadPageController.showEmpty();
+    } else {
+      loadPageController.showContent();
+    }
+  }
+
+  @override
+  void onClose() {
+    refreshController.dispose();
+    loadPageController.dispose();
+    super.onClose();
   }
 }
+
 ```
 
 ### 框架使用指南
@@ -206,20 +280,18 @@ void main() {
 #### 2. 控制器开发
 
 ```dart
-class HomeController extends BaseController {
-  final userList = <User>[].obs;
-  
+class MainController extends BaseController {
+
   @override
-  Future<void> loadData() async {
-    try {
-      final response = await SuperHttp.get(
-        '/api/users',
-        queryParameters: {'page': 1},
-      );
-      userList.value = User.fromJsonList(response.data);
-    } catch (e) {
-      handleError(e);
-    }
+  void onReady() {
+    super.onReady();
+    onRefresh(loadEnum: LoadEnum.page);
+  }
+
+  @override
+  getData() async {
+    // todo
+    update();
   }
 }
 ```
@@ -227,43 +299,21 @@ class HomeController extends BaseController {
 #### 3. 页面开发
 
 ```dart
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+class MainPage extends StatelessWidget {
+  const MainPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<HomeController>(
-      init: HomeController(),
+    return GetBuilder<MainController>(
+      init: MainController(),
       builder: (controller) {
         return Scaffold(
-          appBar: AppBar(
-            title: Text('首页'),
+          appBar: AppBar(title: const Text('main')),
+          body: SuperLoad(
+            controller: controller.loadPageController,
+            onTap: (params) => controller.onRefresh(loadEnum: LoadEnum.page),
+            child: const SizedBox.shrink(),
           ),
-          body: _buildBody(controller),
-        );
-      },
-    );
-  }
-
-  Widget _buildBody(HomeController controller) {
-    if (controller.isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    if (controller.hasError) {
-      return Center(
-        child: Text(controller.errorMsg),
-      );
-    }
-
-    return ListView.builder(
-      itemCount: controller.userList.length,
-      itemBuilder: (context, index) {
-        final user = controller.userList[index];
-        return ListTile(
-          title: Text(user.name),
-          subtitle: Text(user.email),
-          onTap: () => controller.onUserTap(user),
         );
       },
     );

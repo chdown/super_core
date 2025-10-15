@@ -7,17 +7,27 @@ import 'package:super_core/super_core.dart';
 /// 请求是传参[SuperNetConfig.ignoreCheck]，错误处理器会忽略检查，可用于处理接口返回的特殊code值进行处理
 /// 请求是传参[SuperNetConfig.ignoreErrorCodes]，错误处理器会忽略该code，可用于处理接口返回的特殊code值进行处理
 class SuperErrorInterceptor extends Interceptor {
+  /// 自定义错误信息处理函数
+  /// 参数：[DioException] error - 原始错误对象
+  /// 参数：[Map] responseData - 响应数据
+  /// 返回：[String?] - 自定义错误信息，返回null则使用默认处理
+  final String? Function(DioException error, Map responseData)? customErrorMsgHandler;
+
+  SuperErrorInterceptor({this.customErrorMsgHandler});
+
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
     List<int> ignoreErrorCodes = response.requestOptions.extra[SuperNetConfig.paramIgnoreErrorCodes] ?? <int>[];
     ignoreErrorCodes.addAll(SuperNetConfig.successData);
     bool ignoreCheck = (response.requestOptions.extra[SuperNetConfig.paramIgnoreCheck] ?? false) || response.data is! Map<dynamic, dynamic>; // 是否忽略检查
-    var isMath = response.data is Map<String, dynamic> && (response.data as Map).containsKey(SuperNetConfig.successParam);
-    bool isSuccess = ignoreCheck || (isMath && ignoreErrorCodes.contains(response.data[SuperNetConfig.successParam]));
-    if (isSuccess) {
+    var isMatch = response.data is Map<dynamic, dynamic> && (response.data as Map).containsKey(SuperNetConfig.successParam);
+    bool isFinish = ignoreCheck || (isMatch && ignoreErrorCodes.contains(response.data[SuperNetConfig.successParam]));
+    if (isFinish) {
       super.onResponse(response, handler);
     } else {
-      response.statusCode = response.data[SuperNetConfig.successParam];
+      // 安全地设置响应状态码
+      final statusCode = response.data[SuperNetConfig.successParam];
+      if (statusCode is int) response.statusCode = statusCode;
       handler.reject(
         DioException(
           requestOptions: response.requestOptions,
@@ -122,10 +132,18 @@ class SuperErrorInterceptor extends Interceptor {
     try {
       Map map = {};
       if (error.response?.data is Map) {
-        map = jsonDecode(jsonEncode(error.response?.data));
+        map = error.response!.data as Map;
       } else if (error.response?.data is String) {
         map = jsonDecode(error.response?.data ?? "");
       }
+
+      // 检查是否有自定义错误处理
+      if (customErrorMsgHandler != null) {
+        final customMsg = customErrorMsgHandler!(error, map);
+        if (customMsg != null) return customMsg;
+      }
+
+      // 业务中的错误msg
       if (map.containsKey(SuperNetConfig.errorMsgParam)) {
         return map[SuperNetConfig.errorMsgParam];
       }

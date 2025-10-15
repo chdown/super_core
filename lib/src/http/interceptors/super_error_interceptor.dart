@@ -123,7 +123,7 @@ class SuperErrorInterceptor extends Interceptor {
       Map map = {};
       if (error.response?.data is Map) {
         map = jsonDecode(jsonEncode(error.response?.data));
-      }else if (error.response?.data is String) {
+      } else if (error.response?.data is String) {
         map = jsonDecode(error.response?.data ?? "");
       }
       if (map.containsKey(SuperNetConfig.errorMsgParam)) {

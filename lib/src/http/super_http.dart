@@ -14,7 +14,7 @@ import 'package:super_core/src/http/http_method.dart';
 class SuperHttp {
   static final SuperHttp _instance = SuperHttp._internal();
   final CancelToken _cancelToken = CancelToken();
-  late var _dio;
+  late Dio _dio;
 
   factory SuperHttp() => _instance;
 
@@ -55,8 +55,6 @@ class SuperHttp {
     /// 内置拦截器：[SuperHeaderInterceptor] [SuperErrorInterceptor] [SuperTokenInterceptor] [SuperLogInterceptor]
     /// dio刷新参考[https://github.com/cfug/dio/blob/main/example_dart/lib/queued_interceptor_crsftoken.dart]
     dio.interceptors.addAll(SuperNetConfig.interceptors);
-
-    dio.clone();
 
     return dio;
   }

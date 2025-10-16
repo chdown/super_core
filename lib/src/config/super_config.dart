@@ -5,6 +5,9 @@
 class SuperConfig {
   SuperConfig._();
 
+  /// 防抖默认时间
+  static int debounceTime = 500;
+
   /// requestTimeout请求超时时间，默认不设置
   /// 全局生效，建议设置合理的事件，避免请求正确了但是触发此异常
   static Duration? requestTimeout;

@@ -42,9 +42,6 @@ class SuperNetConfig {
   /// 请求成功code
   static List<int> successData = [200];
 
-  /// 防抖默认时间
-  static int debounceTime = 500;
-
   /// 忽略错误codes，key值，在[SuperErrorInterceptor]中使用
   static String paramIgnoreErrorCodes = 'ignoreErrorCodes';
 

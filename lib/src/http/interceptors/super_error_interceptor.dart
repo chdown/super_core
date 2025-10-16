@@ -11,29 +11,30 @@ class SuperErrorInterceptor extends Interceptor {
   /// 参数：[DioException] error - 原始错误对象
   /// 参数：[Map] responseData - 响应数据
   /// 返回：[String?] - 自定义错误信息，返回null则使用默认处理
+  final SuperNetConfig superNetConfig;
   final String? Function(DioException error, Map responseData)? customErrorMsgHandler;
 
-  SuperErrorInterceptor({this.customErrorMsgHandler});
+  SuperErrorInterceptor(this.superNetConfig, {this.customErrorMsgHandler});
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    List<int> ignoreErrorCodes = response.requestOptions.extra[SuperNetConfig.paramIgnoreErrorCodes] ?? <int>[];
-    ignoreErrorCodes.addAll(SuperNetConfig.successData);
-    bool ignoreCheck = (response.requestOptions.extra[SuperNetConfig.paramIgnoreCheck] ?? false) || response.data is! Map<dynamic, dynamic>; // 是否忽略检查
-    var isMatch = response.data is Map<dynamic, dynamic> && (response.data as Map).containsKey(SuperNetConfig.successParam);
-    bool isFinish = ignoreCheck || (isMatch && ignoreErrorCodes.contains(response.data[SuperNetConfig.successParam]));
+    List<int> ignoreErrorCodes = response.requestOptions.extra[superNetConfig.paramIgnoreErrorCodes] ?? <int>[];
+    ignoreErrorCodes.addAll(superNetConfig.successData);
+    bool ignoreCheck = (response.requestOptions.extra[superNetConfig.paramIgnoreCheck] ?? false) || response.data is! Map<dynamic, dynamic>; // 是否忽略检查
+    var isMatch = response.data is Map<dynamic, dynamic> && (response.data as Map).containsKey(superNetConfig.successParam);
+    bool isFinish = ignoreCheck || (isMatch && ignoreErrorCodes.contains(response.data[superNetConfig.successParam]));
     if (isFinish) {
       super.onResponse(response, handler);
     } else {
       // 安全地设置响应状态码
-      final statusCode = response.data[SuperNetConfig.successParam];
+      final statusCode = response.data[superNetConfig.successParam];
       if (statusCode is int) response.statusCode = statusCode;
       handler.reject(
         DioException(
           requestOptions: response.requestOptions,
           response: response,
           type: DioExceptionType.unknown,
-          message: response.data[SuperNetConfig.errorMsgParam] ?? response.data.toString(),
+          message: response.data[superNetConfig.errorMsgParam] ?? response.data.toString(),
         ),
         true,
       );
@@ -46,7 +47,7 @@ class SuperErrorInterceptor extends Interceptor {
   }
 
   String errorMsg(DioException error) {
-    if (SuperNetConfig.showDetailError) return error.toString();
+    if (superNetConfig.showDetailError) return error.toString();
     switch (error.type) {
       case DioExceptionType.sendTimeout:
         return HttpErrorMsg.sendTimeoutMsg();
@@ -144,8 +145,8 @@ class SuperErrorInterceptor extends Interceptor {
       }
 
       // 业务中的错误msg
-      if (map.containsKey(SuperNetConfig.errorMsgParam)) {
-        return map[SuperNetConfig.errorMsgParam];
+      if (map.containsKey(superNetConfig.errorMsgParam)) {
+        return map[superNetConfig.errorMsgParam];
       }
       return error.message;
     } catch (ex) {

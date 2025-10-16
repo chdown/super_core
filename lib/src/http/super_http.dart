@@ -12,35 +12,71 @@ import 'package:super_core/src/http/http_method.dart';
 ///
 
 class SuperHttp {
-  static final SuperHttp _instance = SuperHttp._internal();
-  final CancelToken _cancelToken = CancelToken();
+  late final CancelToken _cancelToken = CancelToken();
   late Dio _dio;
 
-  factory SuperHttp() => _instance;
+  SuperHttp._internal();
 
-  static SuperHttp get instance => _instance;
+  /// 多服务管理 - 懒加载
+  static final Map<String, _ServiceConfig> _serviceConfigs = {};
+  static final Map<String, SuperHttp> _services = {};
+  static String _defaultTag = 'default';
 
-  SuperHttp._internal() {
-    _dio = _initDio();
+  /// 初始化服务
+  static void init(SuperNetConfig config, {String? tag, List<Interceptor>? interceptors}) {
+    final serviceTag = tag ?? _defaultTag;
+    _serviceConfigs[serviceTag] = _ServiceConfig(config, interceptors);
   }
 
-  Dio _initDio() {
+  /// 获取服务 - 懒加载
+  static SuperHttp get([String? tag]) {
+    final serviceTag = tag ?? _defaultTag;
+
+    if (!_serviceConfigs.containsKey(serviceTag)) {
+      throw Exception('Service "$serviceTag" not found. Please initialize it first.');
+    }
+
+    // 懒加载：如果服务不存在则创建
+    if (!_services.containsKey(serviceTag)) {
+      final serviceConfig = _serviceConfigs[serviceTag]!;
+      final service = SuperHttp._createService(serviceConfig.config, serviceConfig.interceptors);
+      _services[serviceTag] = service;
+    }
+
+    return _services[serviceTag]!;
+  }
+
+  /// 获取dio
+  Dio get dio => _dio;
+
+  /// 设置默认服务标签
+  static void setDefaultTag(String tag) => _defaultTag = tag;
+
+  /// 创建服务实例
+  static SuperHttp _createService(SuperNetConfig config, List<Interceptor>? interceptors) {
+    final service = SuperHttp._internal();
+    service._dio = service._initDioWithConfig(config, interceptors);
+    return service;
+  }
+
+  /// 使用配置初始化 Dio
+  Dio _initDioWithConfig(SuperNetConfig config, List<Interceptor>? interceptors) {
     final options = BaseOptions(
-      baseUrl: SuperNetConfig.baseUrl(),
-      connectTimeout: Duration(milliseconds: SuperNetConfig.connectTimeout),
-      sendTimeout: Duration(milliseconds: SuperNetConfig.sendTimeout),
-      receiveTimeout: Duration(milliseconds: SuperNetConfig.receiveTimeout),
+      baseUrl: config.baseUrl(),
+      connectTimeout: Duration(milliseconds: config.connectTimeout),
+      sendTimeout: Duration(milliseconds: config.sendTimeout),
+      receiveTimeout: Duration(milliseconds: config.receiveTimeout),
     );
 
     var dio = Dio(options);
 
     /// 请求代理地址，仅初始化生效
-    if (SuperNetConfig.proxyUrl().isNotEmpty) {
+    if (config.proxyUrl().isNotEmpty) {
       dio.httpClientAdapter = IOHttpClientAdapter(
         createHttpClient: () {
           final client = HttpClient();
-          if (SuperNetConfig.proxyUrl().isNotEmpty) {
-            client.findProxy = (uri) => "PROXY ${SuperNetConfig.proxyUrl()}";
+          if (config.proxyUrl().isNotEmpty) {
+            client.findProxy = (uri) => "PROXY ${config.proxyUrl()}";
           }
           client.badCertificateCallback = (_, __, ___) => true;
           return client;
@@ -49,23 +85,26 @@ class SuperHttp {
     }
 
     /// 扩展dio
-    dio = SuperNetConfig.extDio(dio);
+    dio = config.extDio(dio);
 
-    /// 设置Dio的拦截器
-    /// 内置拦截器：[SuperHeaderInterceptor] [SuperErrorInterceptor] [SuperTokenInterceptor] [SuperLogInterceptor]
-    /// dio刷新参考[https://github.com/cfug/dio/blob/main/example_dart/lib/queued_interceptor_crsftoken.dart]
-    dio.interceptors.addAll(SuperNetConfig.interceptors);
+    /// 设置拦截器
+    if (interceptors != null) {
+      dio.interceptors.addAll(interceptors);
+    }
 
     return dio;
   }
 
-  Dio get dio => _dio;
+  /// 重置服务
+  static void reset(SuperNetConfig config, {String? tag, List<Interceptor>? interceptors}) {
+    final serviceTag = tag ?? _defaultTag;
+    _services.remove(serviceTag);
+    _serviceConfigs.remove(serviceTag);
+    init(config, tag: tag, interceptors: interceptors);
+  }
 
   /// 取消所有请求
   void cancelRequests() => _cancelToken.cancel("cancelled");
-
-  /// 重置 Dio 实例
-  static void reset() => _instance._dio = _instance._initDio();
 
   /// req 请求方法
   ///
@@ -136,4 +175,12 @@ class SuperHttp {
       cancelToken: cancelToken ?? _cancelToken,
     );
   }
+}
+
+/// 服务配置类
+class _ServiceConfig {
+  final SuperNetConfig config;
+  final List<Interceptor>? interceptors;
+
+  _ServiceConfig(this.config, this.interceptors);
 }

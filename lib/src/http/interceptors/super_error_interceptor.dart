@@ -18,11 +18,17 @@ class SuperErrorInterceptor extends Interceptor {
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    List<int> ignoreErrorCodes = response.requestOptions.extra[superNetConfig.paramIgnoreErrorCodes] ?? <int>[];
+    // 如果不需要检查返回值，则直接跳过
+    if (superNetConfig.ignoreCheckResponse) return super.onResponse(response, handler);
+    // 对返回结果进行正确性校验
+    // 是否忽略检查：如果请求时【Options(extra: {SuperNetConfig.ignoreCheck: true})】忽略检查，则跳过检查
+    bool ignoreCheck = (response.requestOptions.extra[SuperNetConfig.ignoreCheck] ?? false) || response.data is! Map<dynamic, dynamic>;
+    // 是否包含需要检查的code
+    var isHaveCodeKey = response.data is Map<dynamic, dynamic> && (response.data as Map).containsKey(superNetConfig.successParam);
+    // 需要忽略的code，即服务器返回的code不在列表内，则认为错误
+    List<int> ignoreErrorCodes = response.requestOptions.extra[SuperNetConfig.ignoreErrorCodes] ?? <int>[];
     ignoreErrorCodes.addAll(superNetConfig.successData);
-    bool ignoreCheck = (response.requestOptions.extra[superNetConfig.paramIgnoreCheck] ?? false) || response.data is! Map<dynamic, dynamic>; // 是否忽略检查
-    var isMatch = response.data is Map<dynamic, dynamic> && (response.data as Map).containsKey(superNetConfig.successParam);
-    bool isFinish = ignoreCheck || (isMatch && ignoreErrorCodes.contains(response.data[superNetConfig.successParam]));
+    bool isFinish = ignoreCheck || (isHaveCodeKey && ignoreErrorCodes.contains(response.data[superNetConfig.successParam]));
     if (isFinish) {
       super.onResponse(response, handler);
     } else {
@@ -47,7 +53,6 @@ class SuperErrorInterceptor extends Interceptor {
   }
 
   String errorMsg(DioException error) {
-    if (superNetConfig.showDetailError) return error.toString();
     switch (error.type) {
       case DioExceptionType.sendTimeout:
         return HttpErrorMsg.sendTimeoutMsg();
@@ -82,9 +87,7 @@ class SuperErrorInterceptor extends Interceptor {
           return HttpErrorMsg.unauthorizedMsg();
         case 403:
           // 特殊处理403状态码，检查是否为区域限制
-          if (_isRegionBlocked(error)) {
-            return HttpErrorMsg.regionBlockedMsg();
-          }
+          if (_isRegionBlocked(error)) return HttpErrorMsg.regionBlockedMsg();
           return HttpErrorMsg.forbiddenMsg();
         case 404:
           return HttpErrorMsg.notFoundMsg();
@@ -98,26 +101,20 @@ class SuperErrorInterceptor extends Interceptor {
           return HttpErrorMsg.gatewayTimeoutMsg();
       }
     }
-
     // 如果没有特定处理或无法获取状态码，尝试从响应中提取错误信息
     final errorMsg = tryGetErrorMsg(error);
     if (errorMsg != null && errorMsg.isNotEmpty) {
       return errorMsg;
     }
-
     return HttpErrorMsg.badResponseMsg();
   }
 
   /// 检查是否为区域限制错误
   /// 通过检查响应内容中的关键词判断
   bool _isRegionBlocked(DioException error) {
-    if (error.response?.statusCode != 403) {
-      return false;
-    }
-
+    if (error.response?.statusCode != 403) return false;
     try {
       final dataString = error.response?.data.toString().toLowerCase() ?? "";
-
       // 检查常见关键词
       return dataString.contains("access denied") ||
           dataString.contains("blocked") ||
@@ -137,13 +134,11 @@ class SuperErrorInterceptor extends Interceptor {
       } else if (error.response?.data is String) {
         map = jsonDecode(error.response?.data ?? "");
       }
-
       // 检查是否有自定义错误处理
       if (customErrorMsgHandler != null) {
         final customMsg = customErrorMsgHandler!(error, map);
         if (customMsg != null) return customMsg;
       }
-
       // 业务中的错误msg
       if (map.containsKey(superNetConfig.errorMsgParam)) {
         return map[superNetConfig.errorMsgParam];

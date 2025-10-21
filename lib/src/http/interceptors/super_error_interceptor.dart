@@ -32,9 +32,11 @@ class SuperErrorInterceptor extends Interceptor {
     if (isFinish) {
       super.onResponse(response, handler);
     } else {
-      // 安全地设置响应状态码
-      final statusCode = response.data[superNetConfig.successParam];
-      if (statusCode is int) response.statusCode = statusCode;
+      // 处理服务器code不标准的情况，安全地设置响应状态码
+      if (superNetConfig.isSupportHttpCode) {
+        final statusCode = response.data[superNetConfig.successParam];
+        if (statusCode is int) response.statusCode = statusCode;
+      }
       handler.reject(
         DioException(
           requestOptions: response.requestOptions,

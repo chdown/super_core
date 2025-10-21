@@ -32,6 +32,9 @@ class SuperNetConfig {
   /// 网络code字段
   String successParam = 'code';
 
+  /// 是否适配HttpCode，应对服务器出参不标准的情况（比如http 401 但是 出参code 才是 401）
+  bool isSupportHttpCode = false;
+
   /// 网络请求msg字段
   String errorMsgParam = 'msg';
 

@@ -106,6 +106,9 @@ class SuperHttp {
   /// 取消所有请求
   void cancelRequests() => _cancelToken.cancel("cancelled");
 
+  ///fetch 方法
+  Future<dynamic> fetch(RequestOptions requestOptions) async => await _dio.fetch(requestOptions);
+
   /// req 请求方法
   ///
   /// [path] 请求地址

@@ -43,12 +43,7 @@ class SuperRetryInterceptor extends Interceptor {
         final response = await onRetry(err.requestOptions);
         handler.resolve(response);
       } catch (e) {
-        // 重试失败，继续错误处理链
-        if (e is DioException) {
-          super.onError(e, handler);
-        } else {
-          super.onError(err, handler);
-        }
+        super.onError(err, handler);
       }
     } else {
       // 不重试或重试次数已达上限

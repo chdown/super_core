@@ -17,7 +17,10 @@ class SuperRetryInterceptor extends Interceptor {
   /// 重试条件判断函数
   final bool Function(DioException error)? retryIf;
 
-  SuperRetryInterceptor({
+  final Future<Response> Function(RequestOptions requestOptions) onRetry;
+
+  SuperRetryInterceptor(
+    this.onRetry, {
     this.maxRetryCount = 3,
     this.retryDelay = 1000,
     this.retryIf,
@@ -37,7 +40,7 @@ class SuperRetryInterceptor extends Interceptor {
 
       try {
         // 重试请求
-        final response = await Dio().fetch(err.requestOptions);
+        final response = await onRetry(err.requestOptions);
         handler.resolve(response);
       } catch (e) {
         // 重试失败，继续错误处理链

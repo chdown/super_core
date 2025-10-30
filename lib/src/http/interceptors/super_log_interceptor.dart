@@ -17,13 +17,17 @@ class SuperLogInterceptor extends Interceptor {
     var logEnable = rep.requestOptions.extra["logEnable"] ?? true;
     String log = "SuperLogInterceptor log print error";
     try {
-      log = '''🌐🌐⚠️⚠️ ${rep.requestOptions.uri}  ${rep.requestOptions.method}  ${DateUtil.getNowDateStr(format: DateEnum.normYmdHms)}  ${time}ms ⚠️⚠️🌐🌐
-      【请求头】${getLogData(rep.requestOptions.headers)}
-      【请求参数】${getLogData(rep.requestOptions.queryParameters)}
-      【请求数据】${getLogData(rep.requestOptions.data)}
-      【返回参数】${getLogData(rep.response?.data)}
-      【错误信息】${getLogData(rep.message)}'''
-          .trimLeft();
+      log = StringBuffer()
+          .apply((sb) {
+            sb.writeln("🌐⚠️ ${rep.requestOptions.uri}  ${rep.requestOptions.method}  ${DateUtil.getNowDateStr(format: DateEnum.normYmdHms)}  ${time}ms ⚠️🌐");
+            writeLog(sb, "请求头", rep.requestOptions.headers);
+            writeLog(sb, "请求参数", rep.requestOptions.queryParameters);
+            writeLog(sb, "请求数据", rep.requestOptions.data);
+            writeLog(sb, "返回参数", rep.response?.data);
+            writeLog(sb, "错误信息", rep.message);
+          })
+          .toString()
+          .trimRight();
     } catch (ex) {
       try {
         log = rep.toString();
@@ -41,12 +45,16 @@ class SuperLogInterceptor extends Interceptor {
     var requestData = (responseType == ResponseType.bytes || responseType == ResponseType.stream) ? responseType.name : rep.data;
     String log = "SuperLogInterceptor log print response";
     try {
-      log = '''🌐🌐🌐🌐 ${rep.requestOptions.uri}  ${rep.requestOptions.method}  ${DateUtil.getNowDateStr(format: DateEnum.normYmdHms)}  ${time}ms 🌐🌐🌐🌐
-      【请求头】${getLogData(rep.requestOptions.headers)}
-      【请求参数】${getLogData(rep.requestOptions.queryParameters)}
-      【请求数据】${getLogData(rep.requestOptions.data)}
-      【返回参数】${getLogData(requestData)}'''
-          .trimLeft();
+      log = StringBuffer()
+          .apply((sb) {
+            sb.writeln("🌐🌐 ${rep.requestOptions.uri}  ${rep.requestOptions.method}  ${DateUtil.getNowDateStr(format: DateEnum.normYmdHms)}  ${time}ms 🌐🌐");
+            writeLog(sb, "请求头", rep.requestOptions.headers);
+            writeLog(sb, "请求参数", rep.requestOptions.queryParameters);
+            writeLog(sb, "请求数据", rep.requestOptions.data);
+            writeLog(sb, "返回参数", requestData);
+          })
+          .toString()
+          .trimRight();
     } catch (ex) {
       try {
         log = rep.toString();
@@ -61,6 +69,12 @@ class SuperLogInterceptor extends Interceptor {
       return jsonEncode(data);
     } catch (ex) {
       return data.toString();
+    }
+  }
+
+  void writeLog(StringBuffer sb, String tag, dynamic data) {
+    if (ObjUtil.isNotEmpty(data)) {
+      sb.writeln("【$tag】${getLogData(data)}");
     }
   }
 }

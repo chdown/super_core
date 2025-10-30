@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:super_core/src/utils/click_throttler_utils.dart';
+import 'package:super_core/src/utils/click_throttler_util.dart';
 import 'package:super_core/super_core.dart';
 
 /// @author : ch

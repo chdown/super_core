@@ -38,4 +38,4 @@ export 'src/utils/log_util.dart';
 export 'src/utils/dev_logger.dart';
 export 'src/utils/num_util.dart';
 export 'src/utils/obj_util.dart';
-export 'src/utils/plat_utils.dart';
+export 'src/utils/plat_util.dart';

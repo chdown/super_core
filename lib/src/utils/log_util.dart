@@ -17,17 +17,11 @@ class LogUtil {
   /// 配置输出 Log
   static LogPrinter? _printer;
 
-  /// 是否输出emoji
-  static bool? _printEmojis;
-
   /// 配置输出 Log
   static LogOutput? _output;
 
   // log默认只有debug才输出，如果需要全部输出，则设置filter
   static LogFilter? _filter;
-
-  // 日期格式
-  static DateTimeFormatter? _dateTimeFormatter;
 
   // Log listeners for custom handling (e.g., upload to Sentry)
   static final List<LogListener> _listeners = [];
@@ -38,14 +32,7 @@ class LogUtil {
     _instance ??= Logger(
       output: _output ?? DevLogger(),
       filter: _filter,
-      printer: _printer ??
-          PrettyPrinter(
-            colors: false,
-            dateTimeFormat: _dateTimeFormatter ?? DateTimeFormat.none,
-            methodCount: 0,
-            errorMethodCount: 16,
-            printEmojis: _printEmojis ?? true,
-          ),
+      printer: _printer ?? PrettyPrinter(colors: false, dateTimeFormat: DateTimeFormat.none, methodCount: 0, errorMethodCount: 16),
     );
     return _instance!;
   }
@@ -57,15 +44,11 @@ class LogUtil {
     LogPrinter? printer,
     LogOutput? output,
     LogFilter? filter,
-    DateTimeFormatter? dateTimeFormatter,
-    bool? printEmojis,
   }) {
     _printer = printer;
     _output = output;
     _filter = filter;
-    _dateTimeFormatter = dateTimeFormatter;
-    _printEmojis = printEmojis;
-    _instance = null; // Reset to apply new config
+    _instance = null;
   }
 
   /// Add a log listener for custom handling (e.g., upload to Sentry)
@@ -142,7 +125,7 @@ class LogUtil {
     _notifyListeners(Level.warning, message, time: time, error: error, stackTrace: stackTrace);
   }
 
-  static void c(
+  static void log(
     Level level,
     dynamic message, {
     DateTime? time,

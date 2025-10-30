@@ -25,7 +25,7 @@ extension ExGesture on Widget {
           onTap: onTap == null
               ? null
               : () {
-                  if (!ClickThrottlerUtils.canClick(Duration(milliseconds: debounceTime ?? SuperConfig.debounceTime))) return;
+                  if (!ClickThrottlerUtil.canClick(Duration(milliseconds: debounceTime ?? SuperConfig.debounceTime))) return;
                   onTap.call();
                 },
           onLongPress: onLongPress,
@@ -51,7 +51,7 @@ extension ExGesture on Widget {
       onTap: onTap == null
           ? null
           : () {
-              if (!ClickThrottlerUtils.canClick(Duration(milliseconds: debounceTime ?? SuperConfig.debounceTime))) return;
+              if (!ClickThrottlerUtil.canClick(Duration(milliseconds: debounceTime ?? SuperConfig.debounceTime))) return;
               onTap.call();
             },
       behavior: behavior ?? HitTestBehavior.opaque,

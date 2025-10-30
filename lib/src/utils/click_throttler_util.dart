@@ -3,7 +3,7 @@
 /// @date 2025-05-14 10:44:08
 /// @description 防抖工具类
 ///
-class ClickThrottlerUtils{
+class ClickThrottlerUtil{
   static bool _locked = false;
 
   static bool canClick([Duration duration = const Duration(milliseconds: 500)]) {

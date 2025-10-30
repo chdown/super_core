@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 
-class PlatUtils {
-  PlatUtils._();
+class PlatUtil {
+  PlatUtil._();
 
   /// Whether the application is running on the web.
   static bool get isWeb => kIsWeb;

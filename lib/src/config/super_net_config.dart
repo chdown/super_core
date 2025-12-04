@@ -23,9 +23,6 @@ class SuperNetConfig {
   /// 接收等待毫秒数
   int receiveTimeout = 30 * 1000;
 
-  /// 拦截器
-  List<Interceptor> interceptors = [];
-
   /// dio其他扩展
   Dio Function(Dio dio) extDio = (dio) => dio;
 

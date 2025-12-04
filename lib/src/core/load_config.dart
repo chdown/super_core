@@ -16,6 +16,7 @@ class LoadConfig {
   VoidCallback? finish; // 完成回调
   String? loadingText; // loading内容
   bool isErrorPage; // 非[LoadEnum.page]、[LoadEnum.none]是否展示错误page,默认false
+  bool isLoadingPage; // 是否忽略[LoadEnum.page] loading中动画
   bool isShowToast; // 是否展示错误toast
   Object? config; // 扩展参数
   Object? config1; // 扩展参数
@@ -29,6 +30,7 @@ class LoadConfig {
     this.finish,
     this.loadingText,
     this.isErrorPage = false,
+    this.isLoadingPage = true,
     this.isShowToast = true,
     this.config,
     this.config1,
